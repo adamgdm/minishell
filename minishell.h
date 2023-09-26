@@ -111,11 +111,29 @@ void add_last_node(t_env **head, const char *str);
 
 void add_before_last_node(t_env **head, const char *str);
 
-void    ft_execute(t_data **data, t_commands *cmnd);
+void printenv(t_env *head, int fd);
+
+int ft_iseqin(char *str);
+
+void    ft_echo(char **cmd, int fd);
+
+void    ft_execute(t_data **data, t_commands *cmnd, char **envp);
 
 int     ft_count(char **str);
 
 char    *ft_retpwd(void);
+
+int ft_which_line(char **envp, char *str);
+
+char *ft_line_w_out_path(char *str, int len);
+
+char **ft_find_path(char **envp, t_env *head);
+
+char *ft_makethelist(char *cmd, char **path, t_env *head);
+
+void ft_execve(char **envp, char **cmnd, t_env *head);
+
+void    ft_exit(t_data *data);
 
 void    ft_pwd(int fd);
 
@@ -124,6 +142,8 @@ void    ft_cd(t_data **data, char *path, char *pwd);
 void    ft_env(t_env **env, int fd);
 
 void    ft_unset(t_data **data, t_commands *cmnd);
+
+void    ft_export(t_env **env, t_env **envnocmd, t_commands *cmnd, int fd);
 
 int ft_doesmatch(char *str, char *qst);
 

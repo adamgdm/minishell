@@ -42,7 +42,6 @@ void ft_initialize(t_data **x, char **env)
 	delete_last_node(&(y->env));
 	delete_last_node(&(y->envnoeq));
 	add_last_node(&(y->env), ft_strdup("_=env"));
-	add_last_node(&(y->envnoeq), ft_strdup("_=env"));
 }
 
 int ft_doesmatch(char *str, char *qst)
@@ -60,7 +59,7 @@ int ft_doesmatch(char *str, char *qst)
     return (0);
 }
 
-void    ft_execute(t_data **data, t_commands *cmnd)
+void    ft_execute(t_data **data, t_commands *cmnd, char **envp)
 {
     if (ft_doesmatch(cmnd->cmd[0], "pwd"))
         ft_pwd(cmnd->out_file);
@@ -70,8 +69,15 @@ void    ft_execute(t_data **data, t_commands *cmnd)
 		ft_env(&(*data)->env, cmnd->out_file);
 	else if (ft_doesmatch(cmnd->cmd[0], "unset"))
 		ft_unset(data, cmnd);
+	else if (ft_doesmatch(cmnd->cmd[0], "export"))
+		ft_export(&(*data)->env, &(*data)->envnoeq, cmnd, cmnd->out_file);
+	else if (ft_doesmatch(cmnd->cmd[0], "echo"))
+		ft_echo(cmnd->cmd, cmnd->out_file);
+    else if (ft_doesmatch(cmnd->cmd[0], "exit"))
+		ft_exit((*data));
     else
-        printf("hada lah\n");
+		printf("Sbr lmk mazal massalit, ah ou exit fiha leaks, chof dok dialk wdiali antklf bihom ghda rah drni rassi. mhm tryiha db\n");
+        //ft_execve(envp, cmnd->cmd, (*data)->env);
 }
 
 
@@ -97,7 +103,7 @@ int main(int ac, char **av, char **envp)
 		_update_tokens(&result);
 		//_print_token(result);
 		 t_commands *commands = _parser(&result);
-		ft_execute(&data, commands);
+		ft_execute(&data, commands,envp);
 		free(input);
 	
 

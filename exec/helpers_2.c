@@ -51,7 +51,7 @@ void add_last_node(t_env **head, const char *str) {
 }
 
 // Function to add a node before the last node
-void add_bln(t_env **head, const char *str) {
+void add_before_last_node(t_env **head, const char *str) {
     if (*head == NULL) {
         // If the list is empty, add a new node as the head
         add_last_node(head, str);

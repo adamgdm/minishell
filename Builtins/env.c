@@ -4,7 +4,9 @@ void    ft_env(t_env **env, int fd)
 {
     t_env *cur;
     t_env *node;
+    char *pwd;
 
+    // pwd = ft_retpwd;
     node = (*env);
     cur = (*env);
     while (node)
