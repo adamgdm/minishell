@@ -1,5 +1,5 @@
 #include "../minishell.h"
-
+a
 void    ft_unset(t_data **data, t_commands *cmnd)
 {
     t_env *x;
