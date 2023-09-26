@@ -67,7 +67,9 @@ void    ft_execute(t_data **data, t_commands *cmnd)
 	else if (ft_doesmatch(cmnd->cmd[0], "cd"))
 		ft_cd(data ,cmnd->cmd[1], ft_retpwd());
 	else if (ft_doesmatch(cmnd->cmd[0], "env"))
-		ft_env((*data)->env, cmnd->out_file);
+		ft_env(&(*data)->env, cmnd->out_file);
+	else if (ft_doesmatch(cmnd->cmd[0], "unset"))
+		ft_unset(data, cmnd);
     else
         printf("hada lah\n");
 }
@@ -83,7 +85,7 @@ int main(int ac, char **av, char **envp)
 	ft_initialize(&data, envp);
 	while (1)
 	{
-		char *input = readline("Prettyshell> ");
+		char *input = readline("Boubou_shell> ");
 		if (input && *input)
 			add_history(input);
 		t_token *result = _lexer(input);

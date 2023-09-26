@@ -87,9 +87,11 @@ void		_print_array(char **array);
 
 //	-----------------------    PARSING    ------------------------
 
+int ft_strcmp(const char *s1, const char *s2);
+
 char* ft_strcpy(char* dest, const char* src);
 
-int ft_rulefinder(char *cmd, char *arraytofind);
+int	ft_rulefinder(char *cmd, char *arraytofind);
 
 char *getValue(char *input);
 
@@ -99,9 +101,11 @@ t_env *charArrayToEnvList(char **charArray);
 
 void appendEnvNode(t_env **head, char *str); 
 
-t_env *createEnvNode(char *str);;
+t_env *createEnvNode(char *str);
 
 void delete_last_node(t_env **head);
+
+void deleteNode(t_env **head, char *target);
 
 void add_last_node(t_env **head, const char *str);
 
@@ -117,7 +121,9 @@ void    ft_pwd(int fd);
 
 void    ft_cd(t_data **data, char *path, char *pwd);
 
-void    ft_env(t_env *env, int fd);
+void    ft_env(t_env **env, int fd);
+
+void    ft_unset(t_data **data, t_commands *cmnd);
 
 int ft_doesmatch(char *str, char *qst);
 
