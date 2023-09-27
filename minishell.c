@@ -85,26 +85,33 @@ int main(int ac, char **av, char **envp)
 {
 	(void)ac;
 	(void)av;
-	t_data *data;
+	t_data	*data;
+	t_token *result;
 
-	data = malloc(sizeof(t_data));
-	ft_initialize(&data, envp);
+	// data = malloc(sizeof(t_data));
+	// ft_initialize(&data, envp);
 	while (1)
 	{
 		char *input = readline("Boubou_shell> ");
 		if (input && *input)
 			add_history(input);
-		t_token *result = _lexer(input);
+		result = _lexer(input);
 		if (!result)
 			continue;
 		if(_syntax_check(&result))
+		{
+			_free_all_tokens(&result);
+			free(input);
 			continue;
+		}
 		_expander(&result);
-		_update_tokens(&result);
-		//_print_token(result);
-		 t_commands *commands = _parser(&result);
-		ft_execute(&data, commands,envp);
+		_print_token(result);
+		//_update_tokens(&result);
+		// t_commands *commands = _parser(&result);
+		//_print_commands(commands);
+	//	ft_execute(&data, commands,envp);
 		free(input);
+		_free_all_tokens(&result);
 	
 
 	}

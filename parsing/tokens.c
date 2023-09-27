@@ -31,6 +31,23 @@ void    _add_token(t_token **head, t_token *new)
     current->next = new;
 }
 
+void    _free_all_tokens(t_token **head)
+{
+    t_token *current;
+    t_token *tmp;
+
+    current = *head;
+    while (current)
+    {
+        tmp = current;
+        current = current->next;
+        free(tmp->content);
+        free(tmp->before_expanded);
+        free(tmp);
+    }
+    *head = NULL;
+}
+
 
 
 
