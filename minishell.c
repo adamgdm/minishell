@@ -109,9 +109,9 @@ int main(int ac, char **av, char **envp)
 		_update_tokens(&result);
 		 t_commands *commands = _parser(&result);
 		//_print_commands(commands);
+		_free_all_tokens(&result);
 		ft_execute(&data, commands,envp);
 		free(input);
-		_free_all_tokens(&result);
 		free_commands(commands);
 	
 
