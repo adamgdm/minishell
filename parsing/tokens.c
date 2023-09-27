@@ -41,7 +41,7 @@ void    _free_all_tokens(t_token **head)
     {
         tmp = current;
         current = current->next;
-        free(tmp->content);
+        //free(tmp->content);
         free(tmp->before_expanded);
         free(tmp);
     }
