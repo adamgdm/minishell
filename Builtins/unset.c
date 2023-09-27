@@ -38,9 +38,9 @@ void    ft_unset(t_data **data, t_commands *cmnd)
     }
     i = 1;
     z = (*data)->envnoeq;
-    while (z)
+    while (z && cmnd->cmd[i])
     {
-        if (ft_doesmatch(z->str, cmnd->cmd[i]))
+        if (!ft_strcmp(z->str, cmnd->cmd[i]))
         {
             deleteNode(&(*data)->envnoeq, z->str);
             z = (*data)->env;
