@@ -35,3 +35,5 @@ echo <<$USER"$HOME"<<$GOROOT
 
 echo ${HOME} should expand
 echo "$USER | " $$'$PATH' ($$)
+
+commit 1
