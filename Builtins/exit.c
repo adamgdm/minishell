@@ -11,7 +11,11 @@ void free_env_list(t_env *head) {
 }
 
 // Function to free a t_data struct, including its nested t_env structs
-void free_t_data(t_data *data) {
+void free_t_data(t_data **dat) 
+{   
+    t_data *data;
+
+    data = *dat; 
     if (data != NULL) {
         free_env_list(data->env);      // Free the env linked list
         free_env_list(data->envnoeq);  // Free the envnoeq linked list
@@ -38,7 +42,7 @@ void free_commands(t_commands *head) {
     }
 }
 
-void    ft_exit(t_data *data, t_commands *cmnds)
+void    ft_exit(t_data **data, t_commands *cmnds)
 {
     free_commands(cmnds);
     free_t_data(data);

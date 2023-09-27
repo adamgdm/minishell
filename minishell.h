@@ -134,7 +134,7 @@ char *ft_makethelist(char *cmd, char **path, t_env *head);
 
 void ft_execve(char **envp, char **cmnd, t_env *head);
 
-void    ft_exit(t_data *data, t_commands *cmnds);
+void    ft_exit(t_data **data, t_commands *cmnds);
 
 void    ft_pwd(int fd);
 
