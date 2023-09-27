@@ -45,9 +45,11 @@ void    ft_pwd(int fd)
     if (!buffer)
     {
         perror("Malloc: ");
+        free(buffer);
         exit(1);
     }
     buffer = getcwd(buffer, i);
     ft_putstr_fd(buffer, fd);
     ft_putchar_fd('\n', fd);
+    free (buffer);
 }

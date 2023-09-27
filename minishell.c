@@ -74,7 +74,7 @@ void    ft_execute(t_data **data, t_commands *cmnd, char **envp)
 	else if (ft_doesmatch(cmnd->cmd[0], "echo"))
 		ft_echo(cmnd->cmd, cmnd->out_file);
     else if (ft_doesmatch(cmnd->cmd[0], "exit"))
-		ft_exit((*data));
+		ft_exit((*data), cmnd);
     else
 		printf("Sbr lmk mazal massalit, ah ou exit fiha leaks, chof dok dialk wdiali antklf bihom ghda rah drni rassi. mhm tryiha db\n");
         //ft_execve(envp, cmnd->cmd, (*data)->env);
@@ -105,13 +105,14 @@ int main(int ac, char **av, char **envp)
 			continue;
 		}
 		_expander(&result);
-		_print_token(result);
-		//_update_tokens(&result);
-		// t_commands *commands = _parser(&result);
+		//_print_token(result);
+		_update_tokens(&result);
+		 t_commands *commands = _parser(&result);
 		//_print_commands(commands);
-	//	ft_execute(&data, commands,envp);
+		ft_execute(&data, commands,envp);
 		free(input);
 		_free_all_tokens(&result);
+		free_commands(commands);
 	
 
 	}

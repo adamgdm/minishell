@@ -134,7 +134,7 @@ char *ft_makethelist(char *cmd, char **path, t_env *head);
 
 void ft_execve(char **envp, char **cmnd, t_env *head);
 
-void    ft_exit(t_data *data);
+void    ft_exit(t_data *data, t_commands *cmnds);
 
 void    ft_pwd(int fd);
 
@@ -150,5 +150,6 @@ int ft_doesmatch(char *str, char *qst);
 
 void ft_initialize(t_data **x, char **env);
 
+void free_commands(t_commands *head);
 
 #endif

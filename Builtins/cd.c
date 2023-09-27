@@ -18,7 +18,6 @@ void    ft_cd(t_data **data, char *path, char *pwd)
     {
         if (chdir(path) != 0)
             perror("cd");
-    }
-    
+    } 
     free(pwd);
 }
