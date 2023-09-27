@@ -22,11 +22,11 @@ typedef struct all {
 	char	*s;
 }	t_B;
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin(char *s1, char *s2)
 {
 	t_B	u;
 
-	if (!s1 || !s2)
+	if(!s1 || !s2)
 		return (NULL);
 	u.v = 0;
 	u.y = 0;

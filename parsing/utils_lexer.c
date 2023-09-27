@@ -19,7 +19,7 @@ char *_append(char *str, char c)
     result = malloc(sizeof(char) * (ft_strlen(str) + 2));
     if (!result)
         return (NULL);
-    while (str[i])
+    while (str && str[i])
     {
         result[i] = str[i];
         i++;
