@@ -99,7 +99,9 @@ int main(int ac, char **av, char **envp)
 		if (!input)
 			return (0);
 		result = _lexer(input);
-		if(!result || _syntax_check(&result))
+		if (!result)
+			continue;
+		if(_syntax_check(&result))
 		{
 			_free_all_tokens(&result, 1);
 			free(input);
@@ -108,8 +110,8 @@ int main(int ac, char **av, char **envp)
 		_expander(&result);
 		
 		_update_tokens(&result);
-		t_commands *commands = _parser(&result);
 		_print_token(result);
+		t_commands *commands = _parser(&result);
 		//_print_commands(commands);
 		 _free_all_tokens(&result, 0);
 		// ft_execute(&data, commands,envp);

@@ -29,6 +29,8 @@ t_token *_lexer(char *input)
                         i++;
                     if (!input[i]) {
                         printf("Error: unclosed double quote\n");
+                        _free_all_tokens(&head, 1);
+			            free(input);
                         return (NULL);
                     }
                 else if (input[i] == '\"') {
@@ -50,6 +52,8 @@ t_token *_lexer(char *input)
                     if (!input[i])
                     {
                         printf("Error: unclosed single quote\n");
+                        _free_all_tokens(&head, 1);
+                        free(input);
                         return (NULL);
                     }
                     else if (input[i] == '\'' && i != j) {
