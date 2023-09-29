@@ -26,6 +26,7 @@ char *_append(char *str, char c)
     }
     result[i] = c;
     result[i + 1] = '\0';
-    free(str);
+    if (str)
+        free(str);
     return (result);
 }
