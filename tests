@@ -42,3 +42,6 @@ commit 3
 
 HEAD detached
 HEAD attached now :)
+
+echo $555 -> 55
+echo $@ -> '\n'

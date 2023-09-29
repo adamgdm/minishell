@@ -34,7 +34,7 @@ char    *_expand_word(char *content)
         if (content[i] == '$')
         {
             i++;
-            while (content[i] && !ft_strchr("+*-?<>{}()#%@\"'$&|;,/\t ", content[i]))
+            while (content[i] && !ft_strchr("+*-?<>{}[]^()#%@\"'$&|;,/\t ", content[i]))
                 i++;
             tmp = ft_substr(content, j + 1, i - j - 1);
             tmp2 = getenv(tmp);
