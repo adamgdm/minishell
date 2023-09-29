@@ -1,6 +1,6 @@
 #include "../minishell.h"
 
-t_commands  *_create_command(char **commands, int in_file, int out_file)
+t_commands  *_create_command(char **commands, int in_file, int out_file, int error)
 {
     t_commands  *new;
 
@@ -10,6 +10,7 @@ t_commands  *_create_command(char **commands, int in_file, int out_file)
     new->cmd = commands;
     new->in_file = in_file;
     new->out_file = out_file;
+    new->error_exist = error;
     new->next = NULL;
     return (new);
 }

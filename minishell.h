@@ -53,6 +53,7 @@ typedef struct s_token {
 typedef struct s_commands {
 	int					in_file;
 	int					out_file;
+	int					error_exist;
 	char				**cmd;
 	struct s_commands	*next;
 } t_commands;
@@ -80,7 +81,7 @@ void		_expander(t_token **head);
 char*		_append(char *str, char c);
 int			_syntax_check(t_token** result);
 t_commands  *_parser(t_token **result);
-t_commands  *_create_command(char **commands, int in_file, int out_file);
+t_commands  *_create_command(char **commands, int in_file, int out_file, int error);
 void		_add_command(t_commands **head, t_commands *new);
 void		_print_array(char **array);
 void		_free_all_tokens(t_token **head);
