@@ -84,7 +84,7 @@ t_commands  *_parser(t_token **result);
 t_commands  *_create_command(char **commands, int in_file, int out_file, int error);
 void		_add_command(t_commands **head, t_commands *new);
 void		_print_array(char **array);
-void		_free_all_tokens(t_token **head);
+void		_free_all_tokens(t_token **head, int check);
 
 
 //	-----------------------    PARSING    ------------------------
