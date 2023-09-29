@@ -37,6 +37,7 @@ void    _free_all_tokens(t_token **head)
     t_token *tmp;
 
     current = *head;
+    int i = 1;
     while (current)
     {
         tmp = current;
@@ -44,6 +45,7 @@ void    _free_all_tokens(t_token **head)
         //free(tmp->content);
         free(tmp->before_expanded);
         free(tmp);
+        i++;
     }
     *head = NULL;
 }

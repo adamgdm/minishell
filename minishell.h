@@ -68,6 +68,12 @@ typedef struct s_data
 	t_env *envnoeq;
 } t_data;
 
+typedef struct s_data_with_addresses
+{
+	t_env **env;
+	t_env **envnoeq;
+} t_data_with_addresses;
+
 //	-----------------------    PARSING    ------------------------
 
 

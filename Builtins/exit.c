@@ -36,7 +36,6 @@ void free_commands(t_commands *head) {
             }
             free(temp->cmd);
         }
-
         // Free the current node
         free(temp);
     }

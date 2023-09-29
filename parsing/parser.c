@@ -3,7 +3,7 @@
 
 char    **_append_string(char **commands, char *content)
 {
-    int     i;
+    int     i;////////////// check here;
     char    **new;
 
     i = 0;
