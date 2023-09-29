@@ -45,3 +45,9 @@ HEAD attached now :)
 
 echo $555 -> 55
 echo $@ -> '\n'
+
+
+memory leaks after parsing error
+<< delim : memory leak
+
+ echo " | echo hello

@@ -105,19 +105,19 @@ int main(int ac, char **av, char **envp)
 			continue;
 		if(_syntax_check(&result))
 		{
-			_free_all_tokens(&result);
+			_free_all_tokens(&result, 1);
 			free(input);
 			continue;
 		}
 		_expander(&result);
-		//_print_token(result);
 		
 		_update_tokens(&result);
-		 t_commands *commands = _parser(&result);
+		_print_token(result);
+		t_commands *commands = _parser(&result);
 		//_print_commands(commands);
-		_free_all_tokens(&result);
-		ft_execute(&data, commands,envp);
-		free(input);
+		 _free_all_tokens(&result, 0);
+		// ft_execute(&data, commands,envp);
+		 free(input);
 		free_commands(commands);
 	}
 
