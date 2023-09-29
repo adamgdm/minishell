@@ -26,6 +26,7 @@ void	_print_commands(t_commands *commands)
 		_print_array(commands->cmd);
 		printf("in_file: %d\n", commands->in_file);
 		printf("out_file: %d\n", commands->out_file);
+		printf("error_exist: %d\n", commands->error_exist);
 		printf("-----------------------------------------------\n");
 		commands = commands->next;
 		i++;
@@ -110,6 +111,7 @@ int main(int ac, char **av, char **envp)
 		}
 		_expander(&result);
 		//_print_token(result);
+		
 		_update_tokens(&result);
 		 t_commands *commands = _parser(&result);
 		//_print_commands(commands);

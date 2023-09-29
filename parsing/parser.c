@@ -43,6 +43,7 @@ t_commands  *_parser(t_token **result)
     char        **commands;
     int         in_file;
     int         out_file;
+    int         error;
     t_token     *current;
     t_commands  *head;
     t_commands  *new;
@@ -50,6 +51,7 @@ t_commands  *_parser(t_token **result)
     commands = NULL;
     in_file = 0;
     out_file = 1;
+    error = 0;
     current = *result;
     head = NULL;
     while (current)
@@ -67,7 +69,8 @@ t_commands  *_parser(t_token **result)
             if (out_file == -1)
             {
                 printf("minishell: %s: %s\n", current->next->content, strerror(errno));
-                return (NULL);
+                error = 1;
+                //return (NULL);
             }
             current = current->next;
         }
@@ -79,7 +82,8 @@ t_commands  *_parser(t_token **result)
             if (out_file == -1)
             {
                 printf("minishell: %s: %s\n", current->next->content, strerror(errno));
-                return (NULL);
+                error = 1;
+                //return (NULL);
             }
             current = current->next;
         }
@@ -91,7 +95,8 @@ t_commands  *_parser(t_token **result)
             if (in_file == -1)
             {
                 printf("minishell: %s: %s\n", current->next->content, strerror(errno));
-                return (NULL);
+                error = 1;
+                //return (NULL);
             }
             current = current->next;
         }
@@ -105,14 +110,15 @@ t_commands  *_parser(t_token **result)
         }
         if (current->type == PIPE)
         {
-            new = _create_command(commands, in_file, out_file);
+            new = _create_command(commands, in_file, out_file, error);
             _add_command(&head, new);
             commands = NULL;
-            
+             error = 0;
         }
+       
         current = current->next;
     }
-    new = _create_command(commands, in_file, out_file);
+    new = _create_command(commands, in_file, out_file, error);
     _add_command(&head, new);
     return (head);
 
