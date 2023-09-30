@@ -51,3 +51,4 @@ memory leaks after parsing error
 << delim : memory leak
 
  echo " | echo hello
+ echo "" ""''koko

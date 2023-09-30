@@ -56,7 +56,7 @@ t_token *_lexer(char *input)
                         free(input);
                         return (NULL);
                     }
-                    else if (input[i] == '\'' && i != j) {
+                    else if (input[i] == '\'') {
                         if ((input[i+1] && _it_contains(input[i+1])) || !input[i+1])
                             current = _create_token(ft_substr(input, j, i - j), WORD, IN_QUOTE, 1);
                         else
