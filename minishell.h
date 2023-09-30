@@ -69,6 +69,12 @@ typedef struct s_data
 	t_env *envnoeq;
 } t_data;
 
+typedef struct s_data_with_addresses
+{
+	t_env **env;
+	t_env **envnoeq;
+} t_data_with_addresses;
+
 //	-----------------------    PARSING    ------------------------
 
 
@@ -85,6 +91,7 @@ t_commands  *_create_command(char **commands, int in_file, int out_file, int err
 void		_add_command(t_commands **head, t_commands *new);
 void		_print_array(char **array);
 void		_free_all_tokens(t_token **head, int check);
+int			_process_env_value(char *value);
 
 
 //	-----------------------    PARSING    ------------------------

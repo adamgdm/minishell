@@ -71,7 +71,9 @@ void    ft_execute(t_data **data, t_commands *cmnd, char **envp)
 	else if (ft_doesmatch(cmnd->cmd[0], "unset"))
 		ft_unset(data, cmnd);
 	else if (ft_doesmatch(cmnd->cmd[0], "export"))
+	{
 		ft_export(&(*data)->env, &(*data)->envnoeq, cmnd, cmnd->out_file);
+	}
 	else if (ft_doesmatch(cmnd->cmd[0], "echo"))
 		ft_echo(cmnd->cmd, cmnd->out_file);
     else if (ft_doesmatch(cmnd->cmd[0], "exit"))
@@ -110,15 +112,13 @@ int main(int ac, char **av, char **envp)
 		_expander(&result);
 		
 		_update_tokens(&result);
-		_print_token(result);
+		//_print_token(result);
 		t_commands *commands = _parser(&result);
 		//_print_commands(commands);
 		 _free_all_tokens(&result, 0);
-		// ft_execute(&data, commands,envp);
+		 //ft_execute(&data, commands,envp);
 		 free(input);
 		free_commands(commands);
-	
-
 	}
 
 	return 0;
