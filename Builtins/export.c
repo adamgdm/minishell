@@ -16,6 +16,18 @@ int ft_iseqin(char *str)
     return (0);
 }
 
+char *ft_retiden(char *str)
+{
+    int i;
+    char *ret;
+
+    i = 0;
+    while (str[i] && str[i] != '=')
+        i++;
+    ret = ft_substr(str, 0, i);
+    return (ret);
+}
+
 void printenv(t_env *head, int fd) 
 {
     t_env *current ;
@@ -30,49 +42,85 @@ void printenv(t_env *head, int fd)
     }
 }
 
+int ft_strcmpwithoutnull(char *str, char *rts)
+{
+    int i;
+
+    i = 0;
+    while (str[i] && rts[i])
+    {
+        if (str[i] != rts[i])
+            return (0);
+        i++;
+    }
+    return (1);
+}
+
 int ft_checkifruleexists(t_env *env, t_env *envnocmd, char *cmd)
 {
     t_env *ee;
     t_env *ff;
     char *str;
+    int i;
+    int j;
     
+    i = 0;
+    j = 0;
     ee = env;
     ff = envnocmd;
     while (ee)
     {
-        str = ft_strjoin(cmd, "=");
-        if (!ft_strcmp(str, ee->str))
-            return (1);
+        str = ft_strjoin(ft_retiden(cmd), "=");
+        if (ft_strcmpwithoutnull(ee->str, str))
+        {
+          //  printf("a= %s\n", ee->str);
+            i = 1;
+            break ;
+        }
         free(str);
         ee = ee->next;
     }    
     while (ff)
     {
-        str = ft_strdup(cmd);
-        if (!ft_rulefinder(ff->str, str))
-            return (1);
+        str = ft_retiden(cmd);
+        if (!ft_strcmp(ff->str, str))
+        {
+            j = 1;
+            break ;
+        }
+        free(str);
         ff = ff->next;
     }
+   // printf("i = %d\n", i);
+   // printf("j = %d\n", j);
+   // printf("k = %d\n", ft_iseqin(cmd));
+    if (i == 0 && j == 1 && ft_iseqin(cmd))
+        return (1);
+    else if (i == 1 && j == 1 && ft_iseqin(cmd))
+        return (1);
+    else if (i == 1 && j == 0 && ft_iseqin(cmd))
+        return (1);
+    else if (i == 0 && j == 0 && ft_iseqin(cmd))
+        return (0);
+    else if (i == 0 && j == 1 && !ft_iseqin(cmd))
+        return (1);
+    else if (i == 1 && j == 1 && !ft_iseqin(cmd))
+        return (0);
+    else if (i == 1 && j == 0 && !ft_iseqin(cmd))
+        return (0);
+    else if (i == 0 && j == 0 && !ft_iseqin(cmd))
+        return (0);
     return (0);
 }
 
-char *ft_retiden(char *str)
-{
-    int i;
-    char *ret;
 
-    i = 0;
-    while (str[i] && str[i] != '=')
-        i++;
-    ret = ft_substr(str, 0, i);
-    return (ret);
-}
 
 void    ft_unsetiden(t_env **env, t_env **envnocmd, char *iden)
 {
     t_commands *cmnd;
     t_data *data;
 
+ //   printf("rule : asl\n");
     data = malloc(sizeof(t_data));
     data->env = (*env);
     data->envnoeq = (*envnocmd);
@@ -89,24 +137,21 @@ void    ft_unsetiden(t_env **env, t_env **envnocmd, char *iden)
 
 char *ft_returnrule(t_env **env, char *cmd)
 {
-    t_env *head;
+    t_env *ff;
     char *iden;
     char *str;
 
-    head = (*env);
-    while (head)
+    ff = (*env);
+    while (ff)
     {
-        iden = ft_retiden(cmd);
-        str = ft_strjoin(iden, "=");
-        if (!ft_strcmp(str, head->str))
+        str = ft_retiden(cmd);
+        if (ft_strcmpwithoutnull(ff->str, str))
         {
-            free(iden);
             free(str);
-            return (ft_strdup(head->str));
+            return(ft_strdup(ff->str));
         }
-        free(iden);
         free(str);
-        head = head->next;
+        ff = ff->next;
     }
     return (NULL);
 }
@@ -138,7 +183,6 @@ int ft_checkrule(t_env **env, t_env **envnc, char *cmd)
     char *rule;
 
     str = ft_retiden(cmd);
-    printf("%s\n", str);
     if (!ft_checkexportvalididentifier(str))
     {
         ft_putstr_fd("boubou_shell: export: `", 2);
@@ -148,8 +192,10 @@ int ft_checkrule(t_env **env, t_env **envnc, char *cmd)
         return (0);
     }
     rule = ft_returnrule(envnc, str);
-    if (!ft_iseqin(str) && ft_iseqin(rule))
+    //printf("RULE = %s, a=%d,b=%d, %s\n", rule, ft_iseqin(str), ft_iseqin(rule), str);
+    if (!ft_iseqin(cmd) && ft_iseqin(rule))
     {
+     //   printf("tfriiit\n");
         free(str);
         return (0);
     }
@@ -160,6 +206,24 @@ int ft_checkrule(t_env **env, t_env **envnc, char *cmd)
     }
     return (0);
 }
+
+int ft_checkif_plusequal_existsinstring(char *str)
+{
+    int i;
+
+    i = 0;
+    if (!str)
+        return (0);
+    while (str[i])
+    {
+        if (str[i] == '+')
+            return (1);
+            
+        i++;
+    }
+    return (0);
+}
+
 
 void    ft_export(t_env **env, t_env **envnocmd, t_commands *cmnd, int fd)
 {
@@ -176,20 +240,21 @@ void    ft_export(t_env **env, t_env **envnocmd, t_commands *cmnd, int fd)
     {
         while (cmnd->cmd[i])
         {
-            if (ft_checkrule(env, envnocmd, cmnd->cmd[i]))
-            {
-                iden = ft_retiden(cmnd->cmd[i]);
-                if (ft_checkifruleexists(*env, *envnocmd, iden))
-                    ft_unsetiden(env, envnocmd, iden);
-                if (ft_iseqin(cmnd->cmd[i]))
-                {    
-                    add_before_last_node(env, cmnd->cmd[i]);            
-                    add_before_last_node(envnocmd,cmnd->cmd[i]);
+           // if (!ft_check_plus_eq())
+                if (ft_checkrule(env, envnocmd, cmnd->cmd[i]))
+                {
+                    iden = ft_retiden(cmnd->cmd[i]);
+                    if (ft_checkifruleexists(*env, *envnocmd, cmnd->cmd[i]))
+                        ft_unsetiden(env, envnocmd, iden);
+                    if (ft_iseqin(cmnd->cmd[i]))
+                    {    
+                        add_before_last_node(env, cmnd->cmd[i]);            
+                        add_before_last_node(envnocmd,cmnd->cmd[i]);
+                    }
+                    else
+                        add_before_last_node(envnocmd,cmnd->cmd[i]);
+                    free(iden);
                 }
-                else
-                    add_before_last_node(envnocmd,cmnd->cmd[i]);
-                free(iden);
-            }
             i++;
         }
     }

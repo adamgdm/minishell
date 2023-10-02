@@ -48,7 +48,8 @@ void ft_initialize(t_data **x, char **env)
 int ft_doesmatch(char *str, char *qst)
 {
     int index = 0;
-    
+    if (!str || !qst)
+		return (0);
     while (str[index] != '\0' || qst[index] != '\0') 
     {
         if (str[index] != qst[index])
@@ -62,6 +63,8 @@ int ft_doesmatch(char *str, char *qst)
 
 void    ft_execute(t_data **data, t_commands *cmnd, char **envp)
 {
+	if (!cmnd || !cmnd->cmd)
+		return ;
     if (ft_doesmatch(cmnd->cmd[0], "pwd"))
         ft_pwd(cmnd->out_file);
 	else if (ft_doesmatch(cmnd->cmd[0], "cd"))
@@ -110,7 +113,11 @@ int main(int ac, char **av, char **envp)
 			continue;
 		}
 		_expander(&result);
+<<<<<<< HEAD
 		
+=======
+		//_print_token(result);
+>>>>>>> c75d16c (export fixed (support for '+=' not yet included))
 		_update_tokens(&result);
 		//_print_token(result);
 		t_commands *commands = _parser(&result);
