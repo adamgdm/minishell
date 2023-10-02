@@ -5,7 +5,7 @@ int _contains_dollar(char *str)
     int i;
 
     i = 0;
-    while(str[i])
+    while (str[i])
     {
         if (str[i] == '$')
             return 1;
@@ -14,32 +14,54 @@ int _contains_dollar(char *str)
     return 0;
 }
 
-char    *_expand_word(char *content)
+char *_expand_word(char *content)
 {
-    char    *result;
-    char    *tmp;
-    char    *tmp2;
-    char    *tmp3;
-    char    *save;
-    int     i;
-    int     j;
-    int     k;
+    char *result;
+    char *tmp;
+    char *tmp2;
+    char *tmp3;
+    char *save;
+    int i;
+    int j;
+    int k;
+    int on_off;
 
     i = 0;
     j = 0;
     k = 0;
+    on_off = 0;
     save = ft_strdup("");
     while (content[i])
     {
-        if (content[i] == '$')
+        if (content[i] == '$') // $?fs
         {
             i++;
             k = i;
+            on_off = 0;
             while (content[i] && !ft_strchr("+*-?<>{}[]^()#%@\"'$&|;,/\t ", content[i]))
                 i++;
+            if (k == i && content[i] == '?')
+            {
+                //printf("g_exit_status: %s\n", ft_itoa(g_exit_status));
+                tmp3 = save;
+                tmp = ft_itoa(g_exit_status);
+                save = ft_strjoin(save, tmp);
+                free(tmp3);
+                free(tmp);
+                i++;
+                j = i;
+                continue;
+            }
             if (i == k)
             {
-                save = _append(save, '$');
+                if (!content[i])
+                    save = _append(save, '$');
+                else
+                {
+                    save = _append(save, '$');
+                    save = _append(save, content[i]);
+                    i++;
+                }
                 j = i;
                 continue;
             }
@@ -55,20 +77,19 @@ char    *_expand_word(char *content)
         }
         if (content[i] && content[i] != '$')
         {
-            
+
             save = _append(save, content[i]);
             i++;
             j = i;
         }
-      
     }
     free(content);
     return save;
 }
 
-void    _expander(t_token **result)
+void _expander(t_token **result)
 {
-    t_token*    head;
+    t_token *head;
 
     head = *result;
     while (head)
@@ -86,7 +107,7 @@ void    _expander(t_token **result)
         }
         if (_contains_dollar(head->content) && (head->state == GENERAL || head->state == IN_DQUOTE))
         {
-            free(head->before_expanded);////////
+            free(head->before_expanded);                      ////////
             head->before_expanded = ft_strdup(head->content); // save the original content
             head->content = _expand_word(head->content);
         }

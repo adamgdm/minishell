@@ -96,6 +96,14 @@ int			_process_env_value(char *value);
 
 //	-----------------------    PARSING    ------------------------
 
+//	-----------------------    EXIT_STATUS    ------------------------
+
+int	g_exit_status;
+
+//	-----------------------    EXIT_STATUS    ------------------------
+
+
+//	-----------------------    EXECUTION    ------------------------
 int ft_strcmp(const char *s1, const char *s2);
 
 char* ft_strcpy(char* dest, const char* src);
@@ -161,5 +169,7 @@ void ft_initialize(t_data **x, char **env);
 void free_commands(t_commands *head);
 
 int ft_strcmpwithoutnull(char *str, char *rts);
+
+//	-----------------------    EXECUTION    ------------------------
 
 #endif
