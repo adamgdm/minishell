@@ -24,7 +24,6 @@ void    ft_unsetiden(t_env **env, t_env **envnocmd, char *iden)
     t_commands *cmnd;
     t_data *data;
 
- //   // // // // printf("rule : asl\n");
     data = malloc(sizeof(t_data));
     data->env = (*env);
     data->envnoeq = (*envnocmd);
@@ -64,7 +63,10 @@ char **ft_parse_args(char *str)
             }
             else
                 returnval[0] = ft_substr(str, 0, i);
-            returnval[1] = ft_substr(str, i + 1, ft_strlen(str));
+            if (str[i + 1] == '\0')
+                returnval[1] = ft_strdup("");
+            else
+                returnval[1] = ft_substr(str, i + 1, ft_strlen(str));
             if (condition == 1)
                 returnval[2] = ft_strdup("+=");
             else
@@ -81,15 +83,16 @@ char **ft_parse_args(char *str)
     return (returnval);
 }
 
-char *ft_returnrule(t_env *env, char *str)
+char *ft_returnrule(t_env *env, char *rts)
 {
     t_env *x;
+    char *str;
 
     x = env;
-    str = ft_strjoin(str, "=");
     while (x)
     {
-        if (!ft_strcmpwithoutnull(x->str, str))
+        str = ft_strjoin(rts, "=");
+        if (ft_rulefinder(x->str, str))
             return (ft_strdup(x->str));
         x = x->next;
     }
@@ -100,16 +103,17 @@ int ft_ruleexist(t_data **data, char *iden)
 {
     t_env *x;
     char *str;
+    char *rule;
 
     x = (*data)->env;
     str = ft_strjoin(iden, "=");
     while (x)
     {
-        if (!ft_strcmpwithoutnull(x->str, str))
+        rule = ft_strdup(str);
+        if (ft_rulefinder(x->str, rule))
             return (1);
         x = x->next;
     }
-    free(str);
     x = (*data)->envnoeq;
     while (x)
     {
@@ -125,7 +129,6 @@ int ft_checkexportorappend(char *str)
     int i;
 
     i = 0;
-    // // // // printf("address given is %p\n", str);
     if (!str)
         return (2);
     if (str[0] == '+')
@@ -146,7 +149,6 @@ void ft_exporttherule(t_data **data, char *iden, char *value)
     envnoeq = (*data)->envnoeq;
     if (ft_ruleexist(data, iden) && !value)
     {
-        // // // // printf("iamhere\n");
         return ;
     }
     else if (ft_ruleexist(data, iden) && value)
@@ -159,6 +161,7 @@ void ft_exporttherule(t_data **data, char *iden, char *value)
     }
     else 
     {
+        printf("hani hna\n");
         if (value)
         {
             str = ft_strjoin(iden, "=");
@@ -190,7 +193,7 @@ char *ft_getvalue(char *str)
         i++;
     }
     if (!str[i])
-        return (ft_strdup(""));
+        return (NULL);
     value = ft_substr(str, i + 1, ft_strlen(str));
     return (value);
 }
@@ -201,12 +204,18 @@ void ft_append(t_data **data, char *iden, char *value)
     char *str;
     char *tmp;
     if (!ft_ruleexist(data, iden))
+    {
+        printf("ident = %s\n", iden);
         ft_exporttherule(data, iden, value);
+    }
     else
     {
         rts = ft_returnrule((*data)->envnoeq, iden);
         str = ft_getvalue(rts);
-        tmp = ft_strjoin(str, value);
+        if (str && value)
+            tmp = ft_strjoin(str, value);
+        else
+            tmp = ft_strdup(value);
         ft_unsetiden(&((*data)->env), &((*data)->envnoeq), iden);
         ft_exporttherule(data, iden, tmp);
         free(rts);
