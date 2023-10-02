@@ -34,8 +34,15 @@ char    *_expand_word(char *content)
         if (content[i] == '$')
         {
             i++;
+            k = i;
             while (content[i] && !ft_strchr("+*-?<>{}[]^()#%@\"'$&|;,/\t ", content[i]))
                 i++;
+            if (i == k)
+            {
+                save = _append(save, '$');
+                j = i;
+                continue;
+            }
             tmp = ft_substr(content, j + 1, i - j - 1);
             tmp2 = getenv(tmp);
             if (!tmp2)
@@ -44,7 +51,6 @@ char    *_expand_word(char *content)
             save = ft_strjoin(save, tmp2);
             free(tmp);
             free(tmp3);
-           // free(tmp2);
             j = i;
         }
         if (content[i] && content[i] != '$')
