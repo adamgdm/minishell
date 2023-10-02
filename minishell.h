@@ -152,12 +152,14 @@ void    ft_env(t_env **env, int fd);
 
 void    ft_unset(t_data **data, t_commands *cmnd);
 
-void    ft_export(t_env **env, t_env **envnocmd, t_commands *cmnd, int fd);
+void	ft_export(t_data **data, char **args, int fd);
 
 int ft_doesmatch(char *str, char *qst);
 
 void ft_initialize(t_data **x, char **env);
 
 void free_commands(t_commands *head);
+
+int ft_strcmpwithoutnull(char *str, char *rts);
 
 #endif

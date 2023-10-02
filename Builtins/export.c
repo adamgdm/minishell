@@ -28,6 +28,18 @@ char *ft_retiden(char *str)
     return (ret);
 }
 
+char *ft_retidenplus(char *str)
+{
+    int i;
+    char *ret;
+
+    i = 0;
+    while (str[i] && str[i] != '=' && str[i] != '+')
+        i++;
+    ret = ft_substr(str, 0, i);
+    return (ret);
+}
+
 void printenv(t_env *head, int fd) 
 {
     t_env *current ;
@@ -182,12 +194,14 @@ int ft_checkrule(t_env **env, t_env **envnc, char *cmd)
     char *str;
     char *rule;
 
-    str = ft_retiden(cmd);
+    str = ft_retidenplus(cmd);
+    printf("%s\n", str);
     if (!ft_checkexportvalididentifier(str))
     {
+        printf("ft_checkrule = %d\n", ft_checkexportvalididentifier(str));
         ft_putstr_fd("boubou_shell: export: `", 2);
         ft_putstr_fd(str, 2);
-        ft_putstr_fd("': not a valid identifier\n", 2);
+        ft_putstr_fd("': not a valid identifierf\n", 2);
         free(str);
         return (0);
     }
@@ -207,7 +221,35 @@ int ft_checkrule(t_env **env, t_env **envnc, char *cmd)
     return (0);
 }
 
-int ft_checkif_plusequal_existsinstring(char *str)
+int ft_findsubinside(char *tofind, char *string)
+{
+    int i;
+    int j;
+
+    i = 0;
+    j = 0;
+    if (!tofind || !string)
+        return (0);
+    while (string[i])
+    {
+        if (string[i] == tofind[j])
+        {
+            while (string[i] == tofind[j])
+            {
+                i++;
+                j++;
+            }
+            if (!tofind[j])
+                return (1);
+            else
+                j = 0;
+        }
+        i++;
+    }
+    return (0);
+}
+
+int ft_checkifplusinidentifier(char *str)
 {
     int i;
 
@@ -217,22 +259,82 @@ int ft_checkif_plusequal_existsinstring(char *str)
     while (str[i])
     {
         if (str[i] == '+')
-            return (1);
-            
+        {
+            i++;
+            if (str[i] == '=')
+                return (0);
+            else
+                return (1);
+        }
         i++;
     }
     return (0);
 }
 
-
-void    ft_export(t_env **env, t_env **envnocmd, t_commands *cmnd, int fd)
+int ft_checkif_plusequal_existsinstring(char *str)
 {
-    t_env *head;
     int i;
-    char *iden;
 
-    i = 1;
-    iden = NULL;
+    i = 0;
+    if (!str)
+        return (0);
+    if (ft_findsubinside("+=", str))
+        return (1);
+    if (str[0] = '+' || ft_checkifplusinidentifier(str) )
+    {
+        printf("%d\n", ft_checkifplusinidentifier(str));
+        return (-1);
+    }
+    return (0);
+}
+
+void ft_printerror(char *str)
+{
+    ft_putstr_fd("boubou_shell: export: `", 2);
+    ft_putstr_fd(str, 2);
+    ft_putstr_fd("': not a valid identifier\n", 2);
+}
+
+char *ft_get_aftertheequalsign(char *str)
+{
+    int i;
+    int j;
+    char *ret;
+
+    i = 0;
+    j = 0;
+    if (!str)
+        return (NULL);
+    while (str[i] && str[i] != '=')
+        i++;
+    i++;
+    ret = malloc(sizeof(char) * (ft_strlen(str) - i + 1));
+    while (str[i])
+    {
+        ret[j] = str[i];
+        i++;
+        j++;
+    }
+    ret[j] = '\0';
+    return (ret);
+}
+
+char *ft_returnjoinedrule(char *identifier, char *value, char *add)
+{
+    char *ret;
+    char *tmp;
+
+    tmp = ft_strjoin(identifier, "=");
+    ret = ft_strjoin(tmp, value);
+    free(tmp);
+    tmp = ft_strjoin(ret, add);    free(str);
+    x = envnoeq;
+    while (x)
+    {
+        if (!ft_strcmp(x->str, iden))
+            return (ft_strdup(x->str));
+        x = x->next;
+    }
     head = (*envnocmd);
     if (!cmnd->cmd[i])    
         printenv(head, fd);
@@ -240,10 +342,22 @@ void    ft_export(t_env **env, t_env **envnocmd, t_commands *cmnd, int fd)
     {
         while (cmnd->cmd[i])
         {
-           // if (!ft_check_plus_eq())
-                if (ft_checkrule(env, envnocmd, cmnd->cmd[i]))
+            error = ft_checkif_plusequal_existsinstring(cmnd->cmd[i]);
+            printf("%d\n", error);
+                if (error == 1)
                 {
                     iden = ft_retiden(cmnd->cmd[i]);
+                    if (ft_checkifruleexists(*env, *envnocmd, cmnd->cmd[i]))
+                    {    
+                        rem = ft_returnjoinedrule(ft_retiden(cmnd->cmd[i]), fetchValue(iden,(*env)), ft_get_aftertheequalsign(cmnd->cmd[i]));
+                        ft_unsetiden(env, envnocmd, iden);
+                    }
+                    add_before_last_node(envnocmd,rem);
+                    free(iden);
+                }
+                else if (ft_checkrule(env, envnocmd, cmnd->cmd[i]) && error == 0)
+                {
+                    iden = ft_retidenplus(cmnd->cmd[i]);
                     if (ft_checkifruleexists(*env, *envnocmd, cmnd->cmd[i]))
                         ft_unsetiden(env, envnocmd, iden);
                     if (ft_iseqin(cmnd->cmd[i]))
@@ -259,3 +373,6 @@ void    ft_export(t_env **env, t_env **envnocmd, t_commands *cmnd, int fd)
         }
     }
 }
+
+
+

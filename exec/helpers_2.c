@@ -33,7 +33,7 @@ void add_last_node(t_env **head, const char *str) {
         exit(EXIT_FAILURE);
     }
 
-    new_node->str = strdup(str);
+    new_node->str = ft_strdup(str);
     new_node->next = NULL;
 
     if (*head == NULL) {
