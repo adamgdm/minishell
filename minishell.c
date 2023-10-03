@@ -1,5 +1,5 @@
 #include "minishell.h"
-
+int g_exit_status = 148;
 
 void _print_token(t_token *token)
 {

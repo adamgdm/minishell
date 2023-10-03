@@ -91,6 +91,7 @@ t_commands  *_create_command(char **commands, int in_file, int out_file, int err
 void		_add_command(t_commands **head, t_commands *new);
 void		_print_array(char **array);
 void		_free_all_tokens(t_token **head, int check);
+int			_process_env_value(char *value);
 
 
 //	-----------------------    PARSING    ------------------------
@@ -102,6 +103,14 @@ t_commands *ft_createcommand(char **str);
 char *ft_returnpwd();
 char *ft_returnrule(t_env *env, char *rts);
 
+//	-----------------------    EXIT_STATUS    ------------------------
+
+int	g_exit_status;
+
+//	-----------------------    EXIT_STATUS    ------------------------
+
+
+//	-----------------------    EXECUTION    ------------------------
 int ft_strcmp(const char *s1, const char *s2);
 
 char* ft_strcpy(char* dest, const char* src);
@@ -167,5 +176,7 @@ void ft_initialize(t_data **x, char **env);
 void free_commands(t_commands *head);
 
 int ft_strcmpwithoutnull(char *str, char *rts);
+
+//	-----------------------    EXECUTION    ------------------------
 
 #endif

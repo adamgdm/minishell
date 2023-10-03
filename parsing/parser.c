@@ -102,7 +102,15 @@ t_commands  *_parser(t_token **result)
             in_file = open(current->next->content, O_RDONLY);
             if (in_file == -1)
             {
-                printf("minishell: %s: %s\n", current->next->content, strerror(errno));
+                if (ft_strlen(current->next->before_expanded) != 0)
+                {
+                    if (_process_env_value(current->next->before_expanded) == 1)
+                        printf("minishell: %s: No such file or directory\n", current->next->before_expanded);
+                    else
+                        printf("minishell: %s: ambiguous redirect\n", current->next->before_expanded);
+                }
+                else
+                    printf("minishell: %s: %s\n", current->next->content, strerror(errno));
                 error = 1;
                 //return (NULL);
             }

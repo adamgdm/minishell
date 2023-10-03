@@ -1,9 +1,9 @@
  @afaqir37 ➜ /workspaces/MiniShell42 (main) $ 
-@afaqir37 ➜ /workspaces/MiniShell42 (main) $ export a=""
-@afaqir37 ➜ /workspaces/MiniShell42 (main) $ export a=" "
-@afaqir37 ➜ /workspaces/MiniShell42 (main) $ export a=" l"
-@afaqir37 ➜ /workspaces/MiniShell42 (main) $ export a="l   "
-@afaqir37 ➜ /workspaces/MiniShell42 (main) $ export a="l   k"
+@afaqir37 ➜ /workspaces/MiniShell42 (main) $ export a=""      -> ambiguous redirection
+@afaqir37 ➜ /workspaces/MiniShell42 (main) $ export a=" "     -> ambiguous redirection
+@afaqir37 ➜ /workspaces/MiniShell42 (main) $ export a=" l"	  -> no such file
+@afaqir37 ➜ /workspaces/MiniShell42 (main) $ export a="l   "  -> no such file
+@afaqir37 ➜ /workspaces/MiniShell42 (main) $ export a="l   k" -> ambiguous redirection
 @afaqir37 ➜ /workspaces/MiniShell42 (main) $ echo dsfsfl   k | echo mzmz^C
 ambiguous redirection
 
@@ -51,3 +51,4 @@ memory leaks after parsing error
 << delim : memory leak
 
  echo " | echo hello
+ echo "" ""''koko
