@@ -96,6 +96,13 @@ int			_process_env_value(char *value);
 
 //	-----------------------    PARSING    ------------------------
 
+void ft_exportpwdoldpwd(t_data **data, char *pwd);
+void ft_freearr(char **arr);
+void ft_freecmd(t_commands *cmd);
+t_commands *ft_createcommand(char **str);
+char *ft_returnpwd();
+char *ft_returnrule(t_env *env, char *rts);
+
 //	-----------------------    EXIT_STATUS    ------------------------
 
 int	g_exit_status;
@@ -154,9 +161,9 @@ void    ft_exit(t_data **data, t_commands *cmnds);
 
 void    ft_pwd(int fd);
 
-void    ft_cd(t_data **data, char *path, char *pwd);
+void    ft_cd(t_data **data, char *path, char **pwd);
 
-void    ft_env(t_env **env, int fd);
+void    ft_env(t_data **data, char *pwd, int fd);
 
 void    ft_unset(t_data **data, t_commands *cmnd);
 

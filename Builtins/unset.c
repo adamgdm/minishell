@@ -43,16 +43,19 @@ void ft_rulefinderanddelete_eq(t_data **data, char *rule)
 {
     t_env *x;
     t_env *y;
+    char *str;
     int i;
 
     x = (*data)->env;
-    y = (*data)->envnoeq;
     i = 1;
     while (x)
     {
         if (ft_rulefinder(x->str, ft_strdup(rule)))
         {
-            deleteNodeByContent(&(*data)->envnoeq, x->str);
+            str = ft_strdup(x->str);
+            deleteNodeByContent(&(*data)->env, x->str);
+            deleteNodeByContent(&(*data)->envnoeq, str);
+            break ;
         }
         y = x;
         x = x->next;
@@ -66,34 +69,20 @@ void ft_rulefinderanddelete(t_data **data, char *rule)
     t_env *y;
     int i;
 
-    x = (*data)->env;
-    y = (*data)->envnoeq;
+    x = (*data)->envnoeq;
     i = 1;
     while (x)
     {
-        if (!ft_strcmp(x->str, rule) == 0)
+        if (!ft_strcmp(x->str, rule))
         {
-            if (i == 1)
-            {
-                (x) = (x)->next;
-                free(x->str);
-                free(x);
-                return ;
-            }
-            else
-            {
-                y->next = x->next;
-                free(x->str);
-                free(x);
-                return ;
-            }
+            deleteNodeByContent(&(*data)->envnoeq, x->str);
+            break ;
         }
         y = x;
         x = x->next;
-        i++;
     }
 }
-/*
+
 void    ft_unset(t_data **data, t_commands *cmnd)
 {
     t_env *x;
@@ -101,8 +90,6 @@ void    ft_unset(t_data **data, t_commands *cmnd)
     int i;
     int count;
 
-    x = (*data)->env;
-    y = (*data)->envnoeq;
     count = ft_count(cmnd->cmd);
     i = 1;
     while (i < count)
@@ -113,21 +100,20 @@ void    ft_unset(t_data **data, t_commands *cmnd)
     i = 1;
     while (i < count)
     {
+        //printf("count = %d\n", count);
         ft_rulefinderanddelete(data, ft_strdup(cmnd->cmd[i]));
         i++;
     }
 }
-*/
+/*
 void    ft_unset(t_data **data, t_commands *cmnd)
 {
     t_env *x;
     t_env *z;
     t_commands *y;
     int i;
-    int j;
 
     i = 1;
-    j = ft_count(cmnd->cmd);
     x = (*data)->env;
     z = (*data)->envnoeq;
     y = cmnd;
@@ -169,4 +155,4 @@ void    ft_unset(t_data **data, t_commands *cmnd)
         else
             z = z->next;
     }
-}
+}*/
