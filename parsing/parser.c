@@ -87,9 +87,8 @@ t_commands  *_parser(t_token **result)
                 out_file = open(current->next->content, O_WRONLY | O_CREAT | O_TRUNC, 0644);
                 if (out_file == -1)
                 {
-                    if (ft_strlen(current->next->before_expanded) != 0)
+                    if (ft_strlen(current->next->before_expanded) != 0 && ft_strlen(current->next->content) == 0)
                     {
-                        if (ft_strlen(current->next->content) == 0)
                             printf("minishell: %s: ambiguous redirect\n", current->next->before_expanded);
                     }
                     else
