@@ -31,7 +31,7 @@ void    _add_token(t_token **head, t_token *new)
     current->next = new;
 }
 
-void    _free_all_tokens(t_token **head)
+void    _free_all_tokens(t_token **head, int check)
 {
     t_token *current;
     t_token *tmp;
@@ -42,13 +42,20 @@ void    _free_all_tokens(t_token **head)
     {
         tmp = current;
         current = current->next;
-        //free(tmp->content);
+        if (check == 1)
+        {
+            printf("content: %s\n", tmp->content);
+            free(tmp->content);
+            tmp->content = NULL;
+        }
         free(tmp->before_expanded);
         free(tmp);
         i++;
     }
     *head = NULL;
 }
+
+
 
 
 

@@ -43,28 +43,37 @@ t_env *charArrayToEnvList(char **charArray) {
 
 int ft_rulefinder(char *cmd, char *arraytofind)
 {
-    int i;
-    int j;
+    int i = 0;
+    int j = 0;
 
-    i = 0;
-    j = 0;
+    /*printf("1: \'%s\'\n", cmd);
+    printf("2: \'%s\'\n", arraytofind);*/
+    
+    if (!arraytofind)
+        return (0);
+    if (!cmd)
+    {    
+        free(arraytofind);
+        return (0);
+    }
     while (cmd[i])
     {
-        if (cmd[i] == arraytofind[j])
-        {
-            j++;
-            if(!arraytofind[j])
-            {
-                free(arraytofind);
-                return (1);
-            }
+        if (i && !arraytofind[i])
+        {    
+            free(arraytofind);
+            return (1);
         }
-        else
-            j = 0;
+        if (cmd[i] != arraytofind[i])
+        {    
+            free(arraytofind);
+            return (0);
+        }
         i++;
     }
+    if (arraytofind[i] == '\0')
+        j = 1;
     free(arraytofind);
-    return (0);
+    return j; // Strings do not match at every character position
 }
 
 char *getValue(char *input) 

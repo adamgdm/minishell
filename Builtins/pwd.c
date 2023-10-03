@@ -1,9 +1,8 @@
 #include "../minishell.h"
 
-char    *ft_retpwd(void)
+char *ft_returnpwd()
 {
     char *buffer;
-    char *ret;
     int i;
 
     i = pathconf(".", _PC_PATH_MAX);
@@ -12,22 +11,15 @@ char    *ft_retpwd(void)
         perror("Pathconf: ");
         exit(1);
     }
-
     buffer = malloc(sizeof(char) * i);
     if (!buffer)
     {
         perror("Malloc: ");
+        free(buffer);
         exit(1);
     }
-    ret = getcwd(buffer, i);
-    if (ret == NULL)
-    {
-        perror("Getcwd: ");
-        free(buffer); 
-        exit(1);
-    }
-    
-    return buffer;
+    buffer = getcwd(buffer, i);
+    return (buffer);
 }
 
 void    ft_pwd(int fd)

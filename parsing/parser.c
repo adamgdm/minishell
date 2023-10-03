@@ -72,7 +72,11 @@ t_commands  *_parser(t_token **result)
                 error = 1;
                 //return (NULL);
             }
+            free(current->content);
+            current->content = NULL;
             current = current->next;
+            free(current->content);
+            current->content = NULL;
         }
         if (current->type == REDIRECT_APPEND)
         {
@@ -85,7 +89,11 @@ t_commands  *_parser(t_token **result)
                 error = 1;
                 //return (NULL);
             }
+            free(current->content);
+            current->content = NULL;
             current = current->next;
+            free(current->content);
+            current->content = NULL;
         }
         if (current->type == REDIRECT_IN)
         {
@@ -98,11 +106,19 @@ t_commands  *_parser(t_token **result)
                 error = 1;
                 //return (NULL);
             }
+            free(current->content);
+            current->content = NULL;
             current = current->next;
+            free(current->content);
+            current->content = NULL;
         }
         if (current->type == HERE_DOC)
         {
+            free(current->content);
+            current->content = NULL;
             current = current->next;
+            free(current->content);
+            current->content = NULL;
             // if (current->state ==  QUOTED || current->state == IN_QUOTE || current->state == IN_DQUOTE)
             //     _herdoc(head,current->next->content, 0, env);  // case : cat << ma'ma' || cat << "ma'ma" || cat << 'mama' || cat << "mama" the env is not expanded
             // else
@@ -113,7 +129,10 @@ t_commands  *_parser(t_token **result)
             new = _create_command(commands, in_file, out_file, error);
             _add_command(&head, new);
             commands = NULL;
-             error = 0;
+            error = 0;
+            free(current->content);
+            current->content = NULL;
+
         }
        
         current = current->next;

@@ -90,10 +90,17 @@ t_commands  *_parser(t_token **result);
 t_commands  *_create_command(char **commands, int in_file, int out_file, int error);
 void		_add_command(t_commands **head, t_commands *new);
 void		_print_array(char **array);
-void		_free_all_tokens(t_token **head);
+void		_free_all_tokens(t_token **head, int check);
 
 
 //	-----------------------    PARSING    ------------------------
+
+void ft_exportpwdoldpwd(t_data **data, char *pwd);
+void ft_freearr(char **arr);
+void ft_freecmd(t_commands *cmd);
+t_commands *ft_createcommand(char **str);
+char *ft_returnpwd();
+char *ft_returnrule(t_env *env, char *rts);
 
 int ft_strcmp(const char *s1, const char *s2);
 
@@ -145,18 +152,20 @@ void    ft_exit(t_data **data, t_commands *cmnds);
 
 void    ft_pwd(int fd);
 
-void    ft_cd(t_data **data, char *path, char *pwd);
+void    ft_cd(t_data **data, char *path, char **pwd);
 
-void    ft_env(t_env **env, int fd);
+void    ft_env(t_data **data, char *pwd, int fd);
 
 void    ft_unset(t_data **data, t_commands *cmnd);
 
-void    ft_export(t_env **env, t_env **envnocmd, t_commands *cmnd, int fd);
+void	ft_export(t_data **data, char **args, int fd);
 
 int ft_doesmatch(char *str, char *qst);
 
 void ft_initialize(t_data **x, char **env);
 
 void free_commands(t_commands *head);
+
+int ft_strcmpwithoutnull(char *str, char *rts);
 
 #endif
