@@ -95,6 +95,13 @@ void		_free_all_tokens(t_token **head, int check);
 
 //	-----------------------    PARSING    ------------------------
 
+void ft_exportpwdoldpwd(t_data **data, char *pwd);
+void ft_freearr(char **arr);
+void ft_freecmd(t_commands *cmd);
+t_commands *ft_createcommand(char **str);
+char *ft_returnpwd();
+char *ft_returnrule(t_env *env, char *rts);
+
 int ft_strcmp(const char *s1, const char *s2);
 
 char* ft_strcpy(char* dest, const char* src);
@@ -145,9 +152,9 @@ void    ft_exit(t_data **data, t_commands *cmnds);
 
 void    ft_pwd(int fd);
 
-void    ft_cd(t_data **data, char *path, char *pwd);
+void    ft_cd(t_data **data, char *path, char **pwd);
 
-void    ft_env(t_env **env, int fd);
+void    ft_env(t_data **data, char *pwd, int fd);
 
 void    ft_unset(t_data **data, t_commands *cmnd);
 
