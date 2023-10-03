@@ -107,8 +107,10 @@ void _expander(t_token **result)
         }
         if (_contains_dollar(head->content) && (head->state == GENERAL || head->state == IN_DQUOTE))
         {
-            free(head->before_expanded);                      ////////
-            head->before_expanded = ft_strdup(head->content); // save the original content
+            if (ft_strlen(head->content) != 1) {                ////////
+                free(head->before_expanded);
+                head->before_expanded = ft_strdup(head->content);// save the original content
+            }
             head->content = _expand_word(head->content);
         }
         head = head->next;
