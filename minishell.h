@@ -83,7 +83,7 @@ t_token*    _create_token(char *value, enum e_token type, enum e_state state, in
 void		_add_token(t_token **head, t_token *new);
 void		_update_tokens(t_token **result);
 int			_it_contains(int c);
-void		_expander(t_token **head);
+void		_expander(t_token **head, t_data *data);
 char*		_append(char *str, char c);
 int			_syntax_check(t_token** result);
 t_commands  *_parser(t_token **result);

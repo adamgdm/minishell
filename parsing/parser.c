@@ -37,6 +37,18 @@ void   _print_array(char **array)
     }
 }
 
+int _is_there_space_or_tab(char *content)
+{
+    int i;\
+    i = 0;
+    while (content[i])
+    {
+        if (content[i] == ' ' || content[i] == '\t')
+            return (1);
+        i++;
+    }
+    return (0);
+}
 
 t_commands  *_parser(t_token **result)
 {
@@ -65,15 +77,25 @@ t_commands  *_parser(t_token **result)
         {
             if (out_file > 2)
                 close(out_file);
-            out_file = open(current->next->content, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-            if (out_file == -1)
+            if (_is_there_space_or_tab(current->next->content) == 1)
             {
-                if (ft_strlen(current->next->before_expanded) != 0)
-                        printf("minishell: %s: ambiguous redirect\n", current->next->before_expanded);
-                else
-                    printf("minishell: %s: %s\n", current->next->content, strerror(errno));
+                printf("minishell: %s: ambiguous redirect\n", current->next->before_expanded);
                 error = 1;
-                //return (NULL);
+            }
+            else
+            {
+                out_file = open(current->next->content, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+                if (out_file == -1)
+                {
+                    if (ft_strlen(current->next->before_expanded) != 0)
+                    {
+                        if (ft_strlen(current->next->content) == 0)
+                            printf("minishell: %s: ambiguous redirect\n", current->next->before_expanded);
+                    }
+                    else
+                        printf("minishell: %s: %s\n", current->next->content, strerror(errno));
+                    error = 1;
+                }
             }
             free(current->content);
             current->content = NULL;
@@ -107,10 +129,10 @@ t_commands  *_parser(t_token **result)
             {
                 if (ft_strlen(current->next->before_expanded) != 0)
                 {
-                    if (_process_env_value(current->next->before_expanded) == 1)
-                        printf("minishell: %s: No such file or directory\n", current->next->before_expanded);
-                    else
+                    if (ft_strlen(current->next->content) == 0 ||  _is_there_space_or_tab(current->next->content) == 1)
                         printf("minishell: %s: ambiguous redirect\n", current->next->before_expanded);
+                    else
+                        printf("minishell: %s: No such file or directory\n", current->next->content);
                 }
                 else
                     printf("minishell: %s: %s\n", current->next->content, strerror(errno));
