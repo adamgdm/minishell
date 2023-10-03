@@ -98,7 +98,7 @@ int main(int ac, char **av, char **envp)
 	ft_initialize(&data, envp);
 	while (1)
 	{
-		char *input = readline("Boubou_shell> ");
+		char *input = readline("\e[01;32mBoubou_shell> \e[0;37m");
 		if (input && *input)
 			add_history(input);
 		if (!input)
