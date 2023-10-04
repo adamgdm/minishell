@@ -12,6 +12,35 @@
 
 #include "get_next_line.h"
 
+static char	*ft_strjoin(char *ptr, char *buffer)
+{
+	char	*str;
+	int		i;
+	int		j;
+
+	if (!ptr)
+	{
+		ptr = malloc(sizeof(char) * 1);
+		if (!ptr)
+			return (NULL);
+		ptr[0] = 0;
+	}
+	if (!buffer)
+		return (NULL);
+	str = malloc(sizeof(char) * (ft_strlen(ptr) + ft_strlen(buffer) + 1));
+	if (!str)
+		return (NULL);
+	i = -1;
+	while (ptr[++i])
+		str[i] = ptr[i];
+	j = 0;
+	while (buffer[j])
+		str[i++] = buffer[j++];
+	str[i] = '\0';
+	free(ptr);
+	return (str);
+}
+
 char	*ft_read_full_line(int fd, char *ptr)
 {
 	int		k;
