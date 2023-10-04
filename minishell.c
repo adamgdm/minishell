@@ -121,14 +121,14 @@ int ft_doesmatch(char *str, char *qst)
     return (0);
 }
 
-void    ft_execute(t_data **data, t_commands *cmnd, char **envp)
+int    ft_execute(t_data **data, t_commands *cmnd)
 {
 	char **pwd;
 
 	pwd = malloc(sizeof(char *));
 	(*pwd) = ft_returnrule((*data)->env, "OLDPWD");
 	if (!cmnd || !cmnd->cmd)
-		return ;
+		return (-1);
     if (ft_doesmatch(cmnd->cmd[0], "pwd"))
         ft_pwd(cmnd->out_file);
 	else if (ft_doesmatch(cmnd->cmd[0], "cd"))
@@ -146,8 +146,12 @@ void    ft_execute(t_data **data, t_commands *cmnd, char **envp)
     else if (ft_doesmatch(cmnd->cmd[0], "exit"))
 		ft_exit((data), cmnd);
     else
-		printf("Sbr lmk mazal massalit, ah ou exit fiha leaks, chof dok dialk wdiali antklf bihom ghda rah drni rassi. mhm tryiha db\n");
-	free(pwd); 
+	{
+		free(pwd); 
+		return (1);
+	}
+	free(pwd);
+	return (0);
 }
 
 
@@ -183,7 +187,7 @@ int main(int ac, char **av, char **envp)
 		t_commands *commands = _parser(&result);
 		//_print_commands(commands);
 		 _free_all_tokens(&result, 0);
-		 ft_execute(&data, commands,envp);
+		 ft_execute_all(&data, commands);
 		 free(input);
 		free_commands(commands);
 	}
