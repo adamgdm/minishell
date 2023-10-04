@@ -9,6 +9,8 @@
 #include <readline/history.h>
 #include <unistd.h>
 #include <string.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 #include "libft/libft.h"
 
 
@@ -105,7 +107,7 @@ char *ft_returnrule(t_env *env, char *rts);
 
 //	-----------------------    EXIT_STATUS    ------------------------
 
-int	g_exit_status;
+extern int	g_exit_status;
 
 //	-----------------------    EXIT_STATUS    ------------------------
 
@@ -141,7 +143,9 @@ int ft_iseqin(char *str);
 
 void    ft_echo(char **cmd, int fd);
 
-void    ft_execute(t_data **data, t_commands *cmnd, char **envp);
+void	ft_execute_all(t_data **data, t_commands *cmnd);
+
+int    ft_execute(t_data **data, t_commands *cmnd);
 
 int     ft_count(char **str);
 

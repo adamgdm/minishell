@@ -1,34 +1,5 @@
 #include "../minishell.h"
 
-int isdnin(char *cmd, char *arraytofind)
-{
-    int i;
-    int j;
-
-    i = 0;
-    j = 0;
-    if (!cmd)
-        return (0);
-    while (cmd[i])
-    {
-        if (cmd[i] == arraytofind[j])
-        {
-            j++;
-            if(!arraytofind[j])
-            {
-                while (cmd[i] == 'n')
-                    i++;
-                if (!cmd[i])
-                    return (1);
-            }
-        }
-        else
-            j = 0;
-        i++;
-    }
-    return (0);
-}
-
 void    ft_echo(char **cmd, int fd)
 {
     int i;
@@ -41,7 +12,7 @@ void    ft_echo(char **cmd, int fd)
         ft_putchar_fd('\n',fd);
         return ;
     }
-    while (isdnin(cmd[i], "-n"))
+    while (ft_rulefinder(cmd[i], ft_strdup("-n")))
     {    
         nl = 0;
         i++;
