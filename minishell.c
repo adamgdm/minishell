@@ -180,13 +180,13 @@ int main(int ac, char **av, char **envp)
 			free(input);
 			continue;
 		}
-		_expander(&result);
-		//_print_token(result);
+		_expander(&result, data);
 		_update_tokens(&result);
 		//_print_token(result);
-		t_commands *commands = _parser(&result);
+		//_print_token(result);
+		t_commands *commands = _parser(&result, data);
 		//_print_commands(commands);
-		 _free_all_tokens(&result, 0);
+		// _free_all_tokens(&result, 0);
 		 ft_execute_all(&data, commands);
 		 free(input);
 		free_commands(commands);

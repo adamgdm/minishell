@@ -14,7 +14,7 @@ int _contains_dollar(char *str)
     return 0;
 }
 
-char *_expand_word(char *content)
+char *_expand_word(char *content, t_data *data)
 {
     char *result;
     char *tmp;
@@ -66,7 +66,7 @@ char *_expand_word(char *content)
                 continue;
             }
             tmp = ft_substr(content, j + 1, i - j - 1);
-            tmp2 = getenv(tmp);
+            tmp2 = fetchValue(tmp, data->env);
             if (!tmp2)
                 tmp2 = "";
             tmp3 = save;
@@ -87,7 +87,7 @@ char *_expand_word(char *content)
     return save;
 }
 
-void _expander(t_token **result)
+void _expander(t_token **result, t_data *data)
 {
     t_token *head;
 
@@ -111,7 +111,7 @@ void _expander(t_token **result)
                 free(head->before_expanded);
                 head->before_expanded = ft_strdup(head->content);// save the original content
             }
-            head->content = _expand_word(head->content);
+            head->content = ft_strtrim(_expand_word(head->content, data), " \t");
         }
         head = head->next;
     }

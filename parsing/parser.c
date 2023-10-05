@@ -37,8 +37,20 @@ void   _print_array(char **array)
     }
 }
 
+int _is_there_space_or_tab(char *content)
+{
+    int i;\
+    i = 0;
+    while (content[i])
+    {
+        if (content[i] == ' ' || content[i] == '\t')
+            return (1);
+        i++;
+    }
+    return (0);
+}
 
-t_commands  *_parser(t_token **result)
+t_commands  *_parser(t_token **result, t_data *data)
 {
     char        **commands;
     int         in_file;
@@ -47,7 +59,10 @@ t_commands  *_parser(t_token **result)
     t_token     *current;
     t_commands  *head;
     t_commands  *new;
-
+    int *fd;
+    int p[2];
+    int result_pipe[2] = {-1 , -1};
+    int previous_pipe = -1;
     commands = NULL;
     in_file = 0;
     out_file = 1;
@@ -65,15 +80,24 @@ t_commands  *_parser(t_token **result)
         {
             if (out_file > 2)
                 close(out_file);
-            out_file = open(current->next->content, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-            if (out_file == -1)
+            if (_is_there_space_or_tab(current->next->content) == 1)
             {
-                if (ft_strlen(current->next->before_expanded) != 0)
-                        printf("minishell: %s: ambiguous redirect\n", current->next->before_expanded);
-                else
-                    printf("minishell: %s: %s\n", current->next->content, strerror(errno));
+                printf("minishell: %s: ambiguous redirect\n", current->next->before_expanded);
                 error = 1;
-                //return (NULL);
+            }
+            else
+            {
+                out_file = open(current->next->content, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+                if (out_file == -1)
+                {
+                    if (ft_strlen(current->next->before_expanded) != 0 && ft_strlen(current->next->content) == 0)
+                    {
+                            printf("minishell: %s: ambiguous redirect\n", current->next->before_expanded);
+                    }
+                    else
+                        printf("minishell: %s: %s\n", current->next->content, strerror(errno));
+                    error = 1;
+                }
             }
             free(current->content);
             current->content = NULL;
@@ -107,10 +131,10 @@ t_commands  *_parser(t_token **result)
             {
                 if (ft_strlen(current->next->before_expanded) != 0)
                 {
-                    if (_process_env_value(current->next->before_expanded) == 1)
-                        printf("minishell: %s: No such file or directory\n", current->next->before_expanded);
-                    else
+                    if (ft_strlen(current->next->content) == 0 ||  _is_there_space_or_tab(current->next->content) == 1)
                         printf("minishell: %s: ambiguous redirect\n", current->next->before_expanded);
+                    else
+                        printf("minishell: %s: No such file or directory\n", current->next->content);
                 }
                 else
                     printf("minishell: %s: %s\n", current->next->content, strerror(errno));
@@ -125,19 +149,27 @@ t_commands  *_parser(t_token **result)
         }
         if (current->type == HERE_DOC)
         {
+             if (current->next->state == GENERAL)
+                fd = _here_doc(current->next->content, 1, data);  // case : cat << ma'ma' || cat << "ma'ma" || cat << 'mama' || cat << "mama" the env is not expanded
+             else
+               fd = _here_doc(current->next->content, 0, data);  // case : cat << mama || cat << $mama || cat << ${mama} the env is expanded
+             
+            in_file = fd[0];
             free(current->content);
             current->content = NULL;
             current = current->next;
             free(current->content);
             current->content = NULL;
-            // if (current->state ==  QUOTED || current->state == IN_QUOTE || current->state == IN_DQUOTE)
-            //     _herdoc(head,current->next->content, 0, env);  // case : cat << ma'ma' || cat << "ma'ma" || cat << 'mama' || cat << "mama" the env is not expanded
-            // else
-            //     _herdoc(head,current->next->content, 1, env);  // case : cat << mama || cat << $mama || cat << ${mama} the env is expanded
+           
         }
         if (current->type == PIPE)
         {
-            new = _create_command(commands, in_file, out_file, error);
+            result_pipe[0] = previous_pipe;
+            pipe(p);
+            result_pipe[1] = p[1];
+            previous_pipe = p[0];
+
+            new = _create_command(commands, in_file, out_file, result_pipe, error);
             _add_command(&head, new);
             commands = NULL;
             error = 0;
@@ -148,7 +180,9 @@ t_commands  *_parser(t_token **result)
        
         current = current->next;
     }
-    new = _create_command(commands, in_file, out_file, error);
+    result_pipe[0] = previous_pipe;
+    result_pipe[1] = -1;
+    new = _create_command(commands, in_file, out_file, result_pipe, error);
     _add_command(&head, new);
     return (head);
 

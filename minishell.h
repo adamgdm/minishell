@@ -55,6 +55,7 @@ typedef struct s_token {
 typedef struct s_commands {
 	int					in_file;
 	int					out_file;
+	int					*pipefd;
 	int					error_exist;
 	char				**cmd;
 	struct s_commands	*next;
@@ -85,15 +86,17 @@ t_token*    _create_token(char *value, enum e_token type, enum e_state state, in
 void		_add_token(t_token **head, t_token *new);
 void		_update_tokens(t_token **result);
 int			_it_contains(int c);
-void		_expander(t_token **head);
+void		_expander(t_token **head, t_data *data);
 char*		_append(char *str, char c);
 int			_syntax_check(t_token** result);
-t_commands  *_parser(t_token **result);
-t_commands  *_create_command(char **commands, int in_file, int out_file, int error);
+t_commands  *_parser(t_token **result, t_data *data);
+t_commands  *_create_command(char **commands, int in_file, int out_file, int *pipefd, int error);
 void		_add_command(t_commands **head, t_commands *new);
 void		_print_array(char **array);
 void		_free_all_tokens(t_token **head, int check);
 int			_process_env_value(char *value);
+int			*_here_doc(char *content, int check, t_data *data);
+char		*_expand_word(char *content, t_data *data);
 
 
 //	-----------------------    PARSING    ------------------------
