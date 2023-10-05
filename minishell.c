@@ -27,6 +27,8 @@ void	_print_commands(t_commands *commands)
 		printf("in_file: %d\n", commands->in_file);
 		printf("out_file: %d\n", commands->out_file);
 		printf("error_exist: %d\n", commands->error_exist);
+		printf("pipefd[0]: %d  ", commands->pipefd[0]);
+		printf("pipefd[1]: %d\n", commands->pipefd[1]);
 		printf("-----------------------------------------------\n");
 		commands = commands->next;
 		i++;
@@ -185,9 +187,9 @@ int main(int ac, char **av, char **envp)
 		//_print_token(result);
 		//_print_token(result);
 		t_commands *commands = _parser(&result, data);
-		//_print_commands(commands);
-		// _free_all_tokens(&result, 0);
-		 ft_execute_all(&data, commands);
+		// _print_commands(commands);
+		_free_all_tokens(&result, 0);
+		ft_execute_all(&data, commands);
 		 free(input);
 		free_commands(commands);
 	}

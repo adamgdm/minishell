@@ -61,7 +61,9 @@ t_commands  *_parser(t_token **result, t_data *data)
     t_commands  *new;
     int *fd;
     int p[2];
-    int result_pipe[2] = {-1 , -1};
+    int *result_pipe = malloc(sizeof(int) * 2);
+    result_pipe[0] = -1;
+    result_pipe[1] = -1;
     int previous_pipe = -1;
     commands = NULL;
     in_file = 0;
@@ -164,10 +166,13 @@ t_commands  *_parser(t_token **result, t_data *data)
         }
         if (current->type == PIPE)
         {
+
             result_pipe[0] = previous_pipe;
             pipe(p);
             result_pipe[1] = p[1];
             previous_pipe = p[0];
+            // printf("pipefd[0]: %d\n", result_pipe[0]);
+            // printf("pipefd[1]: %d\n", result_pipe[1]);
 
             new = _create_command(commands, in_file, out_file, result_pipe, error);
             _add_command(&head, new);
@@ -175,6 +180,12 @@ t_commands  *_parser(t_token **result, t_data *data)
             error = 0;
             free(current->content);
             current->content = NULL;
+            // free(result_pipe);
+            result_pipe = malloc(sizeof(int) * 2);
+            // printf("%p\n", result_pipe);
+            result_pipe[0] = -1;
+            result_pipe[1] = -1;
+
 
         }
        

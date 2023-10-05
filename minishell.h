@@ -116,6 +116,9 @@ extern int	g_exit_status;
 
 
 //	-----------------------    EXECUTION    ------------------------
+
+void ft_executesecondcmnd(t_data **data, t_commands *cmnd, int **pipes);
+
 int ft_strcmp(const char *s1, const char *s2);
 
 char* ft_strcpy(char* dest, const char* src);

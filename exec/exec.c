@@ -90,13 +90,16 @@ void ft_executeonecmnd(t_data **data, t_commands *cmnd)
             }
         }
         else
-            waitpid(frchita, NULL, 0);
+        {
+        while (wait(NULL) != -1)
+		    continue ;
         ft_freearr(environement);
         free(command);
-    }    
+        }    
+    }
 }
 
-void ft_executesecondcmnd(t_data **data, t_commands *cmnd, int **pipes)
+void ft_executeldakhel(t_data **data, t_commands *cmnd)
 {
     int frchita;
     char **environement;
@@ -111,16 +114,63 @@ void ft_executesecondcmnd(t_data **data, t_commands *cmnd, int **pipes)
         free(command);
         return ;
     }
-    printf("l3ezz\n");
     frchita = fork();
     if (frchita == -1)
         perror("Fork");
     else if (frchita == 0)
     {
-        dup2(pipes[0][0], 0);
-        dup2(cmnd->next->out_file, 1);
-        close(pipes[0][0]);
-        close(pipes[0][1]);
+        dup2(cmnd->pipefd[0], 0);
+        dup2(cmnd->pipefd[1], 1);
+        close(cmnd->pipefd[0]);
+        close(cmnd->pipefd[1]);
+        if (execve(command, cmnd->cmd, environement) == -1)
+        {
+            perror("Execve");
+            return ;
+        }
+    }
+    else
+    {	
+        while (wait(NULL) != -1)
+	        continue ;
+        close(cmnd->pipefd[0]);
+        close(cmnd->pipefd[1]);
+    }
+    cmnd = cmnd->next;
+    if (cmnd && cmnd->next)
+        ft_executeldakhel(data, cmnd);
+    else
+        ft_executesecondcmnd(data, cmnd, NULL);
+    ft_freearr(environement);
+    free(command);
+}
+
+
+void ft_executesecondcmnd(t_data **data, t_commands *cmnd, int **pipes)
+{
+    int frchita;
+    char **environement;
+    char *command;
+    (void)pipes;
+
+    command = ft_returnexistingcommandpath((*data)->env, cmnd->cmd[0]);
+    if (!command)
+        return ;
+    environement = ft_env_to_array((*data)->env);
+    if (!environement)
+    {
+        free(command);
+        return ;
+    }
+    frchita = fork();
+    if (frchita == -1)
+        perror("Fork");
+    else if (frchita == 0)
+    {
+        dup2(cmnd->pipefd[0], 0);
+        dup2(cmnd->out_file, 1);
+        close(cmnd->pipefd[0]);
+        close(cmnd->pipefd[1]);
         if (execve(command, cmnd->cmd, environement) == -1)
         {
             perror("Execve");
@@ -129,9 +179,10 @@ void ft_executesecondcmnd(t_data **data, t_commands *cmnd, int **pipes)
     }
     else
     {
-        waitpid(frchita, NULL, 0);
-        close(pipes[0][1]);
-        close(pipes[0][0]);
+        while (wait(NULL) != -1)
+	    	continue ;
+        close(cmnd->pipefd[0]);
+        close(cmnd->pipefd[1]);
     }
     ft_freearr(environement);
     free(command);
@@ -143,6 +194,7 @@ void ft_execute_one_pipe(t_data **data, t_commands *cmnd, int **pipes)
     int frchita;
     char **environement;
     char *command;
+    (void)pipes;
 
     command = ft_returnexistingcommandpath((*data)->env, cmnd->cmd[0]);
     if (!command)
@@ -158,10 +210,10 @@ void ft_execute_one_pipe(t_data **data, t_commands *cmnd, int **pipes)
         perror("Fork");
     else if (frchita == 0)
     {
-        dup2(pipes[0][1], 1);
+        dup2(cmnd->pipefd[1], 1);
         dup2(cmnd->in_file, 0);
-        close(pipes[0][0]);
-        close(pipes[0][1]);
+        close(cmnd->pipefd[0]);
+        close(cmnd->pipefd[1]);
         if (execve(command, cmnd->cmd, environement) == -1)
         {
             perror("Execve");
@@ -170,11 +222,16 @@ void ft_execute_one_pipe(t_data **data, t_commands *cmnd, int **pipes)
     }
     else
     {
-        waitpid(frchita, NULL, 0);
-        close(pipes[0][1]);
-        close(pipes[0][0]);
+        while (wait(NULL) != -1)
+	    	continue ;
+        close(cmnd->pipefd[0]);
+        close(cmnd->pipefd[1]);
     }
-    ft_executesecondcmnd(data, cmnd->next, pipes);
+    cmnd = cmnd->next;
+    if (!cmnd->next)
+        ft_executesecondcmnd(data, cmnd, pipes);
+    else
+        ft_executeldakhel(data, cmnd);
 }
 
 
@@ -193,27 +250,34 @@ int ft_count_how_many_pipes(t_commands *cmnd)
     return (i);
 }
 
+void	ft_wait_last(int pid, int status)
+{
+	waitpid(pid, &status, 0);
+	/*if (WIFEXITED(status))
+		g_exit_stat = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+		g_exit_stat = 128 + WTERMSIG(status);*/
+}
+
 void ft_execute_all(t_data **data, t_commands *cmnd)
 {
+    int forkita;
     int **pipes;
 
-    if (ft_execute(data, cmnd) == 1)
+    forkita = fork();
+    if (forkita == -1)
+        perror("Fork");
+    else if (forkita == 0)
     {
-        if (!cmnd->next)
-            ft_executeonecmnd(data, cmnd);
-        else
+        if (ft_execute(data, cmnd) == 1)
         {
-            pipes = ft_create_pipes(cmnd);
-            if (ft_count_how_many_pipes(cmnd) == 2)
+            if (!cmnd->next)
+                ft_executeonecmnd(data, cmnd);
+            else
             {
                 ft_execute_one_pipe(data, cmnd, pipes);
             }
-            else
-            {
-                printf("L3ezz\n");
-                //ft_executepipes(data, cmnd, pipes);
-                ft_free_pipes(pipes, cmnd, ft_count_how_many_pipes(cmnd) - 1);
-            }
         }
     }
+    ft_wait_last(forkita, 0);
 }
