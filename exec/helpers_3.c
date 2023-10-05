@@ -81,18 +81,46 @@ char *ft_makethelist(char *cmd, char **path, t_env *head)
     return (NULL);
 }
 
-void ft_execve(char **envp, char **cmnd, t_env *head)
+void ft_free_pipes(int **pipes, t_commands *cmnd, int i)
 {
-    char *str;
+    while (i >= 0)
+    {
+        if (pipes[i])
+            free(pipes[i]);
+        i--;
+    }
+    free(pipes);
+}
+
+int **ft_create_pipes(t_commands *cmnd)
+{
+    int **pipes;
     int i;
 
-    if (fork())
+    i = 0;
+    pipes = malloc(sizeof(int *) * (ft_count_how_many_pipes(cmnd) + 1));
+    if (!pipes)
+        return (NULL);
+    while (cmnd)
     {
-        str = ft_makethelist(cmnd[0], ft_find_path(envp, head), head);
-        printf("%s\n",str);
-        execve(str, cmnd, envp);
-        perror("execve");
-        //exit (1);
+        if (cmnd->next)
+        {
+            pipes[i] = malloc(sizeof(int) * 2);
+            if (!pipes[i])
+            {
+                ft_free_pipes(pipes, cmnd, i);
+                return (NULL);
+            }
+            if (pipe(pipes[i]) == -1)
+            {
+                ft_free_pipes(pipes, cmnd, i);
+                return (NULL);
+            }
+        }
+        else
+            pipes[i] = NULL;
+        i++;
+        cmnd = cmnd->next;
     }
-    //free (str);
+    return (pipes);
 }

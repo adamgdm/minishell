@@ -96,43 +96,101 @@ void ft_executeonecmnd(t_data **data, t_commands *cmnd)
     }    
 }
 
-void ft_execute_one_pipe(t_data **data, t_commands *cmnd)
+void ft_executesecondcmnd(t_data **data, t_commands *cmnd, int **pipes)
 {
     int frchita;
-    int fd[2];
-    char *command;
     char **environement;
+    char *command;
 
-    if (pipe(fd) == -1)
-        return ;
     command = ft_returnexistingcommandpath((*data)->env, cmnd->cmd[0]);
-    if (command)
+    if (!command)
+        return ;
+    environement = ft_env_to_array((*data)->env);
+    if (!environement)
     {
-        environement = ft_env_to_array((*data)->env);
-        if (!environement)
+        free(command);
+        return ;
+    }
+    printf("l3ezz\n");
+    frchita = fork();
+    if (frchita == -1)
+        perror("Fork");
+    else if (frchita == 0)
+    {
+        dup2(pipes[0][0], 0);
+        dup2(cmnd->next->out_file, 1);
+        close(pipes[0][0]);
+        close(pipes[0][1]);
+        if (execve(command, cmnd->cmd, environement) == -1)
         {
-            free(command);
+            perror("Execve");
             return ;
         }
-        frchita = fork();
-        if (frchita == -1)
-            perror("Fork");
-        else
-        {
-            dup2(fd[1], 1);
-            close(fd[0]);
-            if (execve(command, cmnd->cmd, environement) == -1);
-            {
-                perror("Execve: ");
-                return ;
-            }
-        }
-        waitpid(frchita, NULL, 0);
-        ft_freearr(environement);
-        free(command);
     }
-    close(fd[1]);
-    cmnd->in_file = fd[0];
+    else
+    {
+        waitpid(frchita, NULL, 0);
+        close(pipes[0][1]);
+        close(pipes[0][0]);
+    }
+    ft_freearr(environement);
+    free(command);
+}
+
+
+void ft_execute_one_pipe(t_data **data, t_commands *cmnd, int **pipes)
+{
+    int frchita;
+    char **environement;
+    char *command;
+
+    command = ft_returnexistingcommandpath((*data)->env, cmnd->cmd[0]);
+    if (!command)
+        return ;
+    environement = ft_env_to_array((*data)->env);
+    if (!environement)
+    {
+        free(command);
+        return ;
+    }
+    frchita = fork();
+    if (frchita == -1)
+        perror("Fork");
+    else if (frchita == 0)
+    {
+        dup2(pipes[0][1], 1);
+        dup2(cmnd->in_file, 0);
+        close(pipes[0][0]);
+        close(pipes[0][1]);
+        if (execve(command, cmnd->cmd, environement) == -1)
+        {
+            perror("Execve");
+            return ;
+        }
+    }
+    else
+    {
+        waitpid(frchita, NULL, 0);
+        close(pipes[0][1]);
+        close(pipes[0][0]);
+    }
+    ft_executesecondcmnd(data, cmnd->next, pipes);
+}
+
+
+
+int ft_count_how_many_pipes(t_commands *cmnd)
+{
+    int i;
+
+    i = 0;
+    while (cmnd)
+    {
+        if (cmnd)
+            i++;
+        cmnd = cmnd->next;
+    }
+    return (i);
 }
 
 void ft_execute_all(t_data **data, t_commands *cmnd)
@@ -143,16 +201,19 @@ void ft_execute_all(t_data **data, t_commands *cmnd)
     {
         if (!cmnd->next)
             ft_executeonecmnd(data, cmnd);
-        /*else
+        else
         {
-            if (ft_count_how_many_pipes(cmnd) == 1)
-                ft_execute_one_pipe(data, cmnd);
+            pipes = ft_create_pipes(cmnd);
+            if (ft_count_how_many_pipes(cmnd) == 2)
+            {
+                ft_execute_one_pipe(data, cmnd, pipes);
+            }
             else
             {
-                pipes = ft_create_pipes(cmnd);
-                ft_executepipes(data, cmnd, pipes);
-                ft_free_pipes(pipes, cmnd);
+                printf("L3ezz\n");
+                //ft_executepipes(data, cmnd, pipes);
+                ft_free_pipes(pipes, cmnd, ft_count_how_many_pipes(cmnd) - 1);
             }
-        }*/
+        }
     }
 }

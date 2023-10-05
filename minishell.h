@@ -184,6 +184,12 @@ void free_commands(t_commands *head);
 
 int ft_strcmpwithoutnull(char *str, char *rts);
 
+int **ft_create_pipes(t_commands *cmnd);
+
+void ft_free_pipes(int **pipes, t_commands *cmnd, int i);
+
+int ft_count_how_many_pipes(t_commands *cmnd);
+
 //	-----------------------    EXECUTION    ------------------------
 
 #endif
