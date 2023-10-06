@@ -36,6 +36,8 @@ void    ft_unsetiden(t_env **env, t_env **envnocmd, char *iden)
     free(cmnd->cmd[0]);
     free(cmnd->cmd[1]);
     free(cmnd->cmd);
+    free(cmnd);
+    free(data);
 }
 
 char **ft_parse_args(char *str)
@@ -111,16 +113,23 @@ int ft_ruleexist(t_data **data, char *iden)
     {
         rule = ft_strdup(str);
         if (ft_rulefinder(x->str, rule))
+        {
+            free(str);
             return (1);
+        }
         x = x->next;
     }
     x = (*data)->envnoeq;
     while (x)
     {
         if (!ft_strcmp(x->str, iden))
+        {
+            free(str);
             return (1);
+        }
         x = x->next;
     }
+    free(str);
     return (0);
 }
 
@@ -218,6 +227,7 @@ void ft_append(t_data **data, char *iden, char *value)
             tmp = ft_strdup(value);
         ft_unsetiden(&((*data)->env), &((*data)->envnoeq), iden);
         ft_exporttherule(data, iden, tmp);
+        free(tmp);
         free(rts);
         free(str);
     }
@@ -325,5 +335,6 @@ void ft_export(t_data **data, char **args, int fd)
                 ft_exporttherule(data, arguments[0], arguments[1]);
         }
         i++;
+        ft_freearr(arguments);
     }
 }

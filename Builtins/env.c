@@ -38,7 +38,7 @@ void ft_freearr(char **arr)
     }
     free(arr);
 }
-
+/*
 void ft_exportpwdoldpwd(t_data **data, char *pwd)
 {
     char **cmd;
@@ -64,19 +64,19 @@ void ft_exportpwdoldpwd(t_data **data, char *pwd)
     free(str);
     ft_freearr(cmd);
     free(newpwd);
-}
+}*/
 
-void    ft_env(t_data **data, char *pwd, int fd)
+void    ft_env(t_data **data, int fd)
 {
     t_env *cur;
     t_env *node;
 
     node = (*data)->env;
     cur = (*data)->env;
-    ft_exportpwdoldpwd(data, pwd);
+   // ft_exportpwdoldpwd(data, pwd);
     while (node)
     {
-        if (ft_rulefinder(node->str, ft_strdup("_=env")))
+        if (ft_rulefinder(node->str, ft_strdup("_")))
             break ;
         if (!node->next)
             add_last_node(&(*data)->env, ft_strdup("_=env"));

@@ -10,6 +10,12 @@ int ft_count(char **str)
     return (i);
 }
 
+void ft_freenode(t_env *node)
+{
+    free(node->str);
+    free(node);
+}
+
 void deleteNodeByContent(t_env **head, const char *target) {
     if (*head == NULL) {
         return; // List is empty, nothing to delete
@@ -29,7 +35,7 @@ void deleteNodeByContent(t_env **head, const char *target) {
             } else {
                 prev->next = current->next;
             }
-            free(current);
+            ft_freenode(current);
             return; // Node deleted, exit the function
         }
 
@@ -46,6 +52,7 @@ void ft_rulefinderanddelete_eq(t_data **data, char *rule)
     char *str;
     int i;
 
+    str = NULL;
     x = (*data)->env;
     i = 1;
     while (x)
@@ -61,6 +68,9 @@ void ft_rulefinderanddelete_eq(t_data **data, char *rule)
         x = x->next;
         i++;
     }
+    if (str)
+        free(str);
+    free(rule);
 }
 
 void ft_rulefinderanddelete(t_data **data, char *rule)
@@ -81,6 +91,7 @@ void ft_rulefinderanddelete(t_data **data, char *rule)
         y = x;
         x = x->next;
     }
+    free(rule);
 }
 
 void    ft_unset(t_data **data, t_commands *cmnd)

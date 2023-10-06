@@ -1,6 +1,7 @@
 #ifndef MINISHELL_H
 #define MINISHELL_H
 
+#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
@@ -70,13 +71,16 @@ typedef struct s_data
 {
 	t_env *env;
 	t_env *envnoeq;
+	int SHLVL;
 } t_data;
 
-typedef struct s_data_with_addresses
+typedef struct s_execcomnand
 {
-	t_env **env;
-	t_env **envnoeq;
-} t_data_with_addresses;
+	char *command;
+	char **args;
+	char **environement;
+} t_execcommand;
+
 
 //	-----------------------    PARSING    ------------------------
 
@@ -111,9 +115,21 @@ char *ft_returnrule(t_env *env, char *rts);
 //	-----------------------    EXIT_STATUS    ------------------------
 
 extern int	g_exit_status;
+extern t_data *g_data;
 
 //	-----------------------    EXIT_STATUS    ------------------------
 
+char **ft_changeelement(char **arr, int index, char *newelement);
+t_execcommand *ft_returndataforexec(t_data **data, t_commands *cmnd);
+void ft_freeexeccommand(t_execcommand *execcommand);
+void ft_execute_one_pip(t_data **data, t_commands *cmnd);
+void ft_execute_middle_commands(t_data **data, t_commands *cmnd);
+void ft_execute_last_command(t_data **data, t_commands *cmnd);
+void ft_executebultin(t_data **data, t_commands *cmnd, int forkita);
+void ft_execute_builtins(t_data **data, t_commands *cmnd);
+void ft_execute_builtins2(t_data **data, t_commands *cmnd);
+int ft_check_builtins(t_commands *cmndd, char *cmnd);
+void ft_execute_all(t_data **data, t_commands *cmnd);
 
 //	-----------------------    EXECUTION    ------------------------
 
@@ -171,9 +187,9 @@ void    ft_exit(t_data **data, t_commands *cmnds);
 
 void    ft_pwd(int fd);
 
-void    ft_cd(t_data **data, char *path, char **pwd);
+void    ft_cd(t_data **data, char *path);
 
-void    ft_env(t_data **data, char *pwd, int fd);
+void    ft_env(t_data **data, int fd);
 
 void    ft_unset(t_data **data, t_commands *cmnd);
 
@@ -181,7 +197,11 @@ void	ft_export(t_data **data, char **args, int fd);
 
 int ft_doesmatch(char *str, char *qst);
 
-void ft_initialize(t_data **x, char **env);
+void ft_initialize(t_data **data, char **env);
+
+void    ft_unsetiden(t_env **env, t_env **envnocmd, char *iden);
+
+void ft_exporttherule(t_data **data, char *iden, char *value);
 
 void free_commands(t_commands *head);
 

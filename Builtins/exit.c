@@ -43,8 +43,9 @@ void free_commands(t_commands *head) {
 
 void    ft_exit(t_data **data, t_commands *cmnds)
 {
-    free_commands(cmnds);
+    printf("exit\n");
+    if (cmnds)
+        free_commands(cmnds);
     free_t_data(data);
-    ft_putstr_fd("exit\n", 1);
     exit(0);
 }

@@ -8,6 +8,7 @@ void delete_last_node(t_env **head) {
 
     if ((*head)->next == NULL) {
         // Only one node in the list, delete it
+        free((*head)->str);
         free(*head);
         *head = NULL;
         return;
@@ -20,7 +21,7 @@ void delete_last_node(t_env **head) {
         previous = current;
         current = current->next;
     }
-
+    free(current->str);
     free(current);
     previous->next = NULL;
 }

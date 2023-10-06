@@ -3,27 +3,34 @@
 t_env *createEnvNode(char *str) 
 {
     t_env *newNode = (t_env *)malloc(sizeof(t_env));
-    if (newNode) {
+    if (newNode) 
+    {
         newNode->str = ft_strdup(str);
         newNode->next = NULL;
     }
     return newNode;
 }
 
-void appendEnvNode(t_env **head, char *str) {
-    t_env *newNode = createEnvNode(str);
-    if (!newNode) {
+void appendEnvNode(t_env **head, char *str) 
+{
+    t_env *newNode;
+    t_env *current;
+
+    newNode = createEnvNode(str);
+    if (!newNode) 
+    {
         perror("malloc");
         exit(1);
     }
-
-    if (*head == NULL) {
+    if (*head == NULL) 
+    {
         *head = newNode;
-    } else {
-        t_env *current = *head;
-        while (current->next != NULL) {
+    } 
+    else 
+    {
+        current = *head;
+        while (current->next != NULL) 
             current = current->next;
-        }
         current->next = newNode;
     }
 }

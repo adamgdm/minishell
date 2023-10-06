@@ -1,5 +1,7 @@
 #include "minishell.h"
 int g_exit_status = 148;
+t_data *g_data;
+
 
 void _print_token(t_token *token)
 {
@@ -63,15 +65,109 @@ char *ft_itoa(int n)
 	return (str);
 }
 
-void ft_initialize(t_data **x, char **env)
+t_env *ft_exportminimum()
 {
-    t_data *y;
-    y = (*x);
-    y->env = charArrayToEnvList(env);
-    y->envnoeq = charArrayToEnvList(env);
-	delete_last_node(&(y->env));
-	delete_last_node(&(y->envnoeq));
-	add_last_node(&(y->env), ft_strdup("_=env"));
+	char *pwd;
+	char *str;
+
+	pwd = ft_returnpwd();
+	str = ft_strjoin("PWD=", pwd);
+	t_env *env = createEnvNode(str);
+	free(str);
+	free(pwd);
+	pwd = ft_itoa(1);
+	str = ft_strjoin("SHLVL=", pwd);
+	appendEnvNode(&(env), str);
+	free(str);
+	free(pwd);
+	add_last_node(&(env), "_=env");
+	return (env);
+}
+
+t_env *ft_exportminimumeq()
+{
+	char *pwd;
+	char *str;
+
+	t_env *env = createEnvNode("OLDPWD");
+	pwd = ft_returnpwd();
+	str = ft_strjoin("PWD=", pwd);
+	appendEnvNode(&(env), str);
+	free(pwd);
+	free(str);
+	pwd = ft_itoa(1);
+	str = ft_strjoin("SHLVL=", pwd);
+	appendEnvNode(&(env), str);
+	free(str);
+	free(pwd);
+	return (env);
+}
+
+void ft_printennv(t_env *head, int fd)
+{
+	t_env *x;
+
+	x = head;
+	while (x)
+	{
+		ft_putstr_fd(x->str, fd);
+		ft_putchar_fd('\n', fd);
+		x = x->next;
+	}
+}
+
+void ft_initalizebasevalue(t_data **data)
+{
+	char *str;
+	int SHLVL;
+	
+	(*data) = malloc(sizeof(t_data));
+	if (!(*data))
+	{
+		perror("malloc");
+		exit(1);
+	}
+	(*data)->env = ft_exportminimum();
+	(*data)->envnoeq = ft_exportminimumeq();
+	ft_printennv((*data)->env, 1);
+}
+
+void ft_initialize(t_data **data, char **env)
+{
+	t_data *y;
+/*	char *str;
+	int SHLVL;
+	if (!(*data) && env &&(*env))
+	{*/
+		y = malloc(sizeof(t_data));
+		if (!y)
+		{
+			perror("malloc");
+			exit(1);
+		}
+		y->env = charArrayToEnvList(env);
+		y->envnoeq = charArrayToEnvList(env);
+		delete_last_node(&(y->env));
+		delete_last_node(&(y->envnoeq));
+		add_last_node(&(y->env), "_=env");
+		(*data) = y;
+/*	}
+	else if (!(*data) && env && (!(*env)))
+	{
+		printf("ALLO\n");
+		ft_initalizebasevalue(data);
+	}
+	else
+	{
+		str = ft_returnrule((*data)->env, "SHLVL");
+		SHLVL = ft_atoi(str);
+		SHLVL++;
+		free(str);
+		str = ft_itoa(SHLVL);
+		ft_unsetiden(&((*data)->env), &((*data)->envnoeq), "SHLVL");
+		ft_exporttherule(data, "SHLVL", str);
+		free(str);
+	}*/
 }
 
 /*void ft_initialize(t_data **x, char **env)
@@ -123,49 +219,32 @@ int ft_doesmatch(char *str, char *qst)
     return (0);
 }
 
-int    ft_execute(t_data **data, t_commands *cmnd)
+void ft_sigint(int sig)
 {
-	char **pwd;
-
-	pwd = malloc(sizeof(char *));
-	(*pwd) = ft_returnrule((*data)->env, "OLDPWD");
-	if (!cmnd || !cmnd->cmd)
-		return (-1);
-    if (ft_doesmatch(cmnd->cmd[0], "pwd"))
-        ft_pwd(cmnd->out_file);
-	else if (ft_doesmatch(cmnd->cmd[0], "cd"))
-		ft_cd(data ,cmnd->cmd[1], pwd);
-	else if (ft_doesmatch(cmnd->cmd[0], "env"))
-		ft_env(data, (*pwd),cmnd->out_file);
-	else if (ft_doesmatch(cmnd->cmd[0], "unset"))
-		ft_unset(data, cmnd);
-	else if (ft_doesmatch(cmnd->cmd[0], "export"))
+	if (sig == SIGINT)
 	{
-		ft_export(data, cmnd->cmd, cmnd->out_file);
+		printf("\n");
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
 	}
-	else if (ft_doesmatch(cmnd->cmd[0], "echo"))
-		ft_echo(cmnd->cmd, cmnd->out_file);
-    else if (ft_doesmatch(cmnd->cmd[0], "exit"))
-		ft_exit((data), cmnd);
-    else
-	{
-		free(pwd); 
-		return (1);
-	}
-	free(pwd);
-	return (0);
 }
 
+void ft_sigquit(int sig)
+{
+	ft_exit(&g_data, NULL);
+}
 
 int main(int ac, char **av, char **envp) 
 {
 	(void)ac;
 	(void)av;
-	t_data	*data;
 	t_token *result;
 
-	data = malloc(sizeof(t_data));
-	ft_initialize(&data, envp);
+	ft_initialize(&g_data ,envp);
+	//ft_printennv(g_data->env, 1);
+	signal(SIGINT, ft_sigint);
+	signal(SIGQUIT, ft_sigquit);
 	while (1)
 	{
 		char *input = readline("\e[01;32mBoubou_shell> \e[0;37m");
@@ -182,14 +261,14 @@ int main(int ac, char **av, char **envp)
 			free(input);
 			continue;
 		}
-		_expander(&result, data);
+		_expander(&result, g_data);
 		_update_tokens(&result);
 		//_print_token(result);
 		//_print_token(result);
-		t_commands *commands = _parser(&result, data);
+		t_commands *commands = _parser(&result, g_data);
 		// _print_commands(commands);
 		_free_all_tokens(&result, 0);
-		ft_execute_all(&data, commands);
+		ft_execute_all(&g_data, commands);
 		 free(input);
 		free_commands(commands);
 	}
