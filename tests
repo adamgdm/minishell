@@ -61,3 +61,8 @@ memory leaks after parsing error
 
  echo rtfyg-n 
 
+------
+leak = ft_strtrim(_expand_word()) // fixed
+cat << ok | cat << ok << bx 
+
+whoami | grep $USER > tmp/file

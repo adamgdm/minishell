@@ -36,6 +36,7 @@ void free_commands(t_commands *head) {
             }
             free(temp->cmd);
         }
+        free(temp->pipefd); // Free the pipefd array
         // Free the current node
         free(temp);
     }

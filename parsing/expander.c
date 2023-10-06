@@ -111,7 +111,9 @@ void _expander(t_token **result, t_data *data)
                 free(head->before_expanded);
                 head->before_expanded = ft_strdup(head->content);// save the original content
             }
-            head->content = ft_strtrim(_expand_word(head->content, data), " \t");
+            char *tmp = _expand_word(head->content, data);
+            head->content = ft_strtrim(tmp, " \t");
+            free(tmp);
         }
         head = head->next;
     }

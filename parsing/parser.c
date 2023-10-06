@@ -157,6 +157,7 @@ t_commands  *_parser(t_token **result, t_data *data)
                fd = _here_doc(current->next->content, 0, data);  // case : cat << mama || cat << $mama || cat << ${mama} the env is expanded
              
             in_file = fd[0];
+            free(fd);
             free(current->content);
             current->content = NULL;
             current = current->next;
