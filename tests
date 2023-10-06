@@ -64,3 +64,5 @@ memory leaks after parsing error
 ------
 leak = ft_strtrim(_expand_word()) // fixed
 cat << ok | cat << ok << bx 
+
+whoami | grep $USER > tmp/file
