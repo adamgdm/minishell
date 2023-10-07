@@ -61,6 +61,7 @@ typedef struct s_commands {
 	int					error_exist;
 	char				**cmd;
 	struct s_commands	*next;
+	struct s_commands	*previous;
 } t_commands;
 
 typedef struct s_env {
