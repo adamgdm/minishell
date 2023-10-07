@@ -81,6 +81,11 @@ typedef struct s_execcomnand
 	char **environement;
 } t_execcommand;
 
+typedef struct s_forchitat
+{
+	int forchita;
+	struct s_forchitat *next;
+}	t_forchitat;
 
 //	-----------------------    PARSING    ------------------------
 
@@ -119,19 +124,36 @@ extern t_data *g_data;
 
 //	-----------------------    EXIT_STATUS    ------------------------
 
+t_forchitat *createNodefork(int value);
+void appendNodefork(t_forchitat **head, int value);
+void freeListfork(t_forchitat *head);
+
+
 char **ft_changeelement(char **arr, int index, char *newelement);
 t_execcommand *ft_returndataforexec(t_data **data, t_commands *cmnd);
 void ft_freeexeccommand(t_execcommand *execcommand);
-void ft_execute_one_pip(t_data **data, t_commands *cmnd);
-void ft_execute_middle_commands(t_data **data, t_commands *cmnd);
-void ft_execute_last_command(t_data **data, t_commands *cmnd);
+int ft_execute_one_pip(t_data **data, t_commands *cmnd);
+int ft_execute_middle_commands(t_data **data, t_commands *cmnd, t_commands *omo);
+int ft_execute_last_command(t_data **data, t_commands *cmnd, t_commands *omo);
 void ft_executebultin(t_data **data, t_commands *cmnd, int forkita);
 void ft_execute_builtins(t_data **data, t_commands *cmnd);
 void ft_execute_builtins2(t_data **data, t_commands *cmnd);
 int ft_check_builtins(t_commands *cmndd, char *cmnd);
 void ft_execute_all(t_data **data, t_commands *cmnd);
 
+void ft_execvee(char **cmd, t_data **data);
+void ft_execute_only_one_cmd_with_no_pipes(t_data **data, t_commands *cmnd);
+void ft_execute_first_command(t_data **data, t_commands *cmnd);
+void ft_execute_middle_commandz(t_data **data, t_commands *cmnd);
+void ft_execute_last_commaand(t_data **data, t_commands *cmnd);
+void ft_execute_more_than_one_cmd_with_pipes(t_data **data, t_commands *cmnd);
+void ft_execute_the_cmd(t_data **data, t_commands *cmnd);
+char **ft_env_to_array(t_env *env);
+char *ft_returnexistingcommandpath(t_env *env, char *cmnd);
+
 //	-----------------------    EXECUTION    ------------------------
+
+void ft_sigint(int sig);
 
 void ft_executesecondcmnd(t_data **data, t_commands *cmnd, int **pipes);
 
@@ -163,7 +185,7 @@ void printenv(t_env *head, int fd);
 
 int ft_iseqin(char *str);
 
-void    ft_echo(char **cmd, int fd);
+void    ft_echo(char **cmd);
 
 void	ft_execute_all(t_data **data, t_commands *cmnd);
 
@@ -189,11 +211,11 @@ void    ft_pwd(int fd);
 
 void    ft_cd(t_data **data, char *path);
 
-void    ft_env(t_data **data, int fd);
+void    ft_env(t_data **data);
 
 void    ft_unset(t_data **data, t_commands *cmnd);
 
-void	ft_export(t_data **data, char **args, int fd);
+void	ft_export(t_data **data, char **args);
 
 int ft_doesmatch(char *str, char *qst);
 

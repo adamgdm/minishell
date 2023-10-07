@@ -1,6 +1,5 @@
 #include "minishell.h"
 int g_exit_status = 148;
-t_data *g_data;
 
 
 void _print_token(t_token *token)
@@ -232,7 +231,8 @@ void ft_sigint(int sig)
 
 void ft_sigquit(int sig)
 {
-	ft_exit(&g_data, NULL);
+	exit(0);
+	// ft_exit(&g_data, NULL);
 }
 
 int main(int ac, char **av, char **envp) 
@@ -240,6 +240,7 @@ int main(int ac, char **av, char **envp)
 	(void)ac;
 	(void)av;
 	t_token *result;
+	t_data *g_data;
 
 	ft_initialize(&g_data ,envp);
 	//ft_printennv(g_data->env, 1);
@@ -268,7 +269,7 @@ int main(int ac, char **av, char **envp)
 		t_commands *commands = _parser(&result, g_data);
 		// _print_commands(commands);
 		_free_all_tokens(&result, 0);
-		ft_execute_all(&g_data, commands);
+		ft_execute_the_cmd(&g_data, commands);
 		 free(input);
 		free_commands(commands);
 	}

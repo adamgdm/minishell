@@ -247,7 +247,7 @@ void ft_free_array(char **array)
     free(array);
 }
 
-void ft_printenv(t_env *env, int fd)
+void ft_printenv(t_env *env)
 {
     t_env *x;
     char **args;
@@ -256,15 +256,15 @@ void ft_printenv(t_env *env, int fd)
     while (x)
     {
         args = ft_parse_args(x->str);
-        ft_putstr_fd("declare -x ", fd);
-        ft_putstr_fd(args[0], fd);
+        printf("declare -x ");
+        printf("%s", args[0]);
         if (args[1])
         {
-            ft_putstr_fd("=\"", fd);
-            ft_putstr_fd(args[1], fd);
-            ft_putstr_fd("\"", fd);
+            printf("=\"");
+            printf("%s", args[1]);
+            printf("\"");
         }
-        ft_putstr_fd("\n", fd);
+        printf("\n");
         ft_free_array(args);
         x = x->next;
     }
@@ -313,7 +313,7 @@ int ft_checkerrors(char *command, char *identifier)
     return (0);
 }
 
-void ft_export(t_data **data, char **args, int fd)
+void ft_export(t_data **data, char **args)
 {
     char **arguments;
     int i;
@@ -321,7 +321,7 @@ void ft_export(t_data **data, char **args, int fd)
     i = 1;
     if (!args[i])
     {
-        ft_printenv(((*data)->envnoeq), fd);
+        ft_printenv(((*data)->envnoeq));
         return ;
     }
     while (args[i])

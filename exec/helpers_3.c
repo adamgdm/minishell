@@ -124,3 +124,17 @@ int **ft_create_pipes(t_commands *cmnd)
     }
     return (pipes);
 }
+
+int ft_count_how_many_pipes(t_commands *cmnd)
+{
+    int i;
+
+    i = 0;
+    while (cmnd)
+    {
+        if (cmnd)
+            i++;
+        cmnd = cmnd->next;
+    }
+    return (i);
+}

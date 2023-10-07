@@ -13,7 +13,7 @@ void ft_unsetandexport(t_data **data, char *rts)
     ft_freecmd(comond);
     str = ft_strjoin("export OLDPWD=", rts);
     cmd = ft_split(str, ' ');
-    ft_export(data, cmd, 1);
+    ft_export(data, cmd);
     free(str);
     ft_freearr(cmd);
     comond = ft_createcommand(ft_split("unset PWD", ' '));
@@ -21,8 +21,9 @@ void ft_unsetandexport(t_data **data, char *rts)
     ft_freecmd(comond);
     str = ft_strjoin("export PWD=", pwd);
     cmd = ft_split(str, ' ');
-    ft_export(data, cmd, 1);
+    ft_export(data, cmd);
     free(str);
+    free(pwd);
     ft_freearr(cmd);
 }
 
@@ -30,13 +31,14 @@ void    ft_cd(t_data **data, char *path)
 {    
     char *pwd;
     
+    printf("PATH: %s\n", path);
     pwd = ft_returnpwd();
     if (!path)
     {
         path = fetchValue("HOME", (*data)->env);
         if (!path)
         {
-            ft_putstr_fd("prettyshell: cd: HOME not set\n", 2);
+            ft_putstr_fd("Boubou_shell: cd: HOME not set\n", 2);
             return ;
         }
         if (chdir(path) != 0)

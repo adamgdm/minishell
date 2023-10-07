@@ -66,7 +66,7 @@ void ft_exportpwdoldpwd(t_data **data, char *pwd)
     free(newpwd);
 }*/
 
-void    ft_env(t_data **data, int fd)
+void    ft_env(t_data **data)
 {
     t_env *cur;
     t_env *node;
@@ -84,8 +84,7 @@ void    ft_env(t_data **data, int fd)
     }
     while (cur)
     {    
-        ft_putstr_fd(cur->str,fd);
-        ft_putchar_fd('\n',fd);
+        printf("%s\n", cur->str);
         cur = cur->next;
-    }  
+    }
 }

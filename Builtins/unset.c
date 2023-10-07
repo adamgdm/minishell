@@ -131,10 +131,7 @@ void    ft_unset(t_data **data, t_commands *cmnd)
     if (!cmnd->cmd[i])
         return ;
     while (x && cmnd->cmd[i])
-    {
-        if (ft_rulefinder(x->str, ft_strjoin(cmnd->cmd[i], "=")))
-        {
-            deleteNode(&(*data)->env, x->str);
+    {    exit(0);ata)->env, x->str);
             x = (*data)->env;
             i++;
         }

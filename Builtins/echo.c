@@ -1,15 +1,16 @@
 #include "../minishell.h"
 
-void    ft_echo(char **cmd, int fd)
+void    ft_echo(char **cmd)
 {
     int i;
     int nl;
 
     i = 1;
     nl = 1;
+    printf("%p\n", cmd[0]);
     if (!cmd[i])
     {
-        ft_putchar_fd('\n',fd);
+        printf("\n");
         return ;
     }
     while (ft_rulefinder(cmd[i], ft_strdup("-n")))
@@ -21,11 +22,11 @@ void    ft_echo(char **cmd, int fd)
         return ;
     while (cmd[i])
     {
-            ft_putstr_fd(cmd[i],fd);
+            printf("%s", cmd[i]);
             if (cmd[i + 1])
-                ft_putchar_fd(' ', fd);
+                printf(" ");
         i++;
     }
     if (nl)
-        ft_putchar_fd('\n',fd);
+        printf("\n");
 }
