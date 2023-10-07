@@ -73,6 +73,7 @@ char *_expand_word(char *content, t_data *data)
             save = ft_strjoin(save, tmp2);
             free(tmp);
             free(tmp3);
+            free(tmp2);
             j = i;
         }
         if (content[i] && content[i] != '$')

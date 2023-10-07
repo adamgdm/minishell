@@ -66,3 +66,11 @@ leak = ft_strtrim(_expand_word()) // fixed
 cat << ok | cat << ok << bx 
 
 whoami | grep $USER > tmp/file
+
+pwd oi
+export hELLO-=123
+export = -> wrong error message
+
+
+echo <123 <345 hi
+ls > file10 > barca > file4
