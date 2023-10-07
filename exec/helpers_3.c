@@ -138,3 +138,15 @@ int ft_count_how_many_pipes(t_commands *cmnd)
     }
     return (i);
 }
+
+int ft_check_last_character(char *str, char c)
+{
+    int i;
+
+    i = 0;
+    while (str[i])
+        i++;
+    if (str[i - 1] == c)
+        return (1);
+    return (0);
+}

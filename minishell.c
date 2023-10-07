@@ -64,42 +64,40 @@ char *ft_itoa(int n)
 	return (str);
 }
 
-t_env *ft_exportminimum()
+void ft_exportminimum(t_data **data)
 {
 	char *pwd;
 	char *str;
 
 	pwd = ft_returnpwd();
 	str = ft_strjoin("PWD=", pwd);
-	t_env *env = createEnvNode(str);
+	(*data)->env = createEnvNode(str);
 	free(str);
 	free(pwd);
 	pwd = ft_itoa(1);
 	str = ft_strjoin("SHLVL=", pwd);
-	appendEnvNode(&(env), str);
+	appendEnvNode(&(*data)->env, str);
 	free(str);
 	free(pwd);
-	add_last_node(&(env), "_=env");
-	return (env);
+	add_last_node(&(*data)->env, "_=env");
 }
 
-t_env *ft_exportminimumeq()
+void ft_exportminimumeq(t_data **data)
 {
 	char *pwd;
 	char *str;
 
-	t_env *env = createEnvNode("OLDPWD");
+	(*data)->envnoeq = createEnvNode("OLDPWD");
 	pwd = ft_returnpwd();
 	str = ft_strjoin("PWD=", pwd);
-	appendEnvNode(&(env), str);
+	appendEnvNode(&(*data)->envnoeq, str);
 	free(pwd);
 	free(str);
 	pwd = ft_itoa(1);
 	str = ft_strjoin("SHLVL=", pwd);
-	appendEnvNode(&(env), str);
+	appendEnvNode(&(*data)->envnoeq, str);
 	free(str);
 	free(pwd);
-	return (env);
 }
 
 void ft_printennv(t_env *head, int fd)
@@ -115,29 +113,32 @@ void ft_printennv(t_env *head, int fd)
 	}
 }
 
-void ft_initalizebasevalue(t_data **data)
+t_data *ft_initalizebasevalue(t_data **data)
 {
 	char *str;
 	int SHLVL;
 	
+	printf("HELLOSAMA\n");
 	(*data) = malloc(sizeof(t_data));
 	if (!(*data))
 	{
 		perror("malloc");
 		exit(1);
 	}
-	(*data)->env = ft_exportminimum();
-	(*data)->envnoeq = ft_exportminimumeq();
-	ft_printennv((*data)->env, 1);
+	ft_exportminimum(data);
+	ft_exportminimumeq(data);
 }
 
 void ft_initialize(t_data **data, char **env)
 {
 	t_data *y;
-/*	char *str;
+	char *str;
 	int SHLVL;
-	if (!(*data) && env &&(*env))
-	{*/
+
+	if (!(*env))
+		ft_initalizebasevalue(data);
+	else
+	{
 		y = malloc(sizeof(t_data));
 		if (!y)
 		{
@@ -150,23 +151,23 @@ void ft_initialize(t_data **data, char **env)
 		delete_last_node(&(y->envnoeq));
 		add_last_node(&(y->env), "_=env");
 		(*data) = y;
-/*	}
-	else if (!(*data) && env && (!(*env)))
-	{
-		printf("ALLO\n");
-		ft_initalizebasevalue(data);
 	}
+	str = fetchValue("SHLVL", (*data)->envnoeq);
+	printf("str = %s\n", str);
+	if (!str)
+		SHLVL = 0;
 	else
 	{
-		str = ft_returnrule((*data)->env, "SHLVL");
 		SHLVL = ft_atoi(str);
 		SHLVL++;
-		free(str);
-		str = ft_itoa(SHLVL);
-		ft_unsetiden(&((*data)->env), &((*data)->envnoeq), "SHLVL");
-		ft_exporttherule(data, "SHLVL", str);
-		free(str);
-	}*/
+	}
+	printf("Shell level = %d\n",SHLVL);
+	free(str);
+	str = ft_itoa(SHLVL);
+	ft_unsetiden(&((*data)->env), &((*data)->envnoeq), "SHLVL");
+	ft_exporttherule(data, "SHLVL", str);
+	free(str);
+
 }
 
 /*void ft_initialize(t_data **x, char **env)
@@ -242,6 +243,7 @@ int main(int ac, char **av, char **envp)
 	t_token *result;
 	t_data *g_data;
 
+	g_data = NULL;
 	ft_initialize(&g_data ,envp);
 	//ft_printennv(g_data->env, 1);
 	signal(SIGINT, ft_sigint);

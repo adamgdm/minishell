@@ -12,6 +12,7 @@
 #include <string.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <sys/stat.h>
 #include "libft/libft.h"
 
 
@@ -232,6 +233,8 @@ int ft_strcmpwithoutnull(char *str, char *rts);
 int **ft_create_pipes(t_commands *cmnd);
 
 void ft_free_pipes(int **pipes, t_commands *cmnd, int i);
+
+int ft_check_last_character(char *str, char c);
 
 int ft_count_how_many_pipes(t_commands *cmnd);
 

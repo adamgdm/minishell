@@ -31,7 +31,6 @@ void    ft_cd(t_data **data, char *path)
 {    
     char *pwd;
     
-    printf("PATH: %s\n", path);
     pwd = ft_returnpwd();
     if (!path)
     {
@@ -42,13 +41,21 @@ void    ft_cd(t_data **data, char *path)
             return ;
         }
         if (chdir(path) != 0)
+        {
             perror("cd");
+            free(pwd);
+            free(path);
+            return ;
+        }    
         free (path);
     }
     else 
     {
         if (chdir(path) != 0)
+        {
             perror("cd");
+            free(pwd);
+        }
     }
     ft_unsetandexport(data, pwd);
     free(pwd);

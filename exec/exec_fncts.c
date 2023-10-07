@@ -27,7 +27,8 @@ char *ft_returnexistingcommandpath(t_env *env, char *cmnd)
     }
     free(path);
     ft_freearr(paths);
-    return (cmnd);
+    
+    return (NULL);
 }
 
 char **ft_env_to_array(t_env *env)
@@ -71,12 +72,13 @@ t_execcommand *ft_returndataforexec(t_data **data, t_commands *cmnd)
 void ft_execvee(char **cmd, t_data **data)
 {
     t_execcommand *excmd;
+    t_commands *cmnd;
 
-    excmd = ft_returndataforexec(data, ft_createcommand(cmd));
-
+    cmnd = ft_createcommand(cmd);
+    excmd = ft_returndataforexec(data, cmnd);
     execve(excmd->command, excmd->args, excmd->environement);
     perror("execve");
-    exit(1);
+    exit(127);
 }
 
 char **ft_changeelement(char **arr, int index, char *newelement)
@@ -85,6 +87,8 @@ char **ft_changeelement(char **arr, int index, char *newelement)
     int i;
 
     i = 0;
+    if (!newelement)
+        return (arr);
     returnval = malloc(sizeof(char *) * (ft_count(arr) + 1));
     while (arr[i])
     {
@@ -96,4 +100,15 @@ char **ft_changeelement(char **arr, int index, char *newelement)
     }
     returnval[i] = NULL;
     return (returnval);
+}
+
+void ft_freeexeccommand(t_execcommand *execcommand)
+{
+    if (execcommand->command)
+    {
+        free(execcommand->command);
+        ft_freearr(execcommand->args);
+    }
+    ft_freearr(execcommand->environement);
+    free(execcommand);
 }
