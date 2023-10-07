@@ -172,6 +172,7 @@ t_commands  *_parser(t_token **result, t_data *data)
             pipe(p);
             result_pipe[1] = p[1];
             previous_pipe = p[0];
+
             // printf("pipefd[0]: %d\n", result_pipe[0]);
             // printf("pipefd[1]: %d\n", result_pipe[1]);
 
@@ -194,6 +195,8 @@ t_commands  *_parser(t_token **result, t_data *data)
     }
     result_pipe[0] = previous_pipe;
     result_pipe[1] = -1;
+    // printf("last pipefd[0]: %d\n", result_pipe[0]);
+    // printf("last pipefd[1]: %d\n", result_pipe[1]);
     new = _create_command(commands, in_file, out_file, result_pipe, error);
     _add_command(&head, new);
     return (head);

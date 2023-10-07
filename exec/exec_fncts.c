@@ -77,7 +77,9 @@ void ft_execvee(char **cmd, t_data **data)
     cmnd = ft_createcommand(cmd);
     excmd = ft_returndataforexec(data, cmnd);
     execve(excmd->command, excmd->args, excmd->environement);
-    perror("execve");
+    ft_putstr_fd("Boubou_shell: ", 2);
+    ft_putstr_fd(excmd->command, 2);
+    ft_putstr_fd(": \n", 2);
     exit(127);
 }
 
