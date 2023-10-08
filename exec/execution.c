@@ -89,10 +89,15 @@ int ft_check_if_executable(char *str)
     return (0);
 }
 
-int ft_check_cmd(t_data **data, char *cmd)
+int ft_check_cmd(t_data **data, t_commands *comond, char *cmd)
 {
     char *str;
 
+    if (comond->error_exist)
+    {
+        g_exit_status = 1;
+        return (0);
+    }
     if (ft_check_whether_builtins(cmd))
         return (1);
     str = ft_returnexistingcommandpath((*data)->env, cmd);
@@ -136,7 +141,7 @@ void ft_execute_first_command(t_data **data, t_commands *cmnd)
 {
     int forkita;
 
-    if (ft_check_cmd(data, cmnd->cmd[0]))
+    if (ft_check_cmd(data, cmnd,cmnd->cmd[0]))
     {
         if (ft_builtings_cd_exit_unset_exportWithParameters(data, cmnd))
             return;
@@ -164,7 +169,7 @@ void ft_execute_middle_commandz(t_data **data, t_commands *cmnd)
 {
     int forkita;
 
-    if (ft_check_cmd(data, cmnd->cmd[0]))
+    if (ft_check_cmd(data, cmnd,cmnd->cmd[0]))
     {
         if (ft_builtings_cd_exit_unset_exportWithParameters(data, cmnd))
             return;
@@ -192,7 +197,7 @@ void ft_execute_last_commaand(t_data **data, t_commands *cmnd)
 {
     int forkita;
 
-    if (ft_check_cmd(data, cmnd->cmd[0]))
+    if (ft_check_cmd(data, cmnd,cmnd->cmd[0]))
     {
         if (ft_builtings_cd_exit_unset_exportWithParameters(data, cmnd))
             return;
@@ -276,7 +281,7 @@ void ft_execute_only_one_cmd_with_no_pipes(t_data **data, t_commands *cmnd)
 {
     int forkita;
 
-    if (ft_check_cmd(data, cmnd->cmd[0]))
+    if (ft_check_cmd(data, cmnd,cmnd->cmd[0]))
     {
         if (ft_builtings_cd_exit_unset_exportWithParameters(data, cmnd))
             return;
