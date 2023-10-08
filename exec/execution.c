@@ -141,6 +141,7 @@ void ft_execute_first_command(t_data **data, t_commands *cmnd)
         if (ft_builtings_cd_exit_unset_exportWithParameters(data, cmnd))
             return;
         forkita = fork();
+        signal(SIGINT, ft_sigint);
         if (forkita == 0)
         {
             dup2(cmnd->in_file, 0);
@@ -168,6 +169,7 @@ void ft_execute_middle_commandz(t_data **data, t_commands *cmnd)
         if (ft_builtings_cd_exit_unset_exportWithParameters(data, cmnd))
             return;
         forkita = fork();
+	    signal(SIGINT, ft_sigint);
         if (forkita == 0)
         {
             dup2(cmnd->pipefd[0], 0);
@@ -195,6 +197,7 @@ void ft_execute_last_commaand(t_data **data, t_commands *cmnd)
         if (ft_builtings_cd_exit_unset_exportWithParameters(data, cmnd))
             return;
         forkita = fork();
+	    signal(SIGINT, ft_sigint);
         if (forkita == 0)
         {
             dup2(cmnd->pipefd[0], 0);
@@ -263,6 +266,7 @@ void ft_execute_only_one_cmd_with_no_pipes(t_data **data, t_commands *cmnd)
         if (ft_builtings_cd_exit_unset_exportWithParameters(data, cmnd))
             return;
         forkita = fork();
+	    signal(SIGINT, ft_sigint);
         if (forkita == 0)
         {
             dup2(cmnd->in_file, 0);

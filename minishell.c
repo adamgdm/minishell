@@ -188,6 +188,7 @@ void ft_sigint(int sig)
 {
 	if (sig == SIGINT)
 	{
+		g_exit_status = 127 + sig;
 		printf("\n");
 		rl_on_new_line();
 		rl_replace_line("", 0);
