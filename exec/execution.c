@@ -215,6 +215,23 @@ void ft_execute_last_commaand(t_data **data, t_commands *cmnd)
         }
     }
 }
+
+t_commands *return_node_after_error(t_commands *cmnd)
+{
+    t_commands *current;
+
+    current = cmnd;
+    while (!current->next)
+        current->next;
+    while (current)
+    {
+        if (current->error_exist)
+            return (current);
+        current = current->previous;
+    }
+    return (cmnd);
+}
+
 void ft_execute_more_than_one_cmd_with_pipes(t_data **data, t_commands *cmnd)
 {
     t_commands *current;
@@ -223,12 +240,11 @@ void ft_execute_more_than_one_cmd_with_pipes(t_data **data, t_commands *cmnd)
     int check;
 
     i = 0;
-    current = cmnd;
+    current = return_node_after_error(cmnd);
+    if (!current->next)
+        ft_execute_only_one_cmd_with_no_pipes(data, current);
     while (current)
     {
-        // if (ft_check_cmd(data ,current->cmd[0]))
-        // {
-
         if (i == 0)
             ft_execute_first_command(data, current);
         else if (!current->next)
@@ -237,7 +253,6 @@ void ft_execute_more_than_one_cmd_with_pipes(t_data **data, t_commands *cmnd)
         }
         else
             ft_execute_middle_commandz(data, current);
-        // }
         i++;
         current = current->next;
     }
