@@ -34,9 +34,11 @@ void ft_unsetandexport(t_data **data, char *rts, char *pwd, char *str)
         str = ft_strjoin("export PWD=", pwd);
         cmd = ft_split(str, ' ');
         ft_export(data, cmd);
-        ft_free_cd_stuff(str, pwd, cmd);
+        ft_free_cd_stuff(str, NULL, cmd);
     }
+    free(pwd);
 }
+
 
 int ft_chdir_error_print(char *path)
 {
@@ -45,42 +47,62 @@ int ft_chdir_error_print(char *path)
     return (g_exit_status = 1);;
 }
 
-int ft_handle_cd_errors(t_data **data, t_commands *cmnd, char *path)
+char *ft_return_home_or_pwd(t_data **data, char *path, char *lol)
+{
+    if (!path || (path && (ft_strchr(path, '~'))))
+    {
+        lol = fetchValue("HOME", (*data)->env);
+        if (!lol)
+        {
+            ft_putstr_fd("Boubou_shell: cd: HOME not set\n", 2);
+            return (NULL);
+        }
+        return (lol);
+    }
+    else if (path && ft_strchr(path, '-'))
+    {
+        lol = fetchValue("OLDPWD", (*data)->env);
+        if (!lol)
+        {
+            ft_putstr_fd("Boubou_shell: cd: OLDPWD not set\n", 2);
+            return (NULL);
+        }
+        return (lol);
+    }
+    return (NULL);
+}
+
+int ft_handle_cd_errors(t_data **data, t_commands *cmnd, char *path, char *lol)
 {
     if (cmnd->cmd[1] && cmnd->cmd[2])
     {
         ft_putstr_fd("Boubou_shell: cd: too many arguments\n", 2);
         return (g_exit_status = 1);
     }
-    if (!path)
+    if (!path || (path && (ft_strchr(path, '~') || ft_strchr(path, '-'))))
     {
-        path = fetchValue("HOME", (*data)->env);
-        if (!path)
-        {
-            ft_putstr_fd("Boubou_shell: cd: HOME not set\n", 2);
+        lol = ft_return_home_or_pwd(data, path, lol);
+        if (!lol)
             return (g_exit_status = 1);
-        }
-        if (chdir(path) != 0)
-            return (ft_chdir_error_print(path));
+        if (chdir(lol) != 0)
+            return (ft_chdir_error_print(lol));
         else
         {
-            free(path);
+            free(lol);
             g_exit_status = 0;
             return (1);
         }
-        free(path);
+        free(lol);
     }
     return (0);
 }
-
-//the reason why whenever this command is executed with a non Null path, it prints 2 new lines because of the free(pwd) in ft_unsetandexport at the line 
 
 void ft_cd(t_data **data, t_commands *comond, char *path)
 {
     char *pwd;
 
     pwd = ft_returnpwd();
-    if (ft_handle_cd_errors(data, comond, path))
+    if (ft_handle_cd_errors(data, comond, path, NULL))
     {
         free(pwd);
         return;

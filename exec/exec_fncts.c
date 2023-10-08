@@ -9,6 +9,8 @@ char *ft_returnexistingcommandpath(t_env *env, char *cmnd)
     char *tmp;
 
     i = 0;
+    if (access(cmnd, F_OK) == 0)
+        return (ft_strdup(cmnd));
     path = fetchValue("PATH", env);
     if (!path)
         return (NULL);
@@ -42,6 +44,8 @@ char *ft_returnexistingcommandpathve(t_env *env, char *cmnd)
     char *tmp;
 
     i = 0;
+    if (access(cmnd, F_OK) == 0)
+        return (ft_strdup(cmnd));
     path = fetchValue("PATH", env);
     if (!path)
         return (cmnd);
