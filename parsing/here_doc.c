@@ -37,6 +37,9 @@ int *_here_doc(char *content, int check, t_data *data)
         while (1)
         {
             s = readline(">");
+            if (!s)
+                break;
+            printf("%p\n", s);
             if (!_strcmp(s, content))
                 break;
             if (check == 1)
