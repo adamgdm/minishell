@@ -1,5 +1,5 @@
 #include "minishell.h"
-int g_exit_status = 148;
+int g_exit_status = 55;
 
 
 void _print_token(t_token *token)
@@ -36,33 +36,6 @@ void	_print_commands(t_commands *commands)
 	}
 }
 
-char *ft_itoa(int n)
-{
-	char *str;
-	int i;
-	int j;
-	int k;
-
-	i = 0;
-	j = 0;
-	k = n;
-	while (k > 0)
-	{
-		k = k / 10;
-		i++;
-	}
-	str = malloc(sizeof(char) * (i + 1));
-	if (!str)
-		return (NULL);
-	str[i] = '\0';
-	while (i > 0)
-	{
-		str[i - 1] = (n % 10) + '0';
-		n = n / 10;
-		i--;
-	}
-	return (str);
-}
 
 void ft_exportminimum(t_data **data)
 {
@@ -211,9 +184,11 @@ int main(int ac, char **av, char **envp)
 
 	g_data = NULL;
 	ft_initialize(&g_data ,envp);
+	printf("exit_status: %d\n", g_exit_status);
 	//ft_printennv(g_data->env, 1);
 	signal(SIGINT, ft_sigint);
 	signal(SIGQUIT, ft_sigquit);
+		printf("exit_status: %d\n", g_exit_status);
 	while (1)
 	{
 		char *input = readline("\e[01;32mBoubou_shell> \e[0;37m");
