@@ -4,7 +4,7 @@ int ft_builtings_cd_exit_unset_exportWithParameters(t_data **data, t_commands *c
 {
     if (ft_doesmatch(cmnd->cmd[0], "cd"))
     {
-        ft_cd(data, cmnd->cmd[1]);
+        ft_cd(data, cmnd,cmnd->cmd[1]);
         return (1);
     }
     else if (ft_doesmatch(cmnd->cmd[0], "exit"))
@@ -44,53 +44,49 @@ int ft_check_whether_builtins(char *cmd)
     return (0);
 }
 
+void ft_print_er(char *str, char *err, int exit_status)
+{
+    ft_putstr_fd("Boubou_shell: ", 2);
+    if (str)
+        ft_putstr_fd(str, 2);
+    ft_putstr_fd(": ", 2);
+    if (err)
+        ft_putstr_fd(err, 2);
+    ft_putstr_fd("\n", 2);
+    g_exit_status = exit_status;
+}
+
 int ft_check_if_directory(char *cmd)
 {
     struct stat sb;
 
-    if ((stat(cmd, &sb) == 0 && S_ISDIR(sb.st_mode) && ft_strchr(cmd, '/') && ft_strcmp(cmd, "./")))
+    if (ft_strchr(cmd, '/'))
     {
-        printf("Boubou_shell: %s: is a directory\n", cmd);
-        return (1);
-    }
-    {
-        if (ft_rulefinder(cmd, ft_strdup("/")))
+        if (stat(cmd, &sb) == 0 && S_ISDIR(sb.st_mode))
+            ft_print_er(cmd, "Is a directory", 126);
+        else
         {
-            printf("Boubou_shell: %s: No such file or directory\n", cmd);
-            return (1);
+            if (ft_rulefinder(cmd, ft_strdup("./")) && access(cmd, F_OK) == 0)
+                ft_print_er(cmd, "Permission denied", 126);
+            else if ((access(cmd, F_OK) == 0 || access(cmd, X_OK) == 0))
+                ft_print_er(cmd, "Not a directory", 126);
+            else
+                ft_print_er(cmd, "No such file or directory", 127);
         }
     }
-    return (0);
+    else
+        ft_print_er(cmd, "command not found", 127);
 }
 
-int ft_check_file(char *cmd)
+int ft_check_if_executable(char *str)
 {
-    char *str;
-
-    str = ft_substr(cmd, 0, ft_strlen(cmd) - 1);
-    if (ft_check_last_character(cmd, '/') && (!access(str, F_OK) || !access(cmd, F_OK)))
+    if (ft_rulefinder(str, ft_strdup("./")) && 
+        access(str, F_OK) == 0 && 
+        access(str, X_OK) == 0)
     {
-        printf("Boubou_shell: %s: Not a directory\n", cmd);
-        free(str);
-        return (0);
+        return (1);        
     }
-    free(str);
-    if ((ft_rulefinder(cmd, ft_strdup("/")) || ft_check_last_character(cmd, '/')) || (ft_rulefinder(cmd, ft_strdup("./"))) && access(cmd, F_OK) != 0)
-    {
-        printf("Boubou_shell: %s: No such file or directory\n", cmd);
-        return (0);
-    }
-    else if (ft_rulefinder(cmd, ft_strdup("./")))
-    {
-        printf("Boubou_shell: %s: Permission denied\n", cmd);
-        return (0);
-    }
-    else
-    {
-        printf("%s: command not found\n", cmd);
-        return (1);
-    }
-    return (1);
+    return (0);
 }
 
 int ft_check_cmd(t_data **data, char *cmd)
@@ -98,20 +94,16 @@ int ft_check_cmd(t_data **data, char *cmd)
     char *str;
 
     if (ft_check_whether_builtins(cmd))
-    {
         return (1);
-    }
     str = ft_returnexistingcommandpath((*data)->env, cmd);
     if (str)
     {
         free(str);
         return (1);
     }
-    // check if directory or executable
-    if (!ft_check_if_directory(cmd))
-    {
-        return (ft_check_file(cmd));
-    }
+    if (ft_check_if_executable(cmd))
+        return (1);
+    ft_check_if_directory(cmd);
     return (0);
 }
 
@@ -130,6 +122,11 @@ int ft_builtings_echo_env_exportwithparameters(t_data **data, t_commands *cmnd)
     else if ((ft_doesmatch(cmnd->cmd[0], "export") && !cmnd->cmd[1]))
     {
         ft_export(data, cmnd->cmd);
+        return (1);
+    }
+    else if ((ft_doesmatch(cmnd->cmd[0], "pwd")))
+    {
+        ft_pwd(1);
         return (1);
     }
     return (0);
@@ -207,7 +204,7 @@ void ft_execute_last_commaand(t_data **data, t_commands *cmnd)
             if (ft_builtings_echo_env_exportwithparameters(data, cmnd) == 0)
                 ft_execvee(cmnd->cmd, data);
             else
-                exit(0);
+                exit(g_exit_status);
         }
         else
         {
@@ -273,7 +270,7 @@ void ft_execute_only_one_cmd_with_no_pipes(t_data **data, t_commands *cmnd)
             if (ft_builtings_echo_env_exportwithparameters(data, cmnd) == 0)
                 ft_execvee(cmnd->cmd, data);
             else
-                exit(0);
+                exit(g_exit_status);
         }
         else
         {

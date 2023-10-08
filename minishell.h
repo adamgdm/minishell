@@ -211,7 +211,7 @@ void    ft_exit(t_data **data, t_commands *cmnds);
 
 void    ft_pwd(int fd);
 
-void    ft_cd(t_data **data, char *path);
+void    ft_cd(t_data **data, t_commands *comond, char *path);
 
 void    ft_env(t_data **data);
 
@@ -220,6 +220,8 @@ void    ft_unset(t_data **data, t_commands *cmnd);
 void	ft_export(t_data **data, char **args);
 
 int ft_doesmatch(char *str, char *qst);
+
+int ft_ruleexist(t_data **data, char *iden);
 
 void ft_initialize(t_data **data, char **env);
 

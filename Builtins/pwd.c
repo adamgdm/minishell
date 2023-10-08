@@ -9,6 +9,7 @@ char *ft_returnpwd()
     if (!i || i == -1)
     {
         perror("Pathconf: ");
+        g_exit_status = 1;
         exit(1);
     }
     buffer = malloc(sizeof(char) * i);
@@ -16,6 +17,7 @@ char *ft_returnpwd()
     {
         perror("Malloc: ");
         free(buffer);
+        g_exit_status = 1;
         exit(1);
     }
     buffer = getcwd(buffer, i);
@@ -31,6 +33,7 @@ void    ft_pwd(int fd)
     if (!i || i == -1)
     {
         perror("Pathconf: ");
+        g_exit_status = 1;
         exit(1);
     }
     buffer = malloc(sizeof(char) * i);
@@ -38,9 +41,11 @@ void    ft_pwd(int fd)
     {
         perror("Malloc: ");
         free(buffer);
+        g_exit_status = 1;
         exit(1);
     }
     buffer = getcwd(buffer, i);
+    g_exit_status = 0;
     ft_putstr_fd(buffer, fd);
     ft_putchar_fd('\n', fd);
     free (buffer);

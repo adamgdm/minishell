@@ -153,7 +153,6 @@ void ft_initialize(t_data **data, char **env)
 		(*data) = y;
 	}
 	str = fetchValue("SHLVL", (*data)->envnoeq);
-	printf("str = %s\n", str);
 	if (!str)
 		SHLVL = 0;
 	else
@@ -161,7 +160,6 @@ void ft_initialize(t_data **data, char **env)
 		SHLVL = ft_atoi(str);
 		SHLVL++;
 	}
-	printf("Shell level = %d\n",SHLVL);
 	free(str);
 	str = ft_itoa(SHLVL);
 	ft_unsetiden(&((*data)->env), &((*data)->envnoeq), "SHLVL");
@@ -169,39 +167,6 @@ void ft_initialize(t_data **data, char **env)
 	free(str);
 
 }
-
-/*void ft_initialize(t_data **x, char **env)
-{
-    t_data *y;
-	char *str;
-	int SHLVL;
-	char *number;
-
-	/*if (x)
-		SHLVL = ft_atoi(fetchValue("SHLVL", y->envnoeq));
-	else
-		SHLVL = 0;
-	SHLVL++;
-    y = (*x);
-	if (!env)
-	{
-		y->envnoeq = createEnvNode("OLDPWD");
-		str = ft_returnpwd();
-		number = ft_itoa(SHLVL);
-		appendEnvNode(&(y->envnoeq), ft_strjoin("PWD=", str));
-		appendEnvNode(&(y->envnoeq), ft_strjoin("SHLVL", number));
-	  	y->env = createEnvNode(ft_strdup(ft_strjoin("PWD", str)));
-		appendEnvNode(&(y->env), ft_strdup(ft_strjoin("SHLVL", number)));
-	}
-	else
-	{
-		y->env = charArrayToEnvList(env);
-		y->envnoeq = charArrayToEnvList(env);
-		delete_last_node(&(y->env));
-		delete_last_node(&(y->envnoeq));
-		add_last_node(&(y->env), ft_strdup("_=env"));
-	}
-}*/
 
 int ft_doesmatch(char *str, char *qst)
 {

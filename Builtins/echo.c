@@ -1,25 +1,10 @@
 #include "../minishell.h"
 
-void    ft_echo(char **cmd)
+void ft_echo_norm(char **cmd, int nl)
 {
     int i;
-    int nl;
 
     i = 1;
-    nl = 1;
-    printf("%p\n", cmd[0]);
-    if (!cmd[i])
-    {
-        printf("\n");
-        return ;
-    }
-    while (ft_rulefinder(cmd[i], ft_strdup("-n")))
-    {    
-        nl = 0;
-        i++;
-    }
-    if (!cmd[i])
-        return ;
     while (cmd[i])
     {
             printf("%s", cmd[i]);
@@ -29,4 +14,32 @@ void    ft_echo(char **cmd)
     }
     if (nl)
         printf("\n");
+}
+
+void    ft_echo(char **cmd)
+{
+    int i;
+    int nl;
+
+    printf("exit_status = %d\n", g_exit_status);
+    i = 1;
+    nl = 1;
+    if (!cmd[i])
+    {
+        printf("\n");
+        g_exit_status = 0;
+        return ;
+    }
+    while (ft_rulefinder(cmd[i], ft_strdup("-n")))
+    {    
+        nl = 0;
+        i++;
+    }
+    if (!cmd[i])
+    {
+        g_exit_status = 0;
+        return ;
+    }
+    ft_echo_norm(cmd, nl);
+    g_exit_status = 0;
 }

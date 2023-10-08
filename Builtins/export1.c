@@ -170,7 +170,6 @@ void ft_exporttherule(t_data **data, char *iden, char *value)
     }
     else 
     {
-        printf("hani hna\n");
         if (value)
         {
             str = ft_strjoin(iden, "=");
@@ -214,7 +213,6 @@ void ft_append(t_data **data, char *iden, char *value)
     char *tmp;
     if (!ft_ruleexist(data, iden))
     {
-        printf("ident = %s\n", iden);
         ft_exporttherule(data, iden, value);
     }
     else
@@ -296,17 +294,13 @@ int ft_checkerrors(char *command, char *identifier)
     int i;
 
     i = 0;
-    // // // printf("identifier is %s\n", identifier);
     if (identifier[0] != '_' && !ft_isalpha(identifier[0]))
         return(ft_printerror(identifier));
     while (identifier[i])
     {
         if (!ft_isalnum(identifier[i]) && identifier[i] != '_')
         {
-            if (identifier[i] == '+')
-                return(ft_printerror(command));
-            else
-                return(ft_printerror(identifier));
+            return(ft_printerror(command));
         }
         i++;
     }
@@ -322,6 +316,7 @@ void ft_export(t_data **data, char **args)
     if (!args[i])
     {
         ft_printenv(((*data)->envnoeq));
+        g_exit_status = 0;
         return ;
     }
     while (args[i])
@@ -333,7 +328,10 @@ void ft_export(t_data **data, char **args)
                 ft_append(data, arguments[0], arguments[1]);
             else if (ft_checkexportorappend(arguments[2]) == 2)
                 ft_exporttherule(data, arguments[0], arguments[1]);
+            g_exit_status = 0;
         }
+        else
+            g_exit_status = 1;
         i++;
         ft_freearr(arguments);
     }

@@ -38,33 +38,6 @@ void ft_freearr(char **arr)
     }
     free(arr);
 }
-/*
-void ft_exportpwdoldpwd(t_data **data, char *pwd)
-{
-    char **cmd;
-    char *str;
-    t_commands *comond;
-    char *newpwd;
-
-    comond = ft_createcommand(ft_split("unset OLDPWD", ' '));
-    ft_unset(data, comond);
-    ft_freecmd(comond);
-    str = ft_strjoin("export OLDPWD=", pwd);
-    cmd = ft_split(str, ' ');
-    ft_export(data, cmd, 1);
-    free(str);
-    comond = ft_createcommand(ft_split("unset PWD", ' '));
-    ft_unset(data, comond);
-    ft_freecmd(comond);
-    ft_freearr(cmd);
-    newpwd = ft_returnpwd();
-    str = ft_strjoin("export PWD=", newpwd);
-    cmd = ft_split(str, ' ');
-    ft_export(data, cmd, 1);
-    free(str);
-    ft_freearr(cmd);
-    free(newpwd);
-}*/
 
 void    ft_env(t_data **data)
 {
@@ -87,4 +60,5 @@ void    ft_env(t_data **data)
         printf("%s\n", cur->str);
         cur = cur->next;
     }
+    g_exit_status = 0;
 }
