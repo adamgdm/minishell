@@ -75,3 +75,5 @@ export = -> wrong error message
 echo <123 <345 hi
 ls > file10 > barca > file4
 whoami | grep $USER > tmp/file | echo hello
+
+Makefile/ -> no such file or directory
