@@ -56,19 +56,41 @@ void ft_print_er(char *str, char *err, int exit_status)
     g_exit_status = exit_status;
 }
 
-int ft_check_if_directory(char *cmd)
+char *return_wsback(char *str)
+{
+    int i;
+    int j;
+    char *new;
+
+    if (!str)
+        return (NULL);
+    i = 0;
+    while (str[i])
+    {
+        if (str[i] == '/')
+            j = i;
+        i++;
+    }
+    new = ft_substr(str, 0, j);
+    return (new);
+}
+
+int ft_check_if_directory(char *cmd, char *str)
 {
     struct stat sb;
 
     if (ft_strchr(cmd, '/'))
     {
         if (stat(cmd, &sb) == 0 && S_ISDIR(sb.st_mode))
+        {   
             ft_print_er(cmd, "Is a directory", 126);
+        }
         else
         {
             if (ft_rulefinder(cmd, ft_strdup("./")) && access(cmd, F_OK) == 0)
                 ft_print_er(cmd, "Permission denied", 126);
-            else if ((access(cmd, F_OK) == 0 || access(cmd, X_OK) == 0))
+            else if ((access(cmd, F_OK) == 0 || access(cmd, X_OK) == 0)
+                || (access(str, F_OK) == 0 || access(str, X_OK) == 0))
                 ft_print_er(cmd, "Not a directory", 126);
             else
                 ft_print_er(cmd, "No such file or directory", 127);
@@ -76,6 +98,8 @@ int ft_check_if_directory(char *cmd)
     }
     else
         ft_print_er(cmd, "command not found", 127);
+    if (str)
+        free(str);
 }
 
 int ft_check_if_executable(char *str)
@@ -108,7 +132,7 @@ int ft_check_cmd(t_data **data, t_commands *comond, char *cmd)
     }
     if (ft_check_if_executable(cmd))
         return (1);
-    ft_check_if_directory(cmd);
+    ft_check_if_directory(cmd, return_wsback(cmd));
     return (0);
 }
 
@@ -145,9 +169,9 @@ void ft_execute_first_command(t_data **data, t_commands *cmnd)
     {
         if (ft_builtings_cd_exit_unset_exportWithParameters(data, cmnd))
             return;
-        forkita = fork();
+        cmnd->pid = fork();
         signal(SIGINT, ft_sigint);
-        if (forkita == 0)
+        if (cmnd->pid == 0)
         {
             dup2(cmnd->in_file, 0);
             dup2(cmnd->pipefd[1], 1);
@@ -173,9 +197,9 @@ void ft_execute_middle_commandz(t_data **data, t_commands *cmnd)
     {
         if (ft_builtings_cd_exit_unset_exportWithParameters(data, cmnd))
             return;
-        forkita = fork();
+        cmnd->pid = fork();
 	    signal(SIGINT, ft_sigint);
-        if (forkita == 0)
+        if (cmnd->pid == 0)
         {
             dup2(cmnd->pipefd[0], 0);
             dup2(cmnd->pipefd[1], 1);
@@ -201,9 +225,9 @@ void ft_execute_last_commaand(t_data **data, t_commands *cmnd)
     {
         if (ft_builtings_cd_exit_unset_exportWithParameters(data, cmnd))
             return;
-        forkita = fork();
+        cmnd->pid = fork();
 	    signal(SIGINT, ft_sigint);
-        if (forkita == 0)
+        if (cmnd->pid == 0)
         {
             dup2(cmnd->pipefd[0], 0);
             dup2(cmnd->out_file, 1);
@@ -272,7 +296,8 @@ void ft_execute_more_than_one_cmd_with_pipes(t_data **data, t_commands *cmnd)
     current = cmnd;
     while (current)
     {
-        waitpid(-1, NULL, 0);
+        if (current->pid != -1)
+            waitpid(current->pid, NULL, 0);
         current = current->next;
     }
 }
@@ -285,9 +310,9 @@ void ft_execute_only_one_cmd_with_no_pipes(t_data **data, t_commands *cmnd)
     {
         if (ft_builtings_cd_exit_unset_exportWithParameters(data, cmnd))
             return;
-        forkita = fork();
+        cmnd->pid = fork();
 	    signal(SIGINT, ft_sigint);
-        if (forkita == 0)
+        if (cmnd->pid == 0)
         {
             dup2(cmnd->in_file, 0);
             dup2(cmnd->out_file, 1);
@@ -298,7 +323,7 @@ void ft_execute_only_one_cmd_with_no_pipes(t_data **data, t_commands *cmnd)
         }
         else
         {
-            waitpid(forkita, NULL, 0);
+            waitpid(cmnd->pid, NULL, 0);
         }
     }
 }
