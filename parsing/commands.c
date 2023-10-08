@@ -14,6 +14,7 @@ t_commands  *_create_command(char **commands, int in_file, int out_file, int *pi
     // printf("pipe_ne[0]: %d\n", new->pipefd[0]);
     // printf("pipe_ne[1]: %d\n", new->pipefd[1]);
     new->error_exist = error;
+    new->pid = -1;
     new->next = NULL;
     new->previous = NULL;
     return (new);

@@ -59,6 +59,7 @@ typedef struct s_commands {
 	int					out_file;
 	int					*pipefd;
 	int					error_exist;
+	int					pid;
 	char				**cmd;
 	struct s_commands	*next;
 	struct s_commands	*previous;
