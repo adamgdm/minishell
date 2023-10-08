@@ -21,7 +21,7 @@ void    ft_echo(char **cmd)
     int i;
     int nl;
 
-    printf("exit_status = %d\n", g_exit_status);
+   // printf("exit_status = %d\n", g_exit_status);
     i = 1;
     nl = 1;
     if (!cmd[i])
