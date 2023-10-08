@@ -42,7 +42,7 @@ char *_expand_word(char *content, t_data *data)
                 i++;
             if (k == i && content[i] == '?')
             {
-                //printf("g_exit_status: %s\n", ft_itoa(g_exit_status));
+                // printf("g_exit_status: %s\n", ft_itoa(g_exit_status));
                 tmp3 = save;
                 tmp = ft_itoa(g_exit_status);
                 save = ft_strjoin(save, tmp);
@@ -67,13 +67,17 @@ char *_expand_word(char *content, t_data *data)
             }
             tmp = ft_substr(content, j + 1, i - j - 1);
             tmp2 = fetchValue(tmp, data->env);
-            if (!tmp2)
-                tmp2 = "";
-            tmp3 = save;
-            save = ft_strjoin(save, tmp2);
-            free(tmp);
-            free(tmp3);
-            free(tmp2);
+            if (tmp2)
+            {
+                tmp3 = save;
+                save = ft_strjoin(save, tmp2);
+                free(tmp);
+                free(tmp3);
+                free(tmp2);
+            }
+            else
+                free(tmp);
+
             j = i;
         }
         if (content[i] && content[i] != '$')
@@ -108,9 +112,10 @@ void _expander(t_token **result, t_data *data)
         }
         if (_contains_dollar(head->content) && (head->state == GENERAL || head->state == IN_DQUOTE))
         {
-            if (ft_strlen(head->content) != 1) {                ////////
+            if (ft_strlen(head->content) != 1)
+            { ////////
                 free(head->before_expanded);
-                head->before_expanded = ft_strdup(head->content);// save the original content
+                head->before_expanded = ft_strdup(head->content); // save the original content
             }
             char *tmp = _expand_word(head->content, data);
             head->content = ft_strtrim(tmp, " \t");

@@ -30,6 +30,7 @@ int *_here_doc(char *content, int check, t_data *data)
     char *s;
     pipe(fd);
     pid = fork();
+    signal(SIGINT, ft_sigint);
     if (pid == 0)
     {
         //close(fd[0]);

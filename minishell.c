@@ -161,7 +161,7 @@ void ft_sigint(int sig)
 {
 	if (sig == SIGINT)
 	{
-		g_exit_status = 127 + sig;
+		g_exit_status = (127 + sig) % 256;
 		printf("\n");
 		rl_on_new_line();
 		rl_replace_line("", 0);
@@ -169,11 +169,6 @@ void ft_sigint(int sig)
 	}
 }
 
-void ft_sigquit(int sig)
-{
-	exit(0);
-	// ft_exit(&g_data, NULL);
-}
 
 int main(int ac, char **av, char **envp) 
 {
@@ -184,18 +179,18 @@ int main(int ac, char **av, char **envp)
 
 	g_data = NULL;
 	ft_initialize(&g_data ,envp);
-	printf("exit_status: %d\n", g_exit_status);
+	//printf("exit_status: %d\n", g_exit_status);
 	//ft_printennv(g_data->env, 1);
 	signal(SIGINT, ft_sigint);
-	signal(SIGQUIT, ft_sigquit);
-		printf("exit_status: %d\n", g_exit_status);
+	signal(SIGQUIT, SIG_IGN);
+		//printf("exit_status: %d\n", g_exit_status);
 	while (1)
 	{
 		char *input = readline("\e[01;32mBoubou_shell> \e[0;37m");
 		if (input && *input)
 			add_history(input);
 		if (!input)
-			return (0);
+			ft_exit(&g_data, NULL);
 		result = _lexer(input);
 		if (!result)
 			continue;
