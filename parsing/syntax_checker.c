@@ -1,5 +1,26 @@
 #include "../minishell.h"
 
+int _here_doc_counter(t_token** result)
+{
+    t_token*    current;
+    int         counter;
+
+    current = *result;
+    counter = 0;
+    while (current)
+    {
+        if (current->type == HERE_DOC)
+            counter++;
+        current = current->next;
+    }
+    if (counter > 16)
+    {
+        printf("minishell: maximum here-document count exceeded\n");
+        g_exit_status = 2;
+        return (-1);
+    }
+    return (0);
+}
 
 int _check_type(enum e_token type)
 {
@@ -97,6 +118,6 @@ int _syntax_check(t_token** result)
         
         current = current->next;
     }
-    return (0);
+    return (_here_doc_counter(result));
 
 } 

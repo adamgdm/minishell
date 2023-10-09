@@ -242,6 +242,8 @@ int ft_check_last_character(char *str, char c);
 
 int ft_count_how_many_pipes(t_commands *cmnd);
 
+void free_t_data(t_data **dat);
+
 //	-----------------------    EXECUTION    ------------------------
 
 #endif
