@@ -53,7 +53,24 @@ char *_expand_word(char *content, t_data *data)
                 j = i;
                 continue;
             }
-            
+            if (k == i && ft_isdigit(content[i]))
+            {
+                tmp = ft_itoa(ft_atoi(&content[i]));
+                tmp2 = fetchValue(tmp, data->env);
+                if (tmp2)
+                {
+                    tmp3 = save;
+                    save = ft_strjoin(save, tmp2);
+                    free(tmp);
+                    free(tmp3);
+                    free(tmp2);
+                }
+                else
+                    free(tmp);
+                i++;
+                j = i;
+                continue;
+            }
             if (i == k)
             {
                 if (!content[i])
