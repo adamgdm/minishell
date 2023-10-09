@@ -38,8 +38,9 @@ char *_expand_word(char *content, t_data *data)
             i++;
             k = i;
             on_off = 0;
-            while (content[i] && !ft_strchr("+*-?<>{}[]^()#%@\"'$&|;,/\t ", content[i]))
+            while (content[i] && !ft_strchr("+*-?<>{}[]^()#%@\"'$&|;,/\t ", content[i]) && !ft_isdigit(content[i]))
                 i++;
+
             if (k == i && content[i] == '?')
             {
                 // printf("g_exit_status: %s\n", ft_itoa(g_exit_status));
@@ -52,6 +53,7 @@ char *_expand_word(char *content, t_data *data)
                 j = i;
                 continue;
             }
+            
             if (i == k)
             {
                 if (!content[i])

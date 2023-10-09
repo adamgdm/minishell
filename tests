@@ -77,3 +77,10 @@ ls > file10 > barca > file4
 whoami | grep $USER > tmp/file | echo hello
 
 Makefile/ -> no such file or directory
+
+pwd | ls > c | pwd | cat < c
+
+echo $4444 -> 444
+echo $4HOME -> HOME
+
+17 here_document count exceeded
