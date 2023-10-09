@@ -75,7 +75,7 @@ char *return_wsback(char *str)
     return (new);
 }
 
-int ft_check_if_directory(char *cmd, char *str)
+void ft_check_if_directory(char *cmd, char *str)
 {
     struct stat sb;
 
