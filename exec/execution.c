@@ -250,7 +250,7 @@ void ft_execute_last_commaand(t_data **data, t_commands *cmnd)
             //
             close(cmnd->previous->pipefd[1]);
             close(cmnd->previous->pipefd[0]);
-            close(cmnd->previous->previous->pipefd[1]);
+           // close(cmnd->previous->previous->pipefd[1]);
             
             if (ft_builtings_echo_env_exportwithparameters(data, cmnd) == 0)
                 ft_execvee(cmnd->cmd, data);
