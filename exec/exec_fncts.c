@@ -1,5 +1,14 @@
 #include "../minishell.h"
 
+int ft_check_if_file_using_stat(char *file)
+{
+    struct stat stats;
+
+    if (stat(file, &stats) == 0)
+        return (1);
+    return (0);
+}
+
 char *ft_returnexistingcommandpath(t_env *env, char *cmnd)
 {
     char *path;

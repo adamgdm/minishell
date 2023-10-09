@@ -1,45 +1,62 @@
 #include "../minishell.h"
 
-void ft_echo_norm(char **cmd, int nl)
+int isdnin(char *cmd, char *arraytofind)
 {
     int i;
+    int j;
 
-    i = 1;
+    i = 0;
+    j = 0;
+    if (!cmd)
+        return (0);
     while (cmd[i])
     {
-            printf("%s", cmd[i]);
-            if (cmd[i + 1])
-                printf(" ");
+        if (cmd[i] == arraytofind[j])
+        {
+            j++;
+            if(!arraytofind[j])
+            {
+                while (cmd[i] == 'n')
+                    i++;
+                if (!cmd[i])
+                    return (1);
+            }
+        }
+        else
+            j = 0;
         i++;
     }
-    if (nl)
-        printf("\n");
+    return (0);
 }
 
 void    ft_echo(char **cmd)
 {
     int i;
     int nl;
+    int fd;
 
-   // printf("exit_status = %d\n", g_exit_status);
+    fd = 1;
     i = 1;
     nl = 1;
     if (!cmd[i])
     {
-        printf("\n");
-        g_exit_status = 0;
+        ft_putchar_fd('\n',fd);
         return ;
     }
-    while (ft_rulefinder(cmd[i], ft_strdup("-n")))
+    while (isdnin(cmd[i], "-n"))
     {    
         nl = 0;
         i++;
     }
     if (!cmd[i])
-    {
-        g_exit_status = 0;
         return ;
+    while (cmd[i])
+    {
+            ft_putstr_fd(cmd[i],fd);
+            if (cmd[i + 1])
+                ft_putchar_fd(' ', fd);
+        i++;
     }
-    ft_echo_norm(cmd, nl);
-    g_exit_status = 0;
+    if (nl)
+        ft_putchar_fd('\n',fd);
 }

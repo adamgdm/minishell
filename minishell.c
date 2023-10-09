@@ -1,10 +1,9 @@
 #include "minishell.h"
 int g_exit_status = 55;
 
-
 void _print_token(t_token *token)
 {
-		printf("-----------------------------------------------\n");
+	printf("-----------------------------------------------\n");
 
 	while (token)
 	{
@@ -18,7 +17,7 @@ void _print_token(t_token *token)
 	}
 }
 
-void	_print_commands(t_commands *commands)
+void _print_commands(t_commands *commands)
 {
 	int i = 0;
 	printf("$-----------------commands---------------------$\n");
@@ -35,7 +34,6 @@ void	_print_commands(t_commands *commands)
 		i++;
 	}
 }
-
 
 void ft_exportminimum(t_data **data)
 {
@@ -90,7 +88,7 @@ t_data *ft_initalizebasevalue(t_data **data)
 {
 	char *str;
 	int SHLVL;
-	
+
 	printf("HELLOSAMA\n");
 	(*data) = malloc(sizeof(t_data));
 	if (!(*data))
@@ -138,39 +136,48 @@ void ft_initialize(t_data **data, char **env)
 	ft_unsetiden(&((*data)->env), &((*data)->envnoeq), "SHLVL");
 	ft_exporttherule(data, "SHLVL", str);
 	free(str);
-
 }
 
 int ft_doesmatch(char *str, char *qst)
 {
-    int index = 0;
-    if (!str || !qst)
+	int index = 0;
+	if (!str || !qst)
 		return (0);
-    while (str[index] != '\0' || qst[index] != '\0') 
-    {
-        if (str[index] != qst[index])
-            return 0;
-        index++;
-    }
-    if (!qst[index] && !str[index])    
-        return 1;
-    return (0);
+	while (str[index] != '\0' || qst[index] != '\0')
+	{
+		if (str[index] != qst[index])
+			return 0;
+		index++;
+	}
+	if (!qst[index] && !str[index])
+		return 1;
+	return (0);
+}
+
+void ft_sigints(int sig)
+{
+	if (sig == SIGINT)
+	{
+		g_exit_status = (127 + sig) % 256;
+		rl_on_new_line();
+		exit(0);
+	}
 }
 
 void ft_sigint(int sig)
 {
 	if (sig == SIGINT)
 	{
-		g_exit_status = (127 + sig) % 256;
+		(void)sig;
 		printf("\n");
-		rl_on_new_line();
 		rl_replace_line("", 0);
+		rl_on_new_line();
 		rl_redisplay();
+		g_exit_status = (127 + sig) % 256;
 	}
 }
 
-
-int main(int ac, char **av, char **envp) 
+int main(int ac, char **av, char **envp)
 {
 	(void)ac;
 	(void)av;
@@ -178,12 +185,12 @@ int main(int ac, char **av, char **envp)
 	t_data *g_data;
 
 	g_data = NULL;
-	ft_initialize(&g_data ,envp);
-	//printf("exit_status: %d\n", g_exit_status);
-	//ft_printennv(g_data->env, 1);
+	ft_initialize(&g_data, envp);
+	// printf("exit_status: %d\n", g_exit_status);
+	// ft_printennv(g_data->env, 1);
 	signal(SIGINT, ft_sigint);
 	signal(SIGQUIT, SIG_IGN);
-		//printf("exit_status: %d\n", g_exit_status);
+	// printf("exit_status: %d\n", g_exit_status);
 	while (1)
 	{
 		char *input = readline("\e[01;32mBoubou_shell> \e[0;37m");
@@ -194,7 +201,7 @@ int main(int ac, char **av, char **envp)
 		result = _lexer(input);
 		if (!result)
 			continue;
-		if(_syntax_check(&result))
+		if (_syntax_check(&result))
 		{
 			_free_all_tokens(&result, 1);
 			free(input);
@@ -212,5 +219,5 @@ int main(int ac, char **av, char **envp)
 		free_commands(commands);
 	}
 
-	return 0;
+	return g_exit_status;
 }

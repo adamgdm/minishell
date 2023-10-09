@@ -109,7 +109,7 @@ void		_free_all_tokens(t_token **head, int check);
 int			_process_env_value(char *value);
 int			*_here_doc(char *content, int check, t_data *data);
 char		*_expand_word(char *content, t_data *data);
-
+void ft_sigints(int sig);
 
 //	-----------------------    PARSING    ------------------------
 
