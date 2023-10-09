@@ -180,6 +180,10 @@ void ft_execute_first_command(t_data **data, t_commands *cmnd)
             dup2(cmnd->pipefd[1], 1);
             close(cmnd->pipefd[0]);
             close(cmnd->pipefd[1]);
+            //
+            close(cmnd->next->pipefd[1]);
+            close(cmnd->next->next->pipefd[0]);
+            //
             close(cmnd->next->pipefd[0]);
             if (ft_builtings_echo_env_exportwithparameters(data, cmnd) == 0)
                 ft_execvee(cmnd->cmd, data);
@@ -210,6 +214,10 @@ void ft_execute_middle_commandz(t_data **data, t_commands *cmnd)
             dup2(cmnd->pipefd[1], 1);
             close(cmnd->pipefd[0]);
             close(cmnd->pipefd[1]);
+            //
+            close(cmnd->previous->pipefd[1]);
+            close(cmnd->next->pipefd[0]);
+
             if (ft_builtings_echo_env_exportwithparameters(data, cmnd) == 0)
                 ft_execvee(cmnd->cmd, data);
             else
@@ -239,6 +247,11 @@ void ft_execute_last_commaand(t_data **data, t_commands *cmnd)
             dup2(cmnd->out_file, 1);
             close(cmnd->pipefd[0]);
             close(cmnd->pipefd[1]);
+            //
+            close(cmnd->previous->pipefd[1]);
+            close(cmnd->previous->pipefd[0]);
+            close(cmnd->previous->previous->pipefd[1]);
+            
             if (ft_builtings_echo_env_exportwithparameters(data, cmnd) == 0)
                 ft_execvee(cmnd->cmd, data);
             else
