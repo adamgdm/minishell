@@ -16,104 +16,40 @@ int _contains_dollar(char *str)
 
 char *_expand_word(char *content, t_data *data)
 {
-    char *result;
-    char *tmp;
-    char *tmp2;
-    char *tmp3;
-    char *save;
-    int i;
-    int j;
-    int k;
-    int on_off;
+    t_vars  vars;
 
-    i = 0;
-    j = 0;
-    k = 0;
-    on_off = 0;
-    save = ft_strdup("");
-    while (content[i])
+    vars.i = 0;
+    vars.j = 0;
+    vars.k = 0;
+    vars.save = ft_strdup("");
+    while (content[vars.i])
     {
-        if (content[i] == '$') // $?fs
+        if (content[vars.i] == '$')
+            _norminette(&vars.save, content, data, &vars);
+        else if (content[vars.i] && content[vars.i] != '$')
         {
-            i++;
-            k = i;
-            on_off = 0;
-            while (content[i] && !ft_strchr("+*-?<>{}[]^()#%@\"'$&|;,/\t ", content[i]) && !ft_isdigit(content[i]))
-                i++;
-
-            if (k == i && content[i] == '?')
-            {
-                // printf("g_exit_status: %s\n", ft_itoa(g_exit_status));
-                tmp3 = save;
-                tmp = ft_itoa(g_exit_status);
-                save = ft_strjoin(save, tmp);
-                free(tmp3);
-                free(tmp);
-                i++;
-                j = i;
-                continue;
-            }
-            if (k == i && ft_isdigit(content[i]))
-            {
-                tmp = ft_itoa(ft_atoi(&content[i]));
-                tmp2 = fetchValue(tmp, data->env);
-                if (tmp2)
-                {
-                    tmp3 = save;
-                    save = ft_strjoin(save, tmp2);
-                    free(tmp);
-                    free(tmp3);
-                    free(tmp2);
-                }
-                else
-                    free(tmp);
-                i++;
-                j = i;
-                continue;
-            }
-            if (i == k)
-            {
-                if (!content[i])
-                    save = _append(save, '$');
-                else
-                {
-                    save = _append(save, '$');
-                    save = _append(save, content[i]);
-                    i++;
-                }
-                j = i;
-                continue;
-            }
-            tmp = ft_substr(content, j + 1, i - j - 1);
-            tmp2 = fetchValue(tmp, data->env);
-            if (tmp2)
-            {
-                tmp3 = save;
-                save = ft_strjoin(save, tmp2);
-                free(tmp);
-                free(tmp3);
-                free(tmp2);
-            }
-            else
-                free(tmp);
-
-            j = i;
-        }
-        if (content[i] && content[i] != '$')
-        {
-
-            save = _append(save, content[i]);
-            i++;
-            j = i;
+            vars.save = _append(vars.save, content[vars.i]);
+            vars.i++;
+            vars.j = vars.i;
         }
     }
     free(content);
-    return save;
+    return vars.save;
+}
+
+void _update_before_expanded(t_token **head)
+{
+    if (ft_strlen((*head)->content) != 1)
+    {
+        free((*head)->before_expanded);
+        (*head)->before_expanded = ft_strdup((*head)->content);
+    }
 }
 
 void _expander(t_token **result, t_data *data)
 {
     t_token *head;
+    char *tmp;
 
     head = *result;
     while (head)
@@ -129,12 +65,8 @@ void _expander(t_token **result, t_data *data)
         }
         if (_contains_dollar(head->content) && (head->state == GENERAL || head->state == IN_DQUOTE))
         {
-            if (ft_strlen(head->content) != 1)
-            { ////////
-                free(head->before_expanded);
-                head->before_expanded = ft_strdup(head->content); // save the original content
-            }
-            char *tmp = _expand_word(head->content, data);
+            _update_before_expanded(&head);
+            tmp = _expand_word(head->content, data);
             head->content = ft_strtrim(tmp, " \t");
             free(tmp);
         }
