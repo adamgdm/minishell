@@ -181,6 +181,8 @@ t_commands *_parser(t_token **result, t_data *data)
             result_pipe[0] = -1;
             result_pipe[1] = -1;
             already_printed = 0;
+            in_file = 0;
+            out_file = 1;
         }
 
         current = current->next;
