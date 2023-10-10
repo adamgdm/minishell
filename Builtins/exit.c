@@ -50,6 +50,7 @@ void	free_commands(t_commands *head)
 	current = head;
 	while (current != NULL)
 	{
+		i = 0;
 		temp = current;
 		current = current->next;
 		if (temp->cmd != NULL)
