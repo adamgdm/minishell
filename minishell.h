@@ -17,12 +17,19 @@
 
 
 
+//------------------------------------    NORMINETTE    ------------------------------------
 
-// typedef struct s_list {
-// 	t_token			*head;
-// 	t_token			*tail;
-// 	int				size;
-// }	t_list;
+typedef struct s_vars
+{
+	char	*save;
+	int		i;
+	int		j;
+	int		k;
+}	t_vars;
+
+
+//------------------------------------    NORMINETTE    ------------------------------------
+
 enum e_state {
 	GENERAL,
 	IN_QUOTE,
@@ -109,7 +116,13 @@ void		_free_all_tokens(t_token **head, int check);
 int			_process_env_value(char *value);
 int			*_here_doc(char *content, int check, t_data *data);
 char		*_expand_word(char *content, t_data *data);
-void ft_sigints(int sig);
+void		ft_sigints(int sig);
+void		_join_exit_status(char **save, int *i);
+void		_join_digit(char **save, char *content, t_data *data, int *i);
+void		_join_dollar_with_char(char **save, char *content, int *i);
+void		_join_the_word(char **save, char *content, char *tmp, t_data *data);
+void   		_norminette(char **save, char *content, t_data *data, t_vars *vars);
+
 
 //	-----------------------    PARSING    ------------------------
 

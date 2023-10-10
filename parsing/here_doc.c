@@ -21,41 +21,47 @@ static int	_strcmp(const char *s1, const char *s2)
 }
 
 
+void    _write_to_pipe(char *content, int check, t_data *data, int *fd)
+{
+    char    *s;
+
+    while (1)
+    {
+        s = readline(">");
+        if (!s)
+            break;
+        if (!_strcmp(s, content))
+        {
+            free(s);
+            break;
+        }
+        if (check == 1)
+            s = _expand_word(s, data);
+        write(fd[1], s, ft_strlen(s));
+        write(fd[1], "\n", 1);
+        free(s);
+    }
+}
 
 int *_here_doc(char *content, int check, t_data *data)
 {
-    pid_t pid;
-
-    int *fd = malloc(sizeof(int) * 2);
-    char *s;
+    pid_t   pid;
+    int     *fd;
+    
+    fd = malloc(sizeof(int) * 2);
     pipe(fd);
     pid = fork();
     signal(SIGINT, ft_sigints);
     if (pid == 0)   
     {
-        //close(fd[0]);
-        while (1)
-        {
-            s = readline(">");
-            if (!s)
-                break;
-            if (!_strcmp(s, content))
-                break;
-            if (check == 1)
-                s = _expand_word(s, data);
-            write(fd[1], s, ft_strlen(s));
-            write(fd[1], "\n", 1);
-            free(s);
-        }
+        _write_to_pipe(content, check, data, fd);
         exit(0);
-       // close(fd[1]);
     }
     else
     {
         signal(SIGINT, SIG_IGN);
         close(fd[1]);
         wait(NULL);
-       // close(fd[0]);
         return (fd);
     }
 }

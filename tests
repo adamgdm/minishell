@@ -86,3 +86,6 @@ echo $4HOME -> HOME
 17 here_document count exceeded
 
 echo hello | ls > b | pwd | cat < b
+
+------
+exit status need to be updated after a successful command

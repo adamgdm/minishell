@@ -29,6 +29,7 @@ t_token *_lexer(char *input)
                         i++;
                     if (!input[i]) {
                         printf("Error: unclosed double quote\n");
+                        g_exit_status = 258;
                         _free_all_tokens(&head, 1);
 			            free(input);
                         return (NULL);
@@ -52,6 +53,7 @@ t_token *_lexer(char *input)
                     if (!input[i])
                     {
                         printf("Error: unclosed single quote\n");
+                        g_exit_status = 258;
                         _free_all_tokens(&head, 1);
                         free(input);
                         return (NULL);

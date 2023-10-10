@@ -93,6 +93,7 @@ t_commands *_parser(t_token **result, t_data *data)
                     printf("minishell: %s: %s\n", current->next->content, strerror(errno));
                 error = 1;
                 already_printed = 1;
+                g_exit_status = 1;
             }
             free(current->content);
             current->content = NULL;
@@ -135,6 +136,7 @@ t_commands *_parser(t_token **result, t_data *data)
                     printf("minishell: %s: %s\n", current->next->content, strerror(errno));
                 error = 1;
                 already_printed = 1;
+                g_exit_status = 1;
                 // return (NULL);
             }
             free(current->content);
