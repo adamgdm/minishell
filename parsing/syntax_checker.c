@@ -43,6 +43,7 @@ int _syntax_check(t_token** result)
     if (current->type == PIPE)
     {
         printf("minishell: syntax error near unexpected token `|'\n");
+        g_exit_status = 258;
         return (1);
     }
     
@@ -53,13 +54,13 @@ int _syntax_check(t_token** result)
             if (!current->next)
             {
                 printf("minishell: syntax error near unexpected token `newline'\n");
-                g_exit_status = 2;
+                g_exit_status = 258;
                 return (1);
             }
             if (_check_type(current->next->type) || current->next->type == PIPE)
             {
                 printf("minishell: syntax error near unexpected token `%s'\n", current->next->content);
-                g_exit_status = 2;
+                g_exit_status = 258;
                 return (1);
             }
         }
@@ -68,7 +69,7 @@ int _syntax_check(t_token** result)
             if (!current->next || current->next->type == PIPE)
             {
                 printf("minishell: syntax error near unexpected token `|'\n");
-                g_exit_status = 2;
+                g_exit_status = 258;
                 return (1);
             }
         }
@@ -77,7 +78,7 @@ int _syntax_check(t_token** result)
             && !ft_strchr(current->content, '(') && !ft_strchr(current->content, '\\'))
         {
             printf("minishell: syntax error near unexpected token `)'\n");
-            g_exit_status = 2;
+            g_exit_status = 258;
             return (1);
         }
         if (current->type == WORD && (ft_strchr(current->content, ')')
@@ -95,20 +96,20 @@ int _syntax_check(t_token** result)
                     tmp = ft_substr(current->content, j, i - j);
                     printf("minishell: syntax error near unexpected token `%s'\n", tmp);
                     free(tmp);
-                    g_exit_status = 2;
+                    g_exit_status = 258;
                     return (1);
                     
                 }
                 if (current->content[0] == ')')
                 {
                     printf("minishell: syntax error near unexpected token `)'\n");
-                    g_exit_status = 2;
+                    g_exit_status = 258;
                     return (1);
                 }
                 if (current->content[i] == '(')
                 {
                     printf("minishell: syntax error near unexpected token `('\n");
-                    g_exit_status = 2;
+                    g_exit_status = 258;
                     return (1);
                 }
                 i++;

@@ -44,7 +44,6 @@ void    _free_all_tokens(t_token **head, int check)
         current = current->next;
         if (check == 1)
         {
-            printf("content: %s\n", tmp->content);
             free(tmp->content);
             tmp->content = NULL;
         }
