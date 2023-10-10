@@ -48,5 +48,5 @@ void    ft_exit(t_data **data, t_commands *cmnds)
     if (cmnds)
         free_commands(cmnds);
     free_t_data(data);
-    exit(0);
+    exit(g_exit_status);
 }

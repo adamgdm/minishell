@@ -159,7 +159,8 @@ void ft_sigints(int sig)
 	if (sig == SIGINT)
 	{
 		g_exit_status = (127 + sig) % 256;
-		rl_on_new_line();
+		ft_putstr_fd("\n", 1);
+		ft_putstr_fd("\e[01;32mBoubou_shell> \e[0;37m", 1);
 		exit(0);
 	}
 }
@@ -169,10 +170,8 @@ void ft_sigint(int sig)
 	if (sig == SIGINT)
 	{
 		(void)sig;
-		printf("\n");
-		rl_replace_line("", 0);
-		rl_on_new_line();
-		rl_redisplay();
+		ft_putstr_fd("\n", 1);
+		ft_putstr_fd("\e[01;32mBoubou_shell> \e[0;37m", 1);
 		g_exit_status = (127 + sig) % 256;
 	}
 }
