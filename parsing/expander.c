@@ -122,9 +122,7 @@ void _expander(t_token **result, t_data *data)
         {
             head = head->next->next;
             while (head && head->space_check == 0)
-            {
                 head = head->next;
-            }
             if (head && head->type != HERE_DOC)
                 head = head->next;
             continue;
