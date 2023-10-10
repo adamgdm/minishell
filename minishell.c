@@ -200,10 +200,16 @@ int main(int ac, char **av, char **envp)
 		result = _lexer(input);
 		if (!result)
 			continue;
-		if (_syntax_check(&result))
+		int a = _syntax_check(&result);
+		if (a)
 		{
 			_free_all_tokens(&result, 1);
 			free(input);
+			if (a == -1)
+			{
+				free_t_data(&g_data);
+				return (g_exit_status);
+			}
 			continue;
 		}
 		_expander(&result, g_data);
@@ -218,5 +224,5 @@ int main(int ac, char **av, char **envp)
 		free_commands(commands);
 	}
 
-	return g_exit_status;
+	return (g_exit_status);
 }
