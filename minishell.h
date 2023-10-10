@@ -131,7 +131,7 @@ t_forchitat *createNodefork(int value);
 void appendNodefork(t_forchitat **head, int value);
 void freeListfork(t_forchitat *head);
 
-
+char *return_wsback(char *str);
 char **ft_changeelement(char **arr, int index, char *newelement);
 t_execcommand *ft_returndataforexec(t_data **data, t_commands *cmnd);
 void ft_freeexeccommand(t_execcommand *execcommand);
@@ -155,7 +155,13 @@ char **ft_env_to_array(t_env *env);
 char *ft_returnexistingcommandpath(t_env *env, char *cmnd);
 
 //	-----------------------    EXECUTION    ------------------------
-
+char *return_wsback(char *str);
+void ft_check_if_directory(t_data **data, char *cmd, char *str);
+void ft_handle_path_existance(t_data **data, char *cmd);
+int ft_check_cmd(t_data **data, t_commands *comond, char *cmd);
+int ft_check_if_executable(char *str);
+void ft_print_er(char *str, char *err, int exit_status);
+int ft_check_whether_builtins(char *cmd);
 void ft_sigint(int sig);
 
 void ft_executesecondcmnd(t_data **data, t_commands *cmnd, int **pipes);
@@ -188,7 +194,7 @@ void printenv(t_env *head, int fd);
 
 int ft_iseqin(char *str);
 
-void    ft_echo(char **cmd);
+void    ft_echo(char **cmd, int fd);
 
 void	ft_execute_all(t_data **data, t_commands *cmnd);
 
@@ -204,6 +210,8 @@ char *ft_line_w_out_path(char *str, int len);
 
 char **ft_find_path(char **envp, t_env *head);
 
+int	ft_chdir_error_print(char *path);
+
 char *ft_makethelist(char *cmd, char **path, t_env *head);
 
 void ft_execve(char **envp, char **cmnd, t_env *head);
@@ -214,11 +222,11 @@ void    ft_pwd(int fd);
 
 void    ft_cd(t_data **data, t_commands *comond, char *path);
 
-void    ft_env(t_data **data);
+void    ft_env(t_data **data, int fd);
 
 void    ft_unset(t_data **data, t_commands *cmnd);
 
-void	ft_export(t_data **data, char **args);
+void ft_export(t_data **data, char **args, int i, int fd);
 
 int ft_doesmatch(char *str, char *qst);
 
@@ -228,7 +236,7 @@ void ft_initialize(t_data **data, char **env);
 
 void    ft_unsetiden(t_env **env, t_env **envnocmd, char *iden);
 
-void ft_exporttherule(t_data **data, char *iden, char *value);
+void ft_exporttherule(t_data **data, char *iden, char *value, char *str);
 
 void free_commands(t_commands *head);
 

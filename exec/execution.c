@@ -19,7 +19,7 @@ int ft_builtings_cd_exit_unset_exportWithParameters(t_data **data, t_commands *c
     }
     else if ((ft_doesmatch(cmnd->cmd[0], "export") && cmnd->cmd[1]))
     {
-        ft_export(data, cmnd->cmd);
+        ft_export(data, cmnd->cmd, 1, cmnd->out_file);
         return (1);
     }
     return (0);
@@ -75,7 +75,15 @@ char *return_wsback(char *str)
     return (new);
 }
 
-void ft_check_if_directory(char *cmd, char *str)
+void ft_handle_path_existance(t_data **data, char *cmd)
+{
+    if (ft_ruleexist(data, "PATH"))
+        ft_print_er(cmd, "command not found", 127);
+    else
+        ft_print_er(cmd, "No such file or directory", 127);
+}
+
+void ft_check_if_directory(t_data **data, char *cmd, char *str)
 {
     struct stat sb;
 
@@ -97,7 +105,7 @@ void ft_check_if_directory(char *cmd, char *str)
         }
     }
     else
-        ft_print_er(cmd, "command not found", 127);
+        ft_handle_path_existance(data, cmd);
     if (str)
         free(str);
 }
@@ -135,7 +143,7 @@ int ft_check_cmd(t_data **data, t_commands *comond, char *cmd)
     }
     if (ft_check_if_executable(cmd))
         return (1);
-    ft_check_if_directory(cmd, return_wsback(cmd));
+    ft_check_if_directory(data ,cmd, return_wsback(cmd));
     return (0);
 }
 
@@ -143,22 +151,22 @@ int ft_builtings_echo_env_exportwithparameters(t_data **data, t_commands *cmnd)
 {
     if (ft_doesmatch(cmnd->cmd[0], "echo"))
     {
-        ft_echo(cmnd->cmd);
+        ft_echo(cmnd->cmd, cmnd->out_file);
         return (1);
     }
     else if (ft_doesmatch(cmnd->cmd[0], "env"))
     {
-        ft_env(data);
+        ft_env(data, cmnd->out_file);
         return (1);
     }
     else if ((ft_doesmatch(cmnd->cmd[0], "export") && !cmnd->cmd[1]))
     {
-        ft_export(data, cmnd->cmd);
+        ft_export(data, cmnd->cmd, 1, cmnd->out_file);
         return (1);
     }
     else if ((ft_doesmatch(cmnd->cmd[0], "pwd")))
     {
-        ft_pwd(1);
+        ft_pwd(cmnd->out_file);
         return (1);
     }
     return (0);

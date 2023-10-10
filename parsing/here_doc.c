@@ -30,8 +30,8 @@ int *_here_doc(char *content, int check, t_data *data)
     char *s;
     pipe(fd);
     pid = fork();
-    signal(SIGINT, ft_sigint);
-    if (pid == 0)
+    signal(SIGINT, ft_sigints);
+    if (pid == 0)   
     {
         //close(fd[0]);
         while (1)
@@ -52,6 +52,7 @@ int *_here_doc(char *content, int check, t_data *data)
     }
     else
     {
+        signal(SIGINT, SIG_IGN);
         close(fd[1]);
         wait(NULL);
        // close(fd[0]);

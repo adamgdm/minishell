@@ -1,10 +1,10 @@
-CFLAGS = -fsanitize=address -g
+CFLAGS = -fsanitize=address -g3
 NAME = minishell
 SRC = parsing/lexer.c minishell.c parsing/utils_lexer.c parsing/tokens.c \
 		parsing/expander.c parsing/update_tokens.c parsing/syntax_checker.c \
 		parsing/parser.c parsing/commands.c \
 		 parsing/utils_parser.c  parsing/here_doc.c \
-		exec/helpers_1.c Builtins/pwd.c \
+		exec/helpers_1.c Builtins/pwd.c Builtins/additional_fncts_1.c\
 		Builtins/cd.c Builtins/env.c Builtins/unset.c Builtins/export1.c exec/helpers_2.c \
 		Builtins/exit.c Builtins/echo.c exec/helpers_3.c \
 		exec/execution.c exec/exec_fncts.c

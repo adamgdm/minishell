@@ -87,9 +87,7 @@ void ft_printennv(t_env *head, int fd)
 t_data *ft_initalizebasevalue(t_data **data)
 {
 	char *str;
-	int SHLVL;
 
-	printf("HELLOSAMA\n");
 	(*data) = malloc(sizeof(t_data));
 	if (!(*data))
 	{
@@ -125,7 +123,7 @@ void ft_initialize(t_data **data, char **env)
 	}
 	str = fetchValue("SHLVL", (*data)->envnoeq);
 	if (!str)
-		SHLVL = 0;
+		SHLVL = 1;
 	else
 	{
 		SHLVL = ft_atoi(str);
@@ -134,7 +132,7 @@ void ft_initialize(t_data **data, char **env)
 	free(str);
 	str = ft_itoa(SHLVL);
 	ft_unsetiden(&((*data)->env), &((*data)->envnoeq), "SHLVL");
-	ft_exporttherule(data, "SHLVL", str);
+	ft_exporttherule(data, "SHLVL", str, NULL);
 	free(str);
 }
 
@@ -176,14 +174,21 @@ void ft_sigint(int sig)
 	}
 }
 
+int ft_handle_more_than_one_arg(t_data **data, char *str)
+{
+	ft_check_if_directory(data, str, return_wsback(str));
+	return (g_exit_status);
+}
+
 int main(int ac, char **av, char **envp)
 {
-	(void)ac;
 	(void)av;
 	t_token *result;
 	t_data *g_data;
 
 	g_data = NULL;
+	if (ac != 1)
+		return (ft_handle_more_than_one_arg(&g_data ,av[1]));
 	ft_initialize(&g_data, envp);
 	// printf("exit_status: %d\n", g_exit_status);
 	// ft_printennv(g_data->env, 1);
