@@ -122,6 +122,7 @@ void		_join_digit(char **save, char *content, t_data *data, int *i);
 void		_join_dollar_with_char(char **save, char *content, int *i);
 void		_join_the_word(char **save, char *content, char *tmp, t_data *data);
 void   		_norminette(char **save, char *content, t_data *data, t_vars *vars);
+void		_token_creation(char *input, t_token **head, int *i);
 
 
 //	-----------------------    PARSING    ------------------------
