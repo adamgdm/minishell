@@ -8,6 +8,8 @@ SRC = parsing/lexer.c minishell.c parsing/utils_lexer.c parsing/tokens.c \
 		parsing/lexer_utils2.c parsing/lexer_utils3.c \
 		parsing/lexer_utils4.c \
 		parsing/parser_utils.c parsing/parser_utils2.c \
+		parsing/parser_utils3.c \
+		parsing/syntax_utils.c parsing/syntax_utils2.c\
 		exec/helpers_1.c Builtins/pwd.c Builtins/additional_fncts_1.c\
 		Builtins/cd.c Builtins/env.c Builtins/unset.c Builtins/export1.c exec/helpers_2.c \
 		Builtins/exit.c Builtins/echo.c exec/helpers_3.c \

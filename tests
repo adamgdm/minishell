@@ -89,3 +89,6 @@ echo hello | ls > b | pwd | cat < b
 
 ------
 exit status need to be updated after a successful command
+
+-----
+check ambiguous redirection for append >>

@@ -160,6 +160,19 @@ void	_parser_norm3(t_token *current, int *in_file, int *error, int *already_prin
 void	_parser_norm4(t_token *current, int *in_file, t_data *data);
 void	_parser_norm5(t_commands **head, int **result_pipe, t_vars3 *vars, int *previous_pipe);
 int		_is_there_space_or_tab(char *content);
+void	_parser_norm6(t_commands **head, t_token *current, t_vars3 *vars, t_data *data);
+void	_initialize_vars(t_vars3 *vars);
+char	**_append_string(char **commands, char *content);
+void	_do_norm(t_token *current, t_vars3 *vars);
+int		_syntax_norm(t_token *current);
+int		_syntax_norm2(t_token *current);
+int		_syntax_norm3(t_token *current);
+int		_syntax_norm4(t_token *current);
+int		_syntax_norm5(void);
+int		_syntax_norm6(void);
+int		_syntax_norm7(t_token *current, int i);
+void	_update_tokens_utils(t_token *current);
+int		_check_type(enum e_token type);
 
 //	-----------------------    PARSING    ------------------------
 
