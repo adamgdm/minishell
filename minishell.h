@@ -104,6 +104,17 @@ typedef struct s_vars2
 	char	*s;
 }	t_vars2;
 
+typedef struct s_vars3
+{
+	char	**commands;
+	int		in_file;
+	int		out_file;
+	int		error;
+	int		already_printed;
+	int 	previous_pipe;
+	int     *result_pipe;
+}	t_vars3;
+
 //------------------------------------    NORMINETTE    ------------------------------------
 
 //	-----------------------    PARSING    ------------------------
@@ -118,7 +129,7 @@ void		_expander(t_token **head, t_data *data);
 char*		_append(char *str, char c);
 int			_syntax_check(t_token** result);
 t_commands  *_parser(t_token **result, t_data *data);
-t_commands  *_create_command(char **commands, int in_file, int out_file, int *pipefd, int error);
+t_commands  *_create_command(t_vars3 *vars);
 void		_add_command(t_commands **head, t_commands *new);
 void		_print_array(char **array);
 void		_free_all_tokens(t_token **head, int check);
@@ -136,7 +147,19 @@ int			_norminette1(char *input, t_token **head, int *i, int *j);
 int			_norminette2(char *input, t_token **head, int *i, int *j);
 void		_norminette3(char *input, t_token **head, char **save, int *i);
 int			_norminette4(char *input, t_vars2 *vars);
-
+int			_lexer_norm(t_token **head, char *input);
+void		_lexer_norm2(char *input, t_token **head, int *i, int *j);
+int			_lexer_norm3(t_token **head, char *input);
+void		 _lexer_norm4(char *input, t_token **head, int *i, int *j);
+void		_token_norm(char *input, t_token **head, int *i);
+void		_token_norm2(char *input, t_token **head, int *i);
+void		_parser_norm(t_token *current, int *out_file, int *error, int *already_printed);
+void		_parser_free_norm(t_token *current);
+void	_parser_norm2(t_token *current, int *out_file, int *error, int *already_printed);
+void	_parser_norm3(t_token *current, int *in_file, int *error, int *already_printed);
+void	_parser_norm4(t_token *current, int *in_file, t_data *data);
+void	_parser_norm5(t_commands **head, int **result_pipe, t_vars3 *vars, int *previous_pipe);
+int		_is_there_space_or_tab(char *content);
 
 //	-----------------------    PARSING    ------------------------
 

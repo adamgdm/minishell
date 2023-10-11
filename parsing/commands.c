@@ -1,17 +1,17 @@
 #include "../minishell.h"
 
-t_commands  *_create_command(char **commands, int in_file, int out_file, int *pipe, int error)
+t_commands  *_create_command(t_vars3 *vars)
 {
     t_commands  *new;
 
     new = malloc(sizeof(t_commands));
     if (!new)
         return (NULL);
-    new->cmd = commands;
-    new->in_file = in_file;
-    new->out_file = out_file;
-    new->pipefd = pipe;
-    new->error_exist = error;
+    new->cmd = vars->commands;
+    new->in_file = vars->in_file;
+    new->out_file = vars->out_file;
+    new->pipefd = vars->result_pipe;
+    new->error_exist = vars->error;
     new->pid = -1;
     new->next = NULL;
     new->previous = NULL;
