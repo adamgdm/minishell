@@ -33,7 +33,6 @@ int _check_type(enum e_token type)
 int _syntax_check(t_token** result)
 {
     t_token*    current;
-    int         parenthesis;
     int         i;
     int         j;
     char*       tmp;

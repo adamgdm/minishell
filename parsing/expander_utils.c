@@ -41,7 +41,7 @@ void    _join_dollar_with_char(char **save, char *content, int *i)
     }
 }
 
-void    _join_the_word(char **save, char *content, char *tmp, t_data *data)
+void    _join_the_word(char **save, char *tmp, t_data *data)
 {
     char    *tmp2;
     char    *tmp3;
@@ -78,7 +78,7 @@ void    _norminette(char **save, char *content, t_data *data, t_vars *vars)
     else
     {
         tmp = ft_substr(content, vars->j + 1, vars->i - vars->j - 1);
-        _join_the_word(save, content, tmp, data);
+        _join_the_word(save, tmp, data);
     }
     vars->j = vars->i;
 }

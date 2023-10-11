@@ -17,18 +17,6 @@
 
 
 
-//------------------------------------    NORMINETTE    ------------------------------------
-
-typedef struct s_vars
-{
-	char	*save;
-	int		i;
-	int		j;
-	int		k;
-}	t_vars;
-
-
-//------------------------------------    NORMINETTE    ------------------------------------
 
 enum e_state {
 	GENERAL,
@@ -97,6 +85,27 @@ typedef struct s_forchitat
 	struct s_forchitat *next;
 }	t_forchitat;
 
+//------------------------------------    NORMINETTE    ------------------------------------
+
+typedef struct s_vars
+{
+	char	*save;
+	int		i;
+	int		j;
+	int		k;
+}	t_vars;
+
+typedef struct s_vars2
+{
+	t_token	*current;
+	t_token *head;
+	int		i;
+	int		j;
+	char	*s;
+}	t_vars2;
+
+//------------------------------------    NORMINETTE    ------------------------------------
+
 //	-----------------------    PARSING    ------------------------
 
 
@@ -120,9 +129,13 @@ void		ft_sigints(int sig);
 void		_join_exit_status(char **save, int *i);
 void		_join_digit(char **save, char *content, t_data *data, int *i);
 void		_join_dollar_with_char(char **save, char *content, int *i);
-void		_join_the_word(char **save, char *content, char *tmp, t_data *data);
+void		_join_the_word(char **save, char *tmp, t_data *data);
 void   		_norminette(char **save, char *content, t_data *data, t_vars *vars);
 void		_token_creation(char *input, t_token **head, int *i);
+int			_norminette1(char *input, t_token **head, int *i, int *j);
+int			_norminette2(char *input, t_token **head, int *i, int *j);
+void		_norminette3(char *input, t_token **head, char **save, int *i);
+int			_norminette4(char *input, t_vars2 *vars);
 
 
 //	-----------------------    PARSING    ------------------------

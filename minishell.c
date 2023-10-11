@@ -84,9 +84,8 @@ void ft_printennv(t_env *head, int fd)
 	}
 }
 
-t_data *ft_initalizebasevalue(t_data **data)
+void	ft_initalizebasevalue(t_data **data)
 {
-	char *str;
 
 	(*data) = malloc(sizeof(t_data));
 	if (!(*data))
