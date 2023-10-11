@@ -8,7 +8,7 @@ t_token *_lexer(char *input)
     int                 i;
     int                 j;
     char                *s;
-    char                *tmp;
+    // char                *tmp;
 
     i = 0;
     j = 0;
@@ -79,42 +79,12 @@ t_token *_lexer(char *input)
                         _add_token(&head, current);
                         s = NULL;
                     }
-                }
+                }                      
             }
 
 
         }
-        else if (input[i] == '|') {
-            current = _create_token(ft_substr(input, i, 1), PIPE, GENERAL, 1);
-            _add_token(&head, current);
-            i++;
-        }
-        else if (input[i] == '<') {
-            // in case here doc
-            if (input[i] && input[i + 1] == '<') {
-                current = _create_token(ft_substr(input, i, 2), HERE_DOC, GENERAL, 1);
-                _add_token(&head, current);
-                i += 2;
-            }
-            else {
-                current = _create_token(ft_substr(input, i, 1), REDIRECT_IN, GENERAL, 1);
-                _add_token(&head, current);
-                i++;
-            }
-        }
-        else if (input[i] == '>') {
-            // in case append
-            if (input[i] && input[i + 1] == '>') {
-                current = _create_token(ft_substr(input, i, 2), REDIRECT_APPEND, GENERAL, 1);
-                _add_token(&head, current);
-                i += 2;
-            }
-            else {
-                current = _create_token(ft_substr(input, i, 1), REDIRECT_OUT, GENERAL, 1);
-                _add_token(&head, current);
-                i++;
-            }
-        }
+        _token_creation(input, &head, &i);
 
 }
 
