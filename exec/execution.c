@@ -134,7 +134,7 @@ int ft_check_cmd(t_data **data, t_commands *comond, char *cmd)
     }
     if (ft_check_whether_builtins(cmd))
         return (1);
-    str = ft_returnexistingcommandpath((*data)->env, cmd);
+    str = ft_rtexpath((*data)->env, cmd, 0, NULL);
     if (str)
     {
         free(str);
@@ -165,7 +165,7 @@ int ft_builtings_echo_env_exportwithparameters(t_data **data, t_commands *cmnd)
     }
     else if ((ft_doesmatch(cmnd->cmd[0], "pwd")))
     {
-        ft_pwd(1);
+        ft_pwd(data, 1);
         return (1);
     }
     return (0);

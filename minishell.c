@@ -40,7 +40,7 @@ void ft_exportminimum(t_data **data)
 	char *pwd;
 	char *str;
 
-	pwd = ft_returnpwd();
+	pwd = ft_returnpwd(data);
 	str = ft_strjoin("PWD=", pwd);
 	(*data)->env = createEnvNode(str);
 	free(str);
@@ -59,7 +59,7 @@ void ft_exportminimumeq(t_data **data)
 	char *str;
 
 	(*data)->envnoeq = createEnvNode("OLDPWD");
-	pwd = ft_returnpwd();
+	pwd = ft_returnpwd(data);
 	str = ft_strjoin("PWD=", pwd);
 	appendEnvNode(&(*data)->envnoeq, str);
 	free(pwd);
@@ -130,7 +130,10 @@ void ft_initialize(t_data **data, char **env)
 		SHLVL++;
 	}
 	free(str);
-	str = ft_itoa(SHLVL);
+	if (SHLVL == 999)
+		str = ft_strdup("");
+	else
+	 str = ft_itoa(SHLVL);
 	ft_unsetiden(&((*data)->env), &((*data)->envnoeq), "SHLVL");
 	ft_exporttherule(data, "SHLVL", str, NULL);
 	free(str);
@@ -219,10 +222,7 @@ int main(int ac, char **av, char **envp)
 		}
 		_expander(&result, g_data);
 		_update_tokens(&result);
-		//_print_token(result);
-		//_print_token(result);
 		t_commands *commands = _parser(&result, g_data);
-		// _print_commands(commands);
 		_free_all_tokens(&result, 0);
 		ft_execute_the_cmd(&g_data, commands);
 		free(input);

@@ -1,4 +1,4 @@
-CFLAGS = -fsanitize=address -g3
+CFLAGS = 
 NAME = minishell
 SRC = parsing/lexer.c minishell.c parsing/utils_lexer.c parsing/tokens.c \
 		parsing/expander.c parsing/update_tokens.c parsing/syntax_checker.c \

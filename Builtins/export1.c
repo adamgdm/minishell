@@ -6,7 +6,7 @@
 /*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 20:40:51 by agoujdam          #+#    #+#             */
-/*   Updated: 2023/10/10 01:08:10 by agoujdam         ###   ########.fr       */
+/*   Updated: 2023/10/10 19:57:56 by agoujdam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ int	ft_ruleexist(t_data **data, char *iden)
 	t_env	*x;
 	char	*str;
 	char	*rule;
-	
+
 	if (!data || !(*data) || !iden)
 		return (0);
 	x = (*data)->env;
