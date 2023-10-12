@@ -1,10 +1,15 @@
-CFLAGS = 
+CFLAGS =  -fsanitize=address -g3 
 NAME = minishell
-SRC = parsing/lexer.c minishell.c parsing/utils_lexer.c parsing/tokens.c \
-		parsing/expander.c parsing/update_tokens.c parsing/syntax_checker.c \
-		parsing/parser.c parsing/commands.c \
-		parsing/utils_parser.c  parsing/here_doc.c \
-		parsing/expander_utils.c parsing/lexer_utils.c \
+SRC = parsing/lexer_files/lexer.c minishell.c parsing/lexer_files/utils_lexer.c parsing/lexer_files/tokens.c \
+		parsing/lexer_files/expander.c parsing/lexer_files/update_tokens.c parsing/syntax_files/syntax_checker.c \
+		parsing/parser_files/parser.c parsing/parser_files/commands.c \
+		parsing/parser_files/utils_parser.c  parsing/parser_files/here_doc.c \
+		parsing/lexer_files/expander_utils.c parsing/lexer_files/lexer_utils.c \
+		parsing/lexer_files/lexer_utils2.c parsing/lexer_files/lexer_utils3.c \
+		parsing/lexer_files/lexer_utils4.c \
+		parsing/parser_files/parser_utils.c parsing/parser_files/parser_utils2.c \
+		parsing/parser_files/parser_utils3.c \
+		parsing/syntax_files/syntax_utils.c parsing/syntax_files/syntax_utils2.c\
 		exec/helpers_1.c Builtins/pwd.c Builtins/additional_fncts_1.c\
 		Builtins/cd.c Builtins/env.c Builtins/unset.c Builtins/export1.c exec/helpers_2.c \
 		Builtins/exit.c Builtins/echo.c exec/helpers_3.c \
@@ -19,7 +24,7 @@ $(LIBFT):
 	make -C libft
 
 $(NAME): $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) -lreadline libft/libft.a -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJ)  -o $(NAME) -lreadline libft/libft.a
 
 re: fclean all
 

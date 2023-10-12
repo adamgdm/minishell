@@ -17,18 +17,6 @@
 
 
 
-//------------------------------------    NORMINETTE    ------------------------------------
-
-typedef struct s_vars
-{
-	char	*save;
-	int		i;
-	int		j;
-	int		k;
-}	t_vars;
-
-
-//------------------------------------    NORMINETTE    ------------------------------------
 
 enum e_state {
 	GENERAL,
@@ -101,6 +89,38 @@ typedef struct s_forchitat
 	struct s_forchitat	*next;
 }						t_forchitat;
 
+//------------------------------------    NORMINETTE    ------------------------------------
+
+typedef struct s_vars
+{
+	char	*save;
+	int		i;
+	int		j;
+	int		k;
+}	t_vars;
+
+typedef struct s_vars2
+{
+	t_token	*current;
+	t_token *head;
+	int		i;
+	int		j;
+	char	*s;
+}	t_vars2;
+
+typedef struct s_vars3
+{
+	char	**commands;
+	int		in_file;
+	int		out_file;
+	int		error;
+	int		already_printed;
+	int 	previous_pipe;
+	int     *result_pipe;
+}	t_vars3;
+
+//------------------------------------    NORMINETTE    ------------------------------------
+
 //	-----------------------    PARSING    ------------------------
 
 
@@ -113,7 +133,7 @@ void		_expander(t_token **head, t_data *data);
 char*		_append(char *str, char c);
 int			_syntax_check(t_token** result);
 t_commands  *_parser(t_token **result, t_data *data);
-t_commands  *_create_command(char **commands, int in_file, int out_file, int *pipefd, int error);
+t_commands  *_create_command(t_vars3 *vars);
 void		_add_command(t_commands **head, t_commands *new);
 void		_print_array(char **array);
 void		_free_all_tokens(t_token **head, int check);
@@ -124,10 +144,41 @@ void		ft_sigints(int sig);
 void		_join_exit_status(char **save, int *i);
 void		_join_digit(char **save, char *content, t_data *data, int *i);
 void		_join_dollar_with_char(char **save, char *content, int *i);
-void		_join_the_word(char **save, char *content, char *tmp, t_data *data);
+void		_join_the_word(char **save, char *tmp, t_data *data);
 void   		_norminette(char **save, char *content, t_data *data, t_vars *vars);
 void		_token_creation(char *input, t_token **head, int *i);
-
+int			_norminette1(char *input, t_token **head, int *i, int *j);
+int			_norminette2(char *input, t_token **head, int *i, int *j);
+void		_norminette3(char *input, t_token **head, char **save, int *i);
+int			_norminette4(char *input, t_vars2 *vars);
+int			_lexer_norm(t_token **head, char *input);
+void		_lexer_norm2(char *input, t_token **head, int *i, int *j);
+int			_lexer_norm3(t_token **head, char *input);
+void		 _lexer_norm4(char *input, t_token **head, int *i, int *j);
+void		_token_norm(char *input, t_token **head, int *i);
+void		_token_norm2(char *input, t_token **head, int *i);
+void		_parser_norm(t_token *current, int *out_file, int *error, int *already_printed);
+void		_parser_free_norm(t_token *current);
+void	_parser_norm2(t_token *current, int *out_file, int *error, int *already_printed);
+void	_parser_norm3(t_token *current, int *in_file, int *error, int *already_printed);
+void	_parser_norm4(t_token *current, int *in_file, t_data *data);
+void	_parser_norm5(t_commands **head, int **result_pipe, t_vars3 *vars, int *previous_pipe);
+int		_is_there_space_or_tab(char *content);
+void	_parser_norm6(t_commands **head, t_token *current, t_vars3 *vars, t_data *data);
+void	_initialize_vars(t_vars3 *vars);
+char	**_append_string(char **commands, char *content);
+void	_do_norm(t_token *current, t_vars3 *vars);
+int		_syntax_norm(t_token *current);
+int		_syntax_norm2(t_token *current);
+int		_syntax_norm3(t_token *current);
+int		_syntax_norm4(t_token *current);
+int		_syntax_norm5(void);
+int		_syntax_norm6(void);
+int		_syntax_norm7(t_token *current, int i);
+void	_update_tokens_utils(t_token *current);
+int		_check_type(enum e_token type);
+int		_do_norm2(t_token *current);
+void		_do_norm3(t_token *current, t_vars3 *vars, t_data *data);
 
 //	-----------------------    PARSING    ------------------------
 
