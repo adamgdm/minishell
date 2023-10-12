@@ -122,7 +122,7 @@ void	ft_initialize(t_data **data, char **env)
 		add_last_node(&(y->env), "_=env");
 		(*data) = y;
 	}
-	y->path = ft_retpwd(y);
+	y->path = ft_returnpwd(&y);
 	str = fetchValue("SHLVL", (*data)->envnoeq);
 	if (!str)
 		SHLVL = 1;
