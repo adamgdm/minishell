@@ -6,11 +6,11 @@
 /*   By: afaqir <afaqir@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 01:05:17 by afaqir            #+#    #+#             */
-/*   Updated: 2023/10/12 01:11:04 by afaqir           ###   ########.fr       */
+/*   Updated: 2023/10/12 01:17:33 by afaqir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../../minishell.h"
 
 void	_join_exit_status(char **save, int *i)
 {

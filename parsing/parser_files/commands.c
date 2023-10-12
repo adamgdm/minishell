@@ -6,11 +6,11 @@
 /*   By: afaqir <afaqir@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 01:05:06 by afaqir            #+#    #+#             */
-/*   Updated: 2023/10/12 01:05:11 by afaqir           ###   ########.fr       */
+/*   Updated: 2023/10/12 01:18:11 by afaqir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../../minishell.h"
 
 t_commands	*_create_command(t_vars3 *vars)
 {

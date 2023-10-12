@@ -6,11 +6,11 @@
 /*   By: afaqir <afaqir@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 01:05:28 by afaqir            #+#    #+#             */
-/*   Updated: 2023/10/12 01:05:29 by afaqir           ###   ########.fr       */
+/*   Updated: 2023/10/12 01:18:14 by afaqir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../../minishell.h"
 
 static int	_strcmp(const char *s1, const char *s2)
 {

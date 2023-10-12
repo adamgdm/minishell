@@ -6,11 +6,11 @@
 /*   By: afaqir <afaqir@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 01:05:38 by afaqir            #+#    #+#             */
-/*   Updated: 2023/10/12 01:10:19 by afaqir           ###   ########.fr       */
+/*   Updated: 2023/10/12 01:17:48 by afaqir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../../minishell.h"
 
 int	_norminette4(char *input, t_vars2 *vars)
 {

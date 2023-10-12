@@ -6,11 +6,11 @@
 /*   By: afaqir <afaqir@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 01:05:51 by afaqir            #+#    #+#             */
-/*   Updated: 2023/10/12 01:10:46 by afaqir           ###   ########.fr       */
+/*   Updated: 2023/10/12 01:17:58 by afaqir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../../minishell.h"
 
 t_token	*_lexer(char *input)
 {

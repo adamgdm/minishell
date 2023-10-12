@@ -6,11 +6,11 @@
 /*   By: afaqir <afaqir@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 01:06:41 by afaqir            #+#    #+#             */
-/*   Updated: 2023/10/12 01:07:46 by afaqir           ###   ########.fr       */
+/*   Updated: 2023/10/12 01:18:07 by afaqir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../../minishell.h"
 
 int	_it_contains(int c)
 {

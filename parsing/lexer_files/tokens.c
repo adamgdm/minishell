@@ -6,11 +6,11 @@
 /*   By: afaqir <afaqir@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 01:06:33 by afaqir            #+#    #+#             */
-/*   Updated: 2023/10/12 01:06:34 by afaqir           ###   ########.fr       */
+/*   Updated: 2023/10/12 01:18:02 by afaqir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../../minishell.h"
 
 t_token	*_create_token(char *value, enum e_token type, enum e_state state,
 		int space_check)

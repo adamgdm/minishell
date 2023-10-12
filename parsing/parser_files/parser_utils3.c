@@ -6,11 +6,11 @@
 /*   By: afaqir <afaqir@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 01:04:51 by afaqir            #+#    #+#             */
-/*   Updated: 2023/10/12 01:09:00 by afaqir           ###   ########.fr       */
+/*   Updated: 2023/10/12 01:18:23 by afaqir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../../minishell.h"
 
 void	_do_norm(t_token *current, t_vars3 *vars)
 {

@@ -6,16 +6,14 @@
 /*   By: afaqir <afaqir@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 01:05:33 by afaqir            #+#    #+#             */
-/*   Updated: 2023/10/12 01:10:33 by afaqir           ###   ########.fr       */
+/*   Updated: 2023/10/12 01:30:17 by afaqir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../../minishell.h"
 
 int	_norminette1(char *input, t_token **head, int *i, int *j)
 {
-	t_token	*current;
-
 	(*i) = (*i) + 1;
 	*j = *i;
 	while (input[*i] && input[*i] != '\"')
@@ -29,8 +27,6 @@ int	_norminette1(char *input, t_token **head, int *i, int *j)
 
 int	_norminette2(char *input, t_token **head, int *i, int *j)
 {
-	t_token	*current;
-
 	(*i) = (*i) + 1;
 	*j = *i;
 	while (input[*i] && input[*i] != '\'')

@@ -6,11 +6,11 @@
 /*   By: afaqir <afaqir@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 01:06:00 by afaqir            #+#    #+#             */
-/*   Updated: 2023/10/12 01:06:04 by afaqir           ###   ########.fr       */
+/*   Updated: 2023/10/12 01:18:20 by afaqir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../../minishell.h"
 
 void	_parser_norm4(t_token *current, int *in_file, t_data *data)
 {

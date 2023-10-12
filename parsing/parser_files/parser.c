@@ -6,11 +6,11 @@
 /*   By: afaqir <afaqir@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 01:06:11 by afaqir            #+#    #+#             */
-/*   Updated: 2023/10/12 01:09:31 by afaqir           ###   ########.fr       */
+/*   Updated: 2023/10/12 01:18:27 by afaqir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../../minishell.h"
 
 char	**_append_string(char **commands, char *content)
 {

@@ -6,11 +6,11 @@
 /*   By: afaqir <afaqir@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 01:06:23 by afaqir            #+#    #+#             */
-/*   Updated: 2023/10/12 01:06:27 by afaqir           ###   ########.fr       */
+/*   Updated: 2023/10/12 01:30:36 by afaqir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../../minishell.h"
 
 int	_syntax_norm(t_token *current)
 {
@@ -60,7 +60,6 @@ int	_syntax_norm3(t_token *current)
 {
 	int		i;
 	int		j;
-	char	*tmp;
 
 	i = 0;
 	j = 0;
