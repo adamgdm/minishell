@@ -229,7 +229,9 @@ int	main(int ac, char **av, char **envp)
 		}
 		_expander(&result, g_data);
 		_update_tokens(&result);
+		// _print_token(result);
 		commands = _parser(&result, g_data);
+		// _print_commands(commands);
 		_free_all_tokens(&result, 0);
 		ft_execute_the_cmd(&g_data, commands);
 		free(input);

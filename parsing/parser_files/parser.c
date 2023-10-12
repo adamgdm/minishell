@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afaqir <afaqir@student.42.fr>              +#+  +:+       +#+        */
+/*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 01:06:11 by afaqir            #+#    #+#             */
-/*   Updated: 2023/10/12 01:18:27 by afaqir           ###   ########.fr       */
+/*   Updated: 2023/10/12 11:30:20 by agoujdam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,11 @@ void	_print_array(char **array)
 	i = 0;
 	while (array && array[i])
 	{
+		if (array[i] == NULL)
+		{
+			printf("HANI DKHLT\n");
+			return ;
+		}
 		printf("array[%d]: %s\n", i, array[i]);
 		i++;
 	}

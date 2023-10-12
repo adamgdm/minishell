@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_utils2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afaqir <afaqir@student.42.fr>              +#+  +:+       +#+        */
+/*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 01:05:38 by afaqir            #+#    #+#             */
-/*   Updated: 2023/10/12 01:17:48 by afaqir           ###   ########.fr       */
+/*   Updated: 2023/10/12 11:35:57 by agoujdam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,11 @@
 
 int	_norminette4(char *input, t_vars2 *vars)
 {
-	if (input[vars->i] == '\"' && !_norminette1(input, &vars->head, &vars->i,
-			&vars->j))
-		return (0);
+	if (input[vars->i] == '\"')
+	{
+		if (!_norminette1(input, &vars->head, &vars->i, &vars->j))
+			return (0);
+	}
 	else if (input[vars->i] == '\'')
 	{
 		if (!_norminette2(input, &vars->head, &vars->i, &vars->j))
