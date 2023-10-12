@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execution.c                                        :+:      :+:    :+:   */
+/*   executiqwon.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 09:00:52 by agoujdam          #+#    #+#             */
-/*   Updated: 2023/10/12 09:02:34 by agoujdam         ###   ########.fr       */
+/*   Updated: 2023/10/12 11:57:41 by agoujdam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -434,7 +434,8 @@ void	ft_execute_more_than_one_cmd_with_pipes(t_data **data, t_commands *cmnd)
 	current = return_node_after_error(cmnd);
 	if (!current->next)
 		ft_execute_only_one_cmd_with_no_pipes(data, current);
-	ft_while_current_execute(data, &current);
+	else
+		ft_while_current_execute(data, &current);
 	current = cmnd;
 	while (current)
 	{
