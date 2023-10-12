@@ -42,8 +42,7 @@ char	*ft_returnpwd(t_data **data)
 		g_exit_status = 1;
 		exit(1);
 	}
-	buffer = getcwd(buffer, i);
-	if (!buffer || !*buffer)
+	if (!getcwd(buffer, i) || !buffer[0])
 		buffer = ft_returnfetch(data, buffer);
 	return (buffer);
 }
@@ -68,8 +67,7 @@ void	ft_pwd(t_data **data, int fd)
 		g_exit_status = 1;
 		exit(1);
 	}
-	buffer = getcwd(buffer, i);
-	if (!buffer || !*buffer)
+	if (!getcwd(buffer, i) || !buffer[0])
 		buffer = ft_returnfetch(data, buffer);
 	g_exit_status = 0;
 	ft_putstr_fd(buffer, fd);

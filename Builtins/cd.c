@@ -20,19 +20,20 @@ char	*ft_returncwd(void)
 	i = pathconf(".", _PC_PATH_MAX);
 	if (!i || i == -1)
 	{
-		perror("Pathconf: ");
+		perror("Pathconf");
 		g_exit_status = 1;
 		exit(1);
 	}
 	buffer = malloc(sizeof(char) * i);
 	if (!buffer)
 	{
-		perror("Malloc: ");
-		free(buffer);
+		perror("Malloc");
 		g_exit_status = 1;
 		exit(1);
 	}
-	buffer = getcwd(buffer, i);
+	getcwd(buffer, i);
+	if (!buffer)
+		return (NULL);
 	return (buffer);
 }
 
