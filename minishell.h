@@ -173,6 +173,8 @@ int		_syntax_norm6(void);
 int		_syntax_norm7(t_token *current, int i);
 void	_update_tokens_utils(t_token *current);
 int		_check_type(enum e_token type);
+int		_do_norm2(t_token *current);
+void		_do_norm3(t_token *current, t_vars3 *vars, t_data *data);
 
 //	-----------------------    PARSING    ------------------------
 
