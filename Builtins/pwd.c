@@ -6,7 +6,7 @@
 /*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 19:59:59 by agoujdam          #+#    #+#             */
-/*   Updated: 2023/10/12 10:10:44 by agoujdam         ###   ########.fr       */
+/*   Updated: 2023/10/12 11:10:11 by agoujdam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ char	*ft_returnfetch(t_data **data, char *buffer)
 
 	if (buffer)
 		free(buffer);
-	pwd = (*data)->path;
+	pwd = ft_strdup((*data)->path);
 	return (pwd);
 }
 
