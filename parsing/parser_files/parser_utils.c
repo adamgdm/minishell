@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afaqir <afaqir@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 01:05:55 by afaqir            #+#    #+#             */
-/*   Updated: 2023/10/12 11:39:51 by agoujdam         ###   ########.fr       */
+/*   Updated: 2023/10/13 00:36:03 by afaqir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,11 @@ void	_parser_norm(t_token *current, int *out_file, int *error,
 			&& ft_strlen(current->next->content) == 0)
 		{
 			printf("minishell: %s: ambiguous redirect\n",
-					current->next->before_expanded);
+				current->next->before_expanded);
 		}
 		else
 			printf("minishell: %s: %s\n", current->next->content,
-					strerror(errno));
+				strerror(errno));
 		*error = 1;
 		*already_printed = 1;
 		g_exit_status = 1;
@@ -58,11 +58,11 @@ void	_parser_norm2(t_token *current, int *out_file, int *error,
 			&& ft_strlen(current->next->content) == 0)
 		{
 			printf("minishell: %s: ambiguous redirect\n",
-					current->next->before_expanded);
+				current->next->before_expanded);
 		}
 		else
 			printf("minishell: %s: %s\n", current->next->content,
-					strerror(errno));
+				strerror(errno));
 		*error = 1;
 		*already_printed = 1;
 		g_exit_status = 1;
@@ -82,14 +82,14 @@ void	_parser_norm3(t_token *current, int *in_file, int *error,
 			if (ft_strlen(current->next->content) == 0
 				|| _is_there_space_or_tab(current->next->content) == 1)
 				printf("minishell: %s: ambiguous redirect\n",
-						current->next->before_expanded);
+					current->next->before_expanded);
 			else
 				printf("minishell: %s: No such file or directory\n",
-						current->next->content);
+					current->next->content);
 		}
 		else
 			printf("minishell: %s: %s\n", current->next->content,
-					strerror(errno));
+				strerror(errno));
 		*error = 1;
 		*already_printed = 1;
 		g_exit_status = 1;
