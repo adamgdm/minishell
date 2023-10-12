@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afaqir <afaqir@student.42.fr>              +#+  +:+       +#+        */
+/*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 01:05:17 by afaqir            #+#    #+#             */
-/*   Updated: 2023/10/12 01:17:33 by afaqir           ###   ########.fr       */
+/*   Updated: 2023/10/12 09:06:02 by agoujdam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	_join_digit(char **save, char *content, t_data *data, int *i)
 	char	*tmp;
 	char	*tmp2;
 
-	tmp2 = fetchValue(content, data->env);
+	tmp2 = ft_fetchvalue(content, data->env);
 	if (tmp2)
 	{
 		tmp = *save;
@@ -58,7 +58,7 @@ void	_join_the_word(char **save, char *tmp, t_data *data)
 	char	*tmp2;
 	char	*tmp3;
 
-	tmp2 = fetchValue(tmp, data->env);
+	tmp2 = ft_fetchvalue(tmp, data->env);
 	if (tmp2)
 	{
 		tmp3 = *save;

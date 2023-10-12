@@ -6,7 +6,7 @@
 /*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 20:21:28 by agoujdam          #+#    #+#             */
-/*   Updated: 2023/10/10 20:21:29 by agoujdam         ###   ########.fr       */
+/*   Updated: 2023/10/12 09:06:02 by agoujdam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ char	*ft_rtexpath(t_env *env, char *cmnd, int i, char *path)
 
 	if (access(cmnd, F_OK) == 0)
 		return (ft_strdup(cmnd));
-	path = fetchValue("PATH", env);
+	path = ft_fetchvalue("PATH", env);
 	if (!path)
 		return (NULL);
 	paths = ft_split(path, ':');
@@ -64,7 +64,7 @@ char	*ft_rtexpathve(t_env *env, char *cmnd, int i, char *path)
 
 	if (access(cmnd, F_OK) == 0)
 		return (ft_strdup(cmnd));
-	path = fetchValue("PATH", env);
+	path = ft_fetchvalue("PATH", env);
 	if (!path)
 		return (cmnd);
 	paths = ft_split(path, ':');

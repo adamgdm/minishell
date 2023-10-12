@@ -6,7 +6,7 @@
 /*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 20:40:51 by agoujdam          #+#    #+#             */
-/*   Updated: 2023/10/10 19:57:56 by agoujdam         ###   ########.fr       */
+/*   Updated: 2023/10/12 09:05:37 by agoujdam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,7 +205,7 @@ void	ft_exporttherule(t_data **data, char *iden, char *value, char *str)
 	ft_free_strtmp(str, tmp);
 }
 
-char	*ft_getvalue(char *str)
+char	*ft_ft_getvalue(char *str)
 {
 	int		i;
 	char	*value;
@@ -238,7 +238,7 @@ void	ft_append(t_data **data, char *iden, char *value)
 	else
 	{
 		rts = ft_returnrule((*data)->envnoeq, iden);
-		str = ft_getvalue(rts);
+		str = ft_ft_getvalue(rts);
 		if (str && value)
 			tmp = ft_strjoin(str, value);
 		else

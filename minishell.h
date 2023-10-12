@@ -232,6 +232,8 @@ char					**ft_env_to_array(t_env *env);
 char					*ft_rtexpath(t_env *env, char *cmnd, int i, char *path);
 
 //	-----------------------    EXECUTION    ------------------------
+
+int	ft_free_return(char *str, int ret);
 char					*return_wsback(char *str);
 void					ft_check_if_directory(t_data **data, char *cmd,
 							char *str);
@@ -252,23 +254,23 @@ char					*ft_strcpy(char *dest, const char *src);
 
 int						ft_rulefinder(char *cmd, char *arraytofind);
 
-char					*getValue(char *input);
+char					*ft_getvalue(char *input);
 
-char					*fetchValue(char *str, t_env *head);
+char					*ft_fetchvalue(char *str, t_env *head);
 
-t_env					*charArrayToEnvList(char **charArray);
+t_env					*ft_array_to_elist(char **charArray);
 
-void					appendEnvNode(t_env **head, char *str);
+void					ft_append_env_node(t_env **head, char *str);
 
-t_env					*createEnvNode(char *str);
+t_env					*ft_create_env_node(char *str);
 
 void					delete_last_node(t_env **head);
 
-void					deleteNode(t_env **head, char *target);
+void					ft_deletethenode(t_env **head, char *target);
 
 void					add_last_node(t_env **head, const char *str);
 
-void					add_before_last_node(t_env **head, const char *str);
+void					add_before_last_node(t_env **head, char *str);
 
 void					printenv(t_env *head, int fd);
 

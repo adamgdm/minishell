@@ -6,7 +6,7 @@
 /*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 19:32:08 by agoujdam          #+#    #+#             */
-/*   Updated: 2023/10/12 08:26:42 by agoujdam         ###   ########.fr       */
+/*   Updated: 2023/10/12 10:24:32 by agoujdam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	ft_unsetandexport(t_data **data, char *rts, char *pwd, char *str)
 		pwd = ft_returnpwd(data);
 	if (ft_ruleexist(data, "OLDPWD"))
 	{
-		rts = fetchValue("PWD", (*data)->env);
+		rts = ft_fetchvalue("PWD", (*data)->env);
 		comond = ft_createcommand(ft_split("unset OLDPWD", ' '));
 		ft_unset(data, comond);
 		ft_freecmd(comond);
@@ -102,7 +102,7 @@ char	*ft_return_home_or_pwd(t_data **data, char *path, char *lol)
 {
 	if (!path || (path && (ft_strchr(path, '~'))))
 	{
-		lol = fetchValue("HOME", (*data)->env);
+		lol = ft_fetchvalue("HOME", (*data)->env);
 		if (!lol)
 		{
 			ft_putstr_fd("Boubou_shell: cd: HOME not set\n", 2);
@@ -112,7 +112,7 @@ char	*ft_return_home_or_pwd(t_data **data, char *path, char *lol)
 	}
 	else if (path && ft_strchr(path, '-'))
 	{
-		lol = fetchValue("OLDPWD", (*data)->env);
+		lol = ft_fetchvalue("OLDPWD", (*data)->env);
 		if (!lol)
 		{
 			ft_putstr_fd("Boubou_shell: cd: OLDPWD not set\n", 2);
@@ -180,10 +180,8 @@ void	ft_handle_lblanat(t_data **data, char *pwd, char *path, int status)
 		if (pwd && !ft_does_directory_exist(data, ft_strdup(lola)))
 		{
 			ft_free_and_replace(data, lola, 1);
-			free(pwd);
 		}
-		if (str)
-			free(str);
+		ft_free_cd_stuff(str, NULL, NULL);
 	}
 	else
 		ft_free_and_replace(data, pwd, 2);

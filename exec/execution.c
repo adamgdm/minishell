@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execution.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/10/12 09:00:52 by agoujdam          #+#    #+#             */
+/*   Updated: 2023/10/12 09:02:34 by agoujdam         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
-int	ft_builtings_cd_exit_unset_exportWithParameters(t_data **data,
+int	ft_builtings_cd_exit_unset_exportwithparameters(t_data **data,
 													t_commands *cmnd)
 {
 	if (ft_doesmatch(cmnd->cmd[0], "cd"))
@@ -99,7 +111,7 @@ void	ft_check_if_directory(t_data **data, char *cmd, char *str)
 			if (ft_rulefinder(cmd, ft_strdup("./")) && access(cmd, F_OK) == 0)
 				ft_print_er(cmd, "Permission denied", 126);
 			else if ((access(cmd, F_OK) == 0 || access(cmd, X_OK) == 0)
-					|| (access(str, F_OK) == 0 || access(str, X_OK) == 0))
+				|| (access(str, F_OK) == 0 || access(str, X_OK) == 0))
 				ft_print_er(cmd, "Not a directory", 126);
 			else
 				ft_print_er(cmd, "No such file or directory", 127);
@@ -113,9 +125,9 @@ void	ft_check_if_directory(t_data **data, char *cmd, char *str)
 
 int	ft_check_if_executable(char *str)
 {
-	if (ft_rulefinder(str, ft_strdup("./")) &&
-		access(str, F_OK) == 0 &&
-		access(str, X_OK) == 0)
+	if (ft_rulefinder(str, ft_strdup("./"))
+		&& access(str, F_OK) == 0
+		&& access(str, X_OK) == 0)
 	{
 		return (1);
 	}
@@ -173,6 +185,35 @@ int	ft_builtings_echo_env_exportwithparameters(t_data **data, t_commands *cmnd)
 	return (0);
 }
 
+void	ft_efn(t_data **data, t_commands **comnd, t_commands *current)
+{
+	t_commands	*cmnd;
+
+	cmnd = (*comnd);
+	signal(SIGINT, ft_sigints);
+	dup2(cmnd->in_file, 0);
+	if (cmnd->out_file == 1)
+		dup2(cmnd->pipefd[1], 1);
+	else
+		dup2(cmnd->out_file, 1);
+	close(cmnd->pipefd[0]);
+	close(cmnd->pipefd[1]);
+	current = cmnd->next;
+	while (current)
+	{
+		close(current->pipefd[0]);
+		close(current->pipefd[1]);
+		current = current->next;
+	}
+	current = cmnd->previous;
+	while (current)
+	{
+		close(current->pipefd[0]);
+		close(current->pipefd[1]);
+		current = current->previous;
+	}
+}
+
 void	ft_execute_first_command(t_data **data, t_commands *cmnd)
 {
 	int			forkita;
@@ -180,33 +221,12 @@ void	ft_execute_first_command(t_data **data, t_commands *cmnd)
 
 	if (ft_check_cmd(data, cmnd, NULL))
 	{
-		if (ft_builtings_cd_exit_unset_exportWithParameters(data, cmnd))
+		if (ft_builtings_cd_exit_unset_exportwithparameters(data, cmnd))
 			return ;
 		cmnd->pid = fork();
 		if (cmnd->pid == 0)
 		{
-			signal(SIGINT, ft_sigints);
-			dup2(cmnd->in_file, 0);
-			if (cmnd->out_file == 1)
-				dup2(cmnd->pipefd[1], 1);
-			else
-				dup2(cmnd->out_file, 1);
-			close(cmnd->pipefd[0]);
-			close(cmnd->pipefd[1]);
-			current = cmnd->next;
-			while (current)
-			{
-				close(current->pipefd[0]);
-				close(current->pipefd[1]);
-				current = current->next;
-			}
-			current = cmnd->previous;
-			while (current)
-			{
-				close(current->pipefd[0]);
-				close(current->pipefd[1]);
-				current = current->previous;
-			}
+			ft_efn(data, &cmnd, NULL);
 			if (ft_builtings_echo_env_exportwithparameters(data, cmnd) == 0)
 				ft_execvee(cmnd->cmd, data);
 			else
@@ -217,6 +237,61 @@ void	ft_execute_first_command(t_data **data, t_commands *cmnd)
 			signal(SIGINT, SIG_IGN);
 			close(cmnd->pipefd[1]);
 		}
+	}
+}
+
+void	ft_execute_middle_nomrinet(t_data **data, t_commands **comnd,
+		t_commands *cmnd)
+{
+	cmnd = (*comnd);
+	if (cmnd->out_file == 1 && cmnd->in_file == 0)
+	{
+		dup2(cmnd->pipefd[1], 1);
+		dup2(cmnd->pipefd[0], 0);
+	}
+	else
+	{
+		if (cmnd->out_file == 1 && cmnd->in_file != 0)
+		{
+			dup2(cmnd->in_file, 0);
+			dup2(cmnd->pipefd[1], 1);
+		}
+		else if (cmnd->out_file != 1 && cmnd->in_file == 0)
+		{
+			dup2(cmnd->out_file, 1);
+			dup2(cmnd->pipefd[0], 0);
+		}
+		else
+		{
+			dup2(cmnd->in_file, 0);
+			dup2(cmnd->out_file, 1);
+		}
+	}
+}
+
+void	ft_execute_middle_norminet(t_data **data, t_commands **comnd)
+{
+	t_commands	*cmnd;
+	t_commands	*current;
+
+	cmnd = (*comnd);
+	signal(SIGINT, ft_sigints);
+	ft_execute_middle_nomrinet(data, &cmnd, NULL);
+	close(cmnd->pipefd[0]);
+	close(cmnd->pipefd[1]);
+	current = cmnd->next;
+	while (current)
+	{
+		close(current->pipefd[0]);
+		close(current->pipefd[1]);
+		current = current->next;
+	}
+	current = cmnd->previous;
+	while (current)
+	{
+		close(current->pipefd[0]);
+		close(current->pipefd[1]);
+		current = current->previous;
 	}
 }
 
@@ -227,51 +302,12 @@ void	ft_execute_middle_commandz(t_data **data, t_commands *cmnd)
 
 	if (ft_check_cmd(data, cmnd, NULL))
 	{
-		if (ft_builtings_cd_exit_unset_exportWithParameters(data, cmnd))
+		if (ft_builtings_cd_exit_unset_exportwithparameters(data, cmnd))
 			return ;
 		cmnd->pid = fork();
 		if (cmnd->pid == 0)
 		{
-			signal(SIGINT, ft_sigints);
-			if (cmnd->out_file == 1 && cmnd->in_file == 0)
-			{
-				dup2(cmnd->pipefd[1], 1);
-				dup2(cmnd->pipefd[0], 0);
-			}
-			else
-			{
-				if (cmnd->out_file == 1 && cmnd->in_file != 0)
-				{
-					dup2(cmnd->in_file, 0);
-					dup2(cmnd->pipefd[1], 1);
-				}
-				else if (cmnd->out_file != 1 && cmnd->in_file == 0)
-				{
-					dup2(cmnd->out_file, 1);
-					dup2(cmnd->pipefd[0], 0);
-				}
-				else
-				{
-					dup2(cmnd->in_file, 0);
-					dup2(cmnd->out_file, 1);
-				}
-			}
-			close(cmnd->pipefd[0]);
-			close(cmnd->pipefd[1]);
-			current = cmnd->next;
-			while (current)
-			{
-				close(current->pipefd[0]);
-				close(current->pipefd[1]);
-				current = current->next;
-			}
-			current = cmnd->previous;
-			while (current)
-			{
-				close(current->pipefd[0]);
-				close(current->pipefd[1]);
-				current = current->previous;
-			}
+			ft_execute_middle_norminet(data, &cmnd);
 			if (ft_builtings_echo_env_exportwithparameters(data, cmnd) == 0)
 				ft_execvee(cmnd->cmd, data);
 			else
@@ -285,6 +321,48 @@ void	ft_execute_middle_commandz(t_data **data, t_commands *cmnd)
 	}
 }
 
+void	ft_execute_last_nomrinet(t_data **data, t_commands **comond)
+{
+	t_commands	*cmnd;
+
+	cmnd = (*comond);
+	if (cmnd->out_file == 1 && cmnd->in_file != 0)
+		dup2(cmnd->in_file, 0);
+	else if (cmnd->out_file != 1 && cmnd->in_file == 0)
+		dup2(cmnd->pipefd[0], 0);
+	else
+		dup2(cmnd->in_file, 0);
+}
+
+void	ft_execute_last_norminet(t_data **data, t_commands **comond)
+{
+	t_commands	*cmnd;
+	t_commands	*current;
+
+	cmnd = (*comond);
+	if (cmnd->out_file == 1 && cmnd->in_file == 0)
+		dup2(cmnd->pipefd[0], 0);
+	else
+		ft_execute_last_norminet(data, &cmnd);
+	dup2(cmnd->out_file, 1);
+	close(cmnd->pipefd[0]);
+	close(cmnd->pipefd[1]);
+	current = cmnd->next;
+	while (current)
+	{
+		close(current->pipefd[0]);
+		close(current->pipefd[1]);
+		current = current->next;
+	}
+	current = cmnd->previous;
+	while (current)
+	{
+		close(current->pipefd[0]);
+		close(current->pipefd[1]);
+		current = current->previous;
+	}
+}
+
 void	ft_execute_last_commaand(t_data **data, t_commands *cmnd)
 {
 	int			forkita;
@@ -292,48 +370,12 @@ void	ft_execute_last_commaand(t_data **data, t_commands *cmnd)
 
 	if (ft_check_cmd(data, cmnd, NULL))
 	{
-		if (ft_builtings_cd_exit_unset_exportWithParameters(data, cmnd))
+		if (ft_builtings_cd_exit_unset_exportwithparameters(data, cmnd))
 			return ;
 		cmnd->pid = fork();
 		if (cmnd->pid == 0)
 		{
 			signal(SIGINT, ft_sigints);
-			if (cmnd->out_file == 1 && cmnd->in_file == 0)
-			{
-				dup2(cmnd->pipefd[0], 0);
-			}
-			else
-			{
-				if (cmnd->out_file == 1 && cmnd->in_file != 0)
-				{
-					dup2(cmnd->in_file, 0);
-				}
-				else if (cmnd->out_file != 1 && cmnd->in_file == 0)
-				{
-					dup2(cmnd->pipefd[0], 0);
-				}
-				else
-				{
-					dup2(cmnd->in_file, 0);
-				}
-			}
-			dup2(cmnd->out_file, 1);
-			close(cmnd->pipefd[0]);
-			close(cmnd->pipefd[1]);
-			current = cmnd->next;
-			while (current)
-			{
-				close(current->pipefd[0]);
-				close(current->pipefd[1]);
-				current = current->next;
-			}
-			current = cmnd->previous;
-			while (current)
-			{
-				close(current->pipefd[0]);
-				close(current->pipefd[1]);
-				current = current->previous;
-			}
 			if (ft_builtings_echo_env_exportwithparameters(data, cmnd) == 0)
 				ft_execvee(cmnd->cmd, data);
 			else
@@ -364,31 +406,35 @@ t_commands	*return_node_after_error(t_commands *cmnd)
 	return (cmnd);
 }
 
-void	ft_execute_more_than_one_cmd_with_pipes(t_data **data, t_commands *cmnd)
+void	ft_while_current_execute(t_data **data, t_commands **comond)
 {
 	t_commands	*current;
-	int			forkita;
 	int			i;
-	int			check;
 
 	i = 0;
-	current = return_node_after_error(cmnd);
-	if (!current->next)
-		ft_execute_only_one_cmd_with_no_pipes(data, current);
+	current = (*comond);
 	while (current)
 	{
 		if (i == 0)
 			ft_execute_first_command(data, current);
 		else if (!current->next)
-		{
 			ft_execute_last_commaand(data, current);
-		}
 		else
 			ft_execute_middle_commandz(data, current);
 		i++;
 		current = current->next;
 	}
-	i = 0;
+}
+
+void	ft_execute_more_than_one_cmd_with_pipes(t_data **data, t_commands *cmnd)
+{
+	t_commands	*current;
+	int			forkita;
+
+	current = return_node_after_error(cmnd);
+	if (!current->next)
+		ft_execute_only_one_cmd_with_no_pipes(data, current);
+	ft_while_current_execute(data, &current);
 	current = cmnd;
 	while (current)
 	{
@@ -399,7 +445,6 @@ void	ft_execute_more_than_one_cmd_with_pipes(t_data **data, t_commands *cmnd)
 	current = cmnd;
 	while (current)
 	{
-		// if (current->pid != -1)
 		waitpid(-1, NULL, 0);
 		current = current->next;
 	}
@@ -411,7 +456,7 @@ void	ft_execute_only_one_cmd_with_no_pipes(t_data **data, t_commands *cmnd)
 
 	if (ft_check_cmd(data, cmnd, NULL))
 	{
-		if (ft_builtings_cd_exit_unset_exportWithParameters(data, cmnd))
+		if (ft_builtings_cd_exit_unset_exportwithparameters(data, cmnd))
 			return ;
 		cmnd->pid = fork();
 		if (cmnd->pid == 0)

@@ -44,12 +44,12 @@ void	ft_exportminimum(t_data **data)
 
 	pwd = ft_returnpwd(data);
 	str = ft_strjoin("PWD=", pwd);
-	(*data)->env = createEnvNode(str);
+	(*data)->env = ft_create_env_node(str);
 	free(str);
 	free(pwd);
 	pwd = ft_itoa(1);
 	str = ft_strjoin("SHLVL=", pwd);
-	appendEnvNode(&(*data)->env, str);
+	ft_append_env_node(&(*data)->env, str);
 	free(str);
 	free(pwd);
 	add_last_node(&(*data)->env, "_=env");
@@ -60,15 +60,15 @@ void	ft_exportminimumeq(t_data **data)
 	char	*pwd;
 	char	*str;
 
-	(*data)->envnoeq = createEnvNode("OLDPWD");
+	(*data)->envnoeq = ft_create_env_node("OLDPWD");
 	pwd = ft_returnpwd(data);
 	str = ft_strjoin("PWD=", pwd);
-	appendEnvNode(&(*data)->envnoeq, str);
+	ft_append_env_node(&(*data)->envnoeq, str);
 	free(pwd);
 	free(str);
 	pwd = ft_itoa(1);
 	str = ft_strjoin("SHLVL=", pwd);
-	appendEnvNode(&(*data)->envnoeq, str);
+	ft_append_env_node(&(*data)->envnoeq, str);
 	free(str);
 	free(pwd);
 }
@@ -115,15 +115,15 @@ void	ft_initialize(t_data **data, char **env)
 			perror("malloc");
 			exit(1);
 		}
-		y->env = charArrayToEnvList(env);
-		y->envnoeq = charArrayToEnvList(env);
+		y->env = ft_array_to_elist(env);
+		y->envnoeq = ft_array_to_elist(env);
 		delete_last_node(&(y->env));
 		delete_last_node(&(y->envnoeq));
 		add_last_node(&(y->env), "_=env");
 		(*data) = y;
 	}
 	y->path = ft_returnpwd(&y);
-	str = fetchValue("SHLVL", (*data)->envnoeq);
+	str = ft_fetchvalue("SHLVL", (*data)->envnoeq);
 	if (!str)
 		SHLVL = 1;
 	else
