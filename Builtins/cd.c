@@ -25,6 +25,7 @@ char	*ft_returncwd(void)
 		exit(1);
 	}
 	buffer = malloc(sizeof(char) * i);
+	buffer[0] = '\0';
 	if (!buffer)
 	{
 		perror("Malloc");
@@ -182,7 +183,7 @@ void	ft_handle_lblanat(t_data **data, char *pwd, char *path, int status)
 		{
 			ft_free_and_replace(data, lola, 1);
 		}
-		ft_free_cd_stuff(str, NULL, NULL);
+		ft_free_cd_stuff(str, pwd, NULL);
 	}
 	else
 		ft_free_and_replace(data, pwd, 2);
