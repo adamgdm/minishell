@@ -6,22 +6,34 @@
 /*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 19:32:08 by agoujdam          #+#    #+#             */
-/*   Updated: 2023/10/11 06:37:06 by agoujdam         ###   ########.fr       */
+/*   Updated: 2023/10/12 08:26:42 by agoujdam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char	*ft_removethelastfolder(char *str)
+char	*ft_returncwd(void)
 {
-	int	i;
+	int		i;
+	char	*buffer;
 
-	i = ft_strlen(str) - 1;
-	while (str[i] != '/')
-		i--;
-	i++;
-	str[i] = '\0';
-	return (str);
+	i = pathconf(".", _PC_PATH_MAX);
+	if (!i || i == -1)
+	{
+		perror("Pathconf: ");
+		g_exit_status = 1;
+		exit(1);
+	}
+	buffer = malloc(sizeof(char) * i);
+	if (!buffer)
+	{
+		perror("Malloc: ");
+		free(buffer);
+		g_exit_status = 1;
+		exit(1);
+	}
+	buffer = getcwd(buffer, i);
+	return (buffer);
 }
 
 int	ft_free_return(char *str, int ret)
@@ -30,23 +42,15 @@ int	ft_free_return(char *str, int ret)
 	return (ret);
 }
 
-int	ft_does_directory_exist(t_data **data)
+int	ft_does_directory_exist(t_data **data, char *path)
 {
 	struct stat	stats;
-	char		*path;
 
-	path = ft_returnpwd(data);
 	if (!path)
 		return (0);
-	path = ft_removethelastfolder(path);
-	if (stat(path, &stats) == 0)
-	{
-		if (S_ISDIR(stats.st_mode))
-			return (ft_free_return(path, 1));
-		else
-			return (ft_free_return(path, 0));
-	}
-	return(ft_free_return(path, 0));
+	if (stat(path, &stats) == 0 && S_ISDIR(stats.st_mode))
+		return (ft_free_return(path, 1));
+	return (ft_free_return(path, 0));
 }
 
 void	ft_free_cd_stuff(char *str, char *str2, char **str3)
@@ -59,23 +63,10 @@ void	ft_free_cd_stuff(char *str, char *str2, char **str3)
 		ft_freearr(str3);
 }
 
-char *ft_returnpathwithdots(t_data **data, char *pwd, int casee)
+void	ft_unsetandex(t_data **data, char **cmd, char *str, char *rts)
 {
-	char *path;
-
-	if (pwd)
-		free(pwd);
-	pwd = fetchValue("PWD", (*data)->env);
-	if (!pwd)
-		return (NULL);
-	if (casee == 1)
-	{	
-		path = ft_strjoin(pwd, "/..");
-		free(pwd);
-	}
-	if (casee == 2)
-		path = fetchValue("HOME", (*data)->env);
-	return (path);
+	ft_export(data, cmd, 1, 1);
+	ft_free_cd_stuff(str, rts, cmd);
 }
 
 void	ft_unsetandexport(t_data **data, char *rts, char *pwd, char *str)
@@ -93,8 +84,7 @@ void	ft_unsetandexport(t_data **data, char *rts, char *pwd, char *str)
 		ft_freecmd(comond);
 		str = ft_strjoin("export OLDPWD=", rts);
 		cmd = ft_split(str, ' ');
-		ft_export(data, cmd, 1, 1);
-		ft_free_cd_stuff(str, NULL, cmd);
+		ft_unsetandex(data, cmd, str, rts);
 	}
 	if (ft_ruleexist(data, "PWD"))
 	{
@@ -103,8 +93,7 @@ void	ft_unsetandexport(t_data **data, char *rts, char *pwd, char *str)
 		ft_freecmd(comond);
 		str = ft_strjoin("export PWD=", pwd);
 		cmd = ft_split(str, ' ');
-		ft_export(data, cmd, 1, 1);
-		ft_free_cd_stuff(str, NULL, cmd);
+		ft_unsetandex(data, cmd, str, NULL);
 	}
 	free(pwd);
 }
@@ -166,60 +155,58 @@ void	ft_print_the_long_goddamn_sentence(t_data **data)
 	ft_putstr_fd("No such file or directory\n", 2);
 }
 
-char *ft_eliminate(char *str)
+void	ft_free_and_replace(t_data **data, char *str, int casse)
 {
-	int	lenght;
-	
-	if (!str)
-		return (NULL);
-	lenght = ft_strlen(str) - 1;
-		
+	if ((*data)->path)
+		free((*data)->path);
+	(*data)->path = str;
+	if (casse == 1)
+		ft_unsetandexport(data, NULL, ft_strdup(str), NULL);
+	else if (casse == 2)
+		ft_unsetandexport(data, NULL, NULL, NULL);
 }
 
-void ft_handle_lblanat(t_data **data, char *pwd, char *path)
+void	ft_handle_lblanat(t_data **data, char *pwd, char *path, int status)
 {
-	char *str;
-	char *lola;
-	
-	if (path && (!ft_strcmp(path, "..") || !(ft_strcmp(path, "."))) 
-		&& !ft_does_directory_exist(data))
+	char	*str;
+	char	*lola;
+	char	*pwdd;
+
+	pwdd = ft_returncwd();
+	if ((!pwdd || !pwdd[0]) && path && !status)
 	{
-		if (pwd)
+		str = ft_strjoin(pwd, "/");
+		lola = ft_strjoin(str, path);
+		if (pwd && !ft_does_directory_exist(data, ft_strdup(lola)))
 		{
-			str = ft_strjoin(pwd, "/");
-			lola = ft_strjoin(str, path);
-			free(str);
-			str = ft_eliminate(lola);
-			chdir(str);
-			free(str);
+			ft_free_and_replace(data, lola, 1);
+			free(pwd);
 		}
-		ft_unsetandexport(data, NULL, lola, NULL);
+		if (str)
+			free(str);
 	}
 	else
-	{
-		ft_unsetandexport(data, NULL, NULL, NULL);
-	}
-	free(pwd);
+		ft_free_and_replace(data, pwd, 2);
+	ft_free_cd_stuff(NULL, pwdd, NULL);
 	g_exit_status = 0;
 }
 
 void	ft_cd(t_data **data, t_commands *comond, char *path)
 {
 	char	*pwd;
-	
+	int		i;
+
 	if (ft_handle_cd_errors(data, comond, path, NULL))
 		return ;
 	else
 	{
-		if ((!ft_strcmp(path, "..") || !(ft_strcmp(path, "."))) 
-			&& !ft_does_directory_exist(data))
-			ft_print_the_long_goddamn_sentence(data);
-		else if (chdir(path) != 0)
+		i = chdir(path);
+		if (i != 0)
 		{
 			perror("Boubou_shell: cd");
 			g_exit_status = 1;
 			return ;
 		}
 	}
-	ft_handle_lblanat(data, fetchValue("PWD", (*data)->env), path);
+	ft_handle_lblanat(data, ft_returnpwd(data), path, i);
 }

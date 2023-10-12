@@ -6,7 +6,7 @@
 /*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 19:37:46 by agoujdam          #+#    #+#             */
-/*   Updated: 2023/10/11 09:24:51 by agoujdam         ###   ########.fr       */
+/*   Updated: 2023/10/12 08:26:09 by agoujdam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,11 @@ void	free_t_data(t_data **dat)
 	{
 		free_env_list(data->env);
 		free_env_list(data->envnoeq);
+		if (data->path)
+			free(data->path);
 		free(data);
 	}
 }
-
-
 
 void	free_commands(t_commands *head)
 {
@@ -69,9 +69,9 @@ void	free_commands(t_commands *head)
 	}
 }
 
-int ft_number(char *str)
+int	ft_number(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (str[i])
@@ -83,10 +83,10 @@ int ft_number(char *str)
 	return (1);
 }
 
-int ft_isbiggerthankbir(char *str)
+int	ft_isbiggerthankbir(char *str)
 {
-	int i;
-	size_t res;
+	int		i;
+	size_t	res;
 
 	i = 0;
 	res = 0;
@@ -102,11 +102,11 @@ int ft_isbiggerthankbir(char *str)
 	return (0);
 }
 
-long long ft_atoll(char *str)
+long long	ft_atoll(char *str)
 {
-	int i;
-	long long res;
-	int sign;
+	int			i;
+	long long	res;
+	int			sign;
 
 	i = 0;
 	res = 0;
@@ -125,7 +125,7 @@ long long ft_atoll(char *str)
 	return (res * sign);
 }
 
-int ft_isnumber(char *str)
+int	ft_isnumber(char *str)
 {
 	if (ft_number(str) == 0)
 		return (0);
@@ -151,7 +151,7 @@ void	ft_error_exit(t_commands *cmnds)
 		}
 		else
 		{
-			g_exit_status = ft_atoll(cmnds->cmd[1]) ;
+			g_exit_status = ft_atoll(cmnds->cmd[1]);
 		}
 	}
 }

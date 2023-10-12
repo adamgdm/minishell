@@ -1,10 +1,10 @@
 #include "minishell.h"
-int g_exit_status = 55;
 
-void _print_token(t_token *token)
+int		g_exit_status = 55;
+
+void	_print_token(t_token *token)
 {
 	printf("-----------------------------------------------\n");
-
 	while (token)
 	{
 		printf("[content]: %s\n", token->content);
@@ -17,9 +17,11 @@ void _print_token(t_token *token)
 	}
 }
 
-void _print_commands(t_commands *commands)
+void	_print_commands(t_commands *commands)
 {
-	int i = 0;
+	int	i;
+
+	i = 0;
 	printf("$-----------------commands---------------------$\n");
 	while (commands)
 	{
@@ -35,10 +37,10 @@ void _print_commands(t_commands *commands)
 	}
 }
 
-void ft_exportminimum(t_data **data)
+void	ft_exportminimum(t_data **data)
 {
-	char *pwd;
-	char *str;
+	char	*pwd;
+	char	*str;
 
 	pwd = ft_returnpwd(data);
 	str = ft_strjoin("PWD=", pwd);
@@ -53,10 +55,10 @@ void ft_exportminimum(t_data **data)
 	add_last_node(&(*data)->env, "_=env");
 }
 
-void ft_exportminimumeq(t_data **data)
+void	ft_exportminimumeq(t_data **data)
 {
-	char *pwd;
-	char *str;
+	char	*pwd;
+	char	*str;
 
 	(*data)->envnoeq = createEnvNode("OLDPWD");
 	pwd = ft_returnpwd(data);
@@ -71,9 +73,9 @@ void ft_exportminimumeq(t_data **data)
 	free(pwd);
 }
 
-void ft_printennv(t_env *head, int fd)
+void	ft_printennv(t_env *head, int fd)
 {
-	t_env *x;
+	t_env	*x;
 
 	x = head;
 	while (x)
@@ -97,11 +99,11 @@ void	ft_initalizebasevalue(t_data **data)
 	ft_exportminimumeq(data);
 }
 
-void ft_initialize(t_data **data, char **env)
+void	ft_initialize(t_data **data, char **env)
 {
-	t_data *y;
-	char *str;
-	int SHLVL;
+	t_data	*y;
+	char	*str;
+	int		SHLVL;
 
 	if (!(*env))
 		ft_initalizebasevalue(data);
@@ -120,6 +122,7 @@ void ft_initialize(t_data **data, char **env)
 		add_last_node(&(y->env), "_=env");
 		(*data) = y;
 	}
+	y->path = ft_retpwd(y);
 	str = fetchValue("SHLVL", (*data)->envnoeq);
 	if (!str)
 		SHLVL = 1;
@@ -132,29 +135,31 @@ void ft_initialize(t_data **data, char **env)
 	if (SHLVL == 999)
 		str = ft_strdup("");
 	else
-	 str = ft_itoa(SHLVL);
+		str = ft_itoa(SHLVL);
 	ft_unsetiden(&((*data)->env), &((*data)->envnoeq), "SHLVL");
 	ft_exporttherule(data, "SHLVL", str, NULL);
 	free(str);
 }
 
-int ft_doesmatch(char *str, char *qst)
+int	ft_doesmatch(char *str, char *qst)
 {
-	int index = 0;
+	int	index;
+
+	index = 0;
 	if (!str || !qst)
 		return (0);
 	while (str[index] != '\0' || qst[index] != '\0')
 	{
 		if (str[index] != qst[index])
-			return 0;
+			return (0);
 		index++;
 	}
 	if (!qst[index] && !str[index])
-		return 1;
+		return (1);
 	return (0);
 }
 
-void ft_sigints(int sig)
+void	ft_sigints(int sig)
 {
 	if (sig == SIGINT)
 	{
@@ -165,7 +170,7 @@ void ft_sigints(int sig)
 	}
 }
 
-void ft_sigint(int sig)
+void	ft_sigint(int sig)
 {
 	if (sig == SIGINT)
 	{
@@ -176,21 +181,24 @@ void ft_sigint(int sig)
 	}
 }
 
-int ft_handle_more_than_one_arg(t_data **data, char *str)
+int	ft_handle_more_than_one_arg(t_data **data, char *str)
 {
 	ft_check_if_directory(data, str, return_wsback(str));
 	return (g_exit_status);
 }
 
-int main(int ac, char **av, char **envp)
+int	main(int ac, char **av, char **envp)
 {
-	(void)av;
-	t_token *result;
-	t_data *g_data;
+	t_token		*result;
+	t_data		*g_data;
+	char		*input;
+	int			a;
+	t_commands	*commands;
 
+	(void)av;
 	g_data = NULL;
 	if (ac != 1)
-		return (ft_handle_more_than_one_arg(&g_data ,av[1]));
+		return (ft_handle_more_than_one_arg(&g_data, av[1]));
 	ft_initialize(&g_data, envp);
 	// printf("exit_status: %d\n", g_exit_status);
 	// ft_printennv(g_data->env, 1);
@@ -199,15 +207,15 @@ int main(int ac, char **av, char **envp)
 	// printf("exit_status: %d\n", g_exit_status);
 	while (1)
 	{
-		char *input = readline("\e[01;32mBoubou_shell> \e[0;37m");
+		input = readline("\e[01;32mBoubou_shell> \e[0;37m");
 		if (input && *input)
 			add_history(input);
 		if (!input)
 			ft_exit(&g_data, NULL);
 		result = _lexer(input);
 		if (!result)
-			continue;
-		int a = _syntax_check(&result);
+			continue ;
+		a = _syntax_check(&result);
 		if (a)
 		{
 			_free_all_tokens(&result, 1);
@@ -217,16 +225,15 @@ int main(int ac, char **av, char **envp)
 				free_t_data(&g_data);
 				return (g_exit_status);
 			}
-			continue;
+			continue ;
 		}
 		_expander(&result, g_data);
 		_update_tokens(&result);
-		t_commands *commands = _parser(&result, g_data);
+		commands = _parser(&result, g_data);
 		_free_all_tokens(&result, 0);
 		ft_execute_the_cmd(&g_data, commands);
 		free(input);
 		free_commands(commands);
 	}
-
 	return (g_exit_status);
 }

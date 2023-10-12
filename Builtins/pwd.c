@@ -6,7 +6,7 @@
 /*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 19:59:59 by agoujdam          #+#    #+#             */
-/*   Updated: 2023/10/11 00:41:29 by agoujdam         ###   ########.fr       */
+/*   Updated: 2023/10/12 08:26:22 by agoujdam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,10 @@
 char	*ft_returnfetch(t_data **data, char *buffer)
 {
 	char	*pwd;
-	
+
 	if (buffer)
 		free(buffer);
-	pwd = fetchValue("PWD", (*data)->env);
-	if (!pwd)
-	{
-		ft_putstr_fd("getcwd: cannot access parent directories: ", 2);
-		ft_putstr_fd("No such file or directory\n", 2);
-		return (NULL);
-	}
+	pwd = (*data)->path;
 	return (pwd);
 }
 
