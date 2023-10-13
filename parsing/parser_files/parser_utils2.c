@@ -6,7 +6,7 @@
 /*   By: afaqir <afaqir@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 01:06:00 by afaqir            #+#    #+#             */
-/*   Updated: 2023/10/13 07:02:40 by afaqir           ###   ########.fr       */
+/*   Updated: 2023/10/13 07:09:41 by afaqir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ int	_parser_norm6(t_commands **head, t_token *current, t_vars3 *vars,
 		{
 			free(current->content);
 			current->content = NULL;
+			free_commands2(*head);
 			return (1);
 		}
 		free(current->content);

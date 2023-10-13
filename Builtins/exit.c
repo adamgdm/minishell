@@ -6,7 +6,7 @@
 /*   By: afaqir <afaqir@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 19:37:46 by agoujdam          #+#    #+#             */
-/*   Updated: 2023/10/13 07:07:09 by afaqir           ###   ########.fr       */
+/*   Updated: 2023/10/13 07:11:02 by afaqir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,7 +158,7 @@ void	ft_error_exit(t_commands *cmnds)
 
 void	ft_exit(t_data **data, t_commands *cmnds)
 {
-	//system("leaks minishell");
+	system("leaks minishell");
 	printf("exit\n");
 	if (cmnds)
 	{

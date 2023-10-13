@@ -186,6 +186,7 @@ int		_check_type(enum e_token type);
 int		_do_norm2(t_token *current);
 void		_do_norm3(t_token *current, t_vars3 *vars, t_data *data);
 void	free_commands(t_commands *head);
+void	free_commands2(t_commands *head);
 
 //	-----------------------    PARSING    ------------------------
 

@@ -253,7 +253,6 @@ int	main(int ac, char **av, char **envp)
 		if (!commands)
 		{
 			_free_all_tokens(&result, 1);
-			free_commands2(commands);
 			free(input);
 			continue ;
 		}
