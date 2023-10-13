@@ -200,7 +200,7 @@ void	free_commands2(t_commands *head)
 		i = 0;
 		temp = current;
 		current = current->next;
-
+		free(temp->cmd);
 		free(temp->pipefd);
 		free(temp);
 	}
