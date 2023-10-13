@@ -6,7 +6,7 @@
 /*   By: afaqir <afaqir@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 19:37:46 by agoujdam          #+#    #+#             */
-/*   Updated: 2023/10/13 07:45:04 by afaqir           ###   ########.fr       */
+/*   Updated: 2023/10/13 21:33:18 by afaqir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ void	free_commands(t_commands *head)
 				free(temp->cmd[i]);
 				i++;
 			}
+			free(temp->cmd[i]);
 			free(temp->cmd);
 		}
 		free(temp->pipefd);
