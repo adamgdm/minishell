@@ -6,7 +6,7 @@
 /*   By: afaqir <afaqir@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 01:06:00 by afaqir            #+#    #+#             */
-/*   Updated: 2023/10/12 01:18:20 by afaqir           ###   ########.fr       */
+/*   Updated: 2023/10/13 05:50:36 by afaqir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,9 @@ void	_parser_norm5(t_commands **head, int **result_pipe, t_vars3 *vars,
 	(*result_pipe)[0] = *previous_pipe;
 	if (pipe(p) == -1)
 	{
-		printf("pipe error\n");
-		exit(1);
+		perror("pipe");
+		g_exit_status = 1;
+		return ;
 	}
 	(*result_pipe)[1] = p[1];
 	*previous_pipe = p[0];

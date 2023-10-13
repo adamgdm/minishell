@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afaqir <afaqir@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 01:05:17 by afaqir            #+#    #+#             */
-/*   Updated: 2023/10/12 09:06:02 by agoujdam         ###   ########.fr       */
+/*   Updated: 2023/10/13 06:12:55 by afaqir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,22 +25,6 @@ void	_join_exit_status(char **save, int *i)
 	(*i)++;
 }
 
-void	_join_digit(char **save, char *content, t_data *data, int *i)
-{
-	char	*tmp;
-	char	*tmp2;
-
-	tmp2 = ft_fetchvalue(content, data->env);
-	if (tmp2)
-	{
-		tmp = *save;
-		*save = ft_strjoin(*save, tmp2);
-		free(tmp);
-		free(tmp2);
-	}
-	(*i)++;
-}
-
 void	_join_dollar_with_char(char **save, char *content, int *i)
 {
 	if (!content[*i])
@@ -53,7 +37,29 @@ void	_join_dollar_with_char(char **save, char *content, int *i)
 	}
 }
 
-void	_join_the_word(char **save, char *tmp, t_data *data)
+void	_custom_trim(char **str)
+{
+	int		i;
+	char	*tmp;
+
+	i = 0;
+	tmp = NULL;
+	while ((*str)[i])
+	{
+		if ((*str)[i] && ((*str)[i] == ' ' || (*str)[i] == '\t'))
+		{
+			tmp = _append(tmp, ' ');
+			while ((*str)[i] && ((*str)[i] == ' ' || (*str)[i] == '\t'))
+				i++;
+		}
+		tmp = _append(tmp, (*str)[i]);
+		i++;
+	}
+	free(*str);
+	*str = tmp;
+}
+
+void	_join_the_word(char **save, char *tmp, t_data *data, t_token *head)
 {
 	char	*tmp2;
 	char	*tmp3;
@@ -62,6 +68,8 @@ void	_join_the_word(char **save, char *tmp, t_data *data)
 	if (tmp2)
 	{
 		tmp3 = *save;
+		if (head->state == GENERAL)
+			_custom_trim(&tmp2);
 		*save = ft_strjoin(*save, tmp2);
 		free(tmp);
 		free(tmp2);
@@ -71,7 +79,7 @@ void	_join_the_word(char **save, char *tmp, t_data *data)
 		free(tmp);
 }
 
-void	_norminette(char **save, char *content, t_data *data, t_vars *vars)
+void	_norminette(char **save, t_token *head, t_data *data, t_vars *vars)
 {
 	int		k;
 	char	*tmp;
@@ -79,19 +87,19 @@ void	_norminette(char **save, char *content, t_data *data, t_vars *vars)
 	(vars->i)++;
 	k = vars->i;
 	tmp = NULL;
-	while (content[vars->i] && !ft_strchr("+*-?<>{}[]^()#%@\"'$&|;,/\t ",
-			content[vars->i]) && !ft_isdigit(content[vars->i]))
+	while (head->content[vars->i] && !ft_strchr("+*-?<>{}[]^()#%@\"'$&|;,/\t ",
+			head->content[vars->i]) && !ft_isdigit(head->content[vars->i]))
 		vars->i++;
-	if (k == vars->i && content[vars->i] == '?')
+	if (k == vars->i && head->content[vars->i] == '?')
 		_join_exit_status(save, &vars->i);
-	else if (k == vars->i && ft_isdigit(content[vars->i]))
-		_join_digit(save, &content[k], data, &vars->i);
+	else if (k == vars->i && ft_isdigit(head->content[vars->i]))
+		_join_digit(save, &head->content[k], data, &vars->i);
 	else if (k == vars->i)
-		_join_dollar_with_char(save, content, &vars->i);
+		_join_dollar_with_char(save, head->content, &vars->i);
 	else
 	{
-		tmp = ft_substr(content, vars->j + 1, vars->i - vars->j - 1);
-		_join_the_word(save, tmp, data);
+		tmp = ft_substr(head->content, vars->j + 1, vars->i - vars->j - 1);
+		_join_the_word(save, tmp, data, head);
 	}
 	vars->j = vars->i;
 }
