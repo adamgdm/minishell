@@ -6,7 +6,7 @@
 /*   By: afaqir <afaqir@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 01:06:00 by afaqir            #+#    #+#             */
-/*   Updated: 2023/10/13 05:50:36 by afaqir           ###   ########.fr       */
+/*   Updated: 2023/10/13 07:02:40 by afaqir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	_parser_norm4(t_token *current, int *in_file, t_data *data)
 	free(fd);
 }
 
-void	_parser_norm5(t_commands **head, int **result_pipe, t_vars3 *vars,
+int	_parser_norm5(t_commands **head, int **result_pipe, t_vars3 *vars,
 		int *previous_pipe)
 {
 	int			p[2];
@@ -35,7 +35,7 @@ void	_parser_norm5(t_commands **head, int **result_pipe, t_vars3 *vars,
 	{
 		perror("pipe");
 		g_exit_status = 1;
-		return ;
+		return (1);
 	}
 	(*result_pipe)[1] = p[1];
 	*previous_pipe = p[0];
@@ -49,6 +49,7 @@ void	_parser_norm5(t_commands **head, int **result_pipe, t_vars3 *vars,
 	vars->error = 0;
 	vars->in_file = 0;
 	vars->out_file = 1;
+	return (0);
 }
 
 void	_initialize_vars(t_vars3 *vars)
@@ -64,7 +65,7 @@ void	_initialize_vars(t_vars3 *vars)
 	vars->result_pipe[1] = -1;
 }
 
-void	_parser_norm6(t_commands **head, t_token *current, t_vars3 *vars,
+int	_parser_norm6(t_commands **head, t_token *current, t_vars3 *vars,
 		t_data *data)
 {
 	if (current->type == WORD)
@@ -81,8 +82,14 @@ void	_parser_norm6(t_commands **head, t_token *current, t_vars3 *vars,
 		_do_norm3(current, vars, data);
 	if (current->type == PIPE)
 	{
-		_parser_norm5(head, &vars->result_pipe, vars, &vars->previous_pipe);
+		if (_parser_norm5(head, &vars->result_pipe, vars, &vars->previous_pipe))
+		{
+			free(current->content);
+			current->content = NULL;
+			return (1);
+		}
 		free(current->content);
 		current->content = NULL;
 	}
+	return (0);
 }
