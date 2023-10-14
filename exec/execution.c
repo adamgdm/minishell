@@ -6,7 +6,7 @@
 /*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 09:00:52 by agoujdam          #+#    #+#             */
-/*   Updated: 2023/10/14 02:58:15 by agoujdam         ###   ########.fr       */
+/*   Updated: 2023/10/14 06:03:28 by agoujdam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ void	ft_check_if_directory(t_data **data, char *cmd, char *str)
 			if (ft_rulefinder(cmd, ft_strdup("./")) && access(cmd, F_OK) == 0)
 				ft_print_er(cmd, "Permission denied", 126);
 			else if ((access(cmd, F_OK) == 0 || access(cmd, X_OK) == 0)
-				|| (access(str, F_OK) == 0 || access(str, X_OK) == 0))
+					|| (access(str, F_OK) == 0 || access(str, X_OK) == 0))
 				ft_print_er(cmd, "Not a directory", 126);
 			else
 				ft_print_er(cmd, "No such file or directory", 127);
@@ -125,8 +125,7 @@ void	ft_check_if_directory(t_data **data, char *cmd, char *str)
 
 int	ft_check_if_executable(char *str)
 {
-	if (ft_rulefinder(str, ft_strdup("./"))
-		&& access(str, F_OK) == 0
+	if (ft_rulefinder(str, ft_strdup("./")) && access(str, F_OK) == 0
 		&& access(str, X_OK) == 0)
 	{
 		return (1);
@@ -160,7 +159,7 @@ int	ft_check_cmd(t_data **data, t_commands *comond, char *cmd)
 	return (0);
 }
 
-void ft_pwd_pre(char *str, t_data **data, int fd)
+void	ft_pwd_pre(char *str, t_data **data, int fd)
 {
 	if (!str)
 		ft_pwd(data, fd);
@@ -173,7 +172,7 @@ void ft_pwd_pre(char *str, t_data **data, int fd)
 
 void	ft_env_pre(char *str, t_data **data, int fd)
 {
-	struct stat sb;
+	struct stat	sb;
 
 	if (!str)
 		ft_env(data, fd);
@@ -194,7 +193,7 @@ int	ft_builtings_echo_env_exportwithparameters(t_data **data, t_commands *cmnd)
 	}
 	else if (ft_doesmatch(cmnd->cmd[0], "env"))
 	{
-		ft_env_pre(cmnd->cmd[1],data, 1);
+		ft_env_pre(cmnd->cmd[1], data, 1);
 		return (1);
 	}
 	else if ((ft_doesmatch(cmnd->cmd[0], "export") && !cmnd->cmd[1]))
@@ -204,7 +203,7 @@ int	ft_builtings_echo_env_exportwithparameters(t_data **data, t_commands *cmnd)
 	}
 	else if ((ft_doesmatch(cmnd->cmd[0], "pwd")))
 	{
-		ft_pwd_pre(cmnd->cmd[1],data, 1);
+		ft_pwd_pre(cmnd->cmd[1], data, 1);
 		return (1);
 	}
 	return (0);
@@ -220,7 +219,7 @@ void	ft_execute_parent_process(t_commands **cmnd)
 		perror("fork");
 		g_exit_status = 1;
 	}
-    close(current->pipefd[1]);
+	close(current->pipefd[1]);
 }
 
 void	ft_efn(t_data **data, t_commands **comnd, t_commands *current)
@@ -280,133 +279,131 @@ void	ft_execute_first_command(t_data **data, t_commands *cmnd)
 
 void	ft_ft_clozi_pipes_after(t_commands *cmnd)
 {
-    t_commands	*current;
+	t_commands	*current;
 
-    current = cmnd->next;
-    while (current)
-    {
-        close(current->pipefd[0]);
-        close(current->pipefd[1]);
-        current = current->next;
-    }
+	current = cmnd->next;
+	while (current)
+	{
+		close(current->pipefd[0]);
+		close(current->pipefd[1]);
+		current = current->next;
+	}
 }
 
 void	ft_ft_clozi_pipes_before(t_commands *cmnd)
 {
-    t_commands	*current;
+	t_commands	*current;
 
-    current = cmnd->previous;
-    while (current)
-    {
-        close(current->pipefd[0]);
-        close(current->pipefd[1]);
-        current = current->previous;
-    }
+	current = cmnd->previous;
+	while (current)
+	{
+		close(current->pipefd[0]);
+		close(current->pipefd[1]);
+		current = current->previous;
+	}
 }
 
 void	ft_ft_clozi_pipes(t_commands *cmnd)
 {
-    ft_ft_clozi_pipes_after(cmnd);
-    ft_ft_clozi_pipes_before(cmnd);
+	ft_ft_clozi_pipes_after(cmnd);
+	ft_ft_clozi_pipes_before(cmnd);
 }
-
 
 void	ft_set_up_io_redirection(t_commands *cmnd)
 {
-    if (cmnd->out_file == 1 && cmnd->in_file == 0)
-        dup2(cmnd->pipefd[0], 0);
-    else
-    {
-        if (cmnd->out_file == 1 && cmnd->in_file != 0)
-            dup2(cmnd->in_file, 0);
-        else if (cmnd->out_file != 1 && cmnd->in_file == 0)
-            dup2(cmnd->pipefd[0], 0);
-        else
-            dup2(cmnd->in_file, 0);
-    }
-    dup2(cmnd->out_file, 1);
+	if (cmnd->out_file == 1 && cmnd->in_file == 0)
+		dup2(cmnd->pipefd[0], 0);
+	else
+	{
+		if (cmnd->out_file == 1 && cmnd->in_file != 0)
+			dup2(cmnd->in_file, 0);
+		else if (cmnd->out_file != 1 && cmnd->in_file == 0)
+			dup2(cmnd->pipefd[0], 0);
+		else
+			dup2(cmnd->in_file, 0);
+	}
+	dup2(cmnd->out_file, 1);
 }
-
 
 void	ft_execute_child_process(t_data **data, t_commands *cmnd)
 {
-    signal(SIGINT, ft_sigints);
-    ft_set_up_io_redirection(cmnd);
-    ft_ft_clozi_pipes(cmnd);
-    if (ft_builtings_echo_env_exportwithparameters(data, cmnd) == 0)
-        ft_execvee(cmnd->cmd, data);
-    else
-        exit(g_exit_status);
+	signal(SIGINT, ft_sigints);
+	ft_set_up_io_redirection(cmnd);
+	ft_ft_clozi_pipes(cmnd);
+	if (ft_builtings_echo_env_exportwithparameters(data, cmnd) == 0)
+		ft_execvee(cmnd->cmd, data);
+	else
+		exit(g_exit_status);
 }
 
 void	ft_execute_last_commaand(t_data **data, t_commands *cmnd)
 {
-    if (ft_check_cmd(data, cmnd, NULL))
-    {
-        if (ft_builtings_cd_exit_unset_exportwithparameters(data, cmnd))
-            return ;
-        cmnd->pid = fork();
-        if (cmnd->pid == 0)
-            ft_execute_child_process(data, cmnd);
-        else
+	if (ft_check_cmd(data, cmnd, NULL))
+	{
+		if (ft_builtings_cd_exit_unset_exportwithparameters(data, cmnd))
+			return ;
+		cmnd->pid = fork();
+		if (cmnd->pid == 0)
+			ft_execute_child_process(data, cmnd);
+		else
 		{
-    		signal(SIGINT, SIG_IGN);
-            ft_execute_parent_process(&cmnd);
+			signal(SIGINT, SIG_IGN);
+			ft_execute_parent_process(&cmnd);
 		}
 	}
 }
 
 void	ft_set_up_io_mid_redirection(t_commands *cmnd)
 {
-    if (cmnd->out_file == 1 && cmnd->in_file == 0)
-    {
-        dup2(cmnd->pipefd[1], 1);
-        dup2(cmnd->pipefd[0], 0);
-    }
-    else
-    {
-        if (cmnd->out_file == 1 && cmnd->in_file != 0)
-        {
-            dup2(cmnd->in_file, 0);
-            dup2(cmnd->pipefd[1], 1);
-        }
-        else if (cmnd->out_file != 1 && cmnd->in_file == 0)
-        {
-            dup2(cmnd->out_file, 1);
-            dup2(cmnd->pipefd[0], 0);
-        }
-        else
-        {
-            dup2(cmnd->in_file, 0);
-            dup2(cmnd->out_file, 1);
-        }
-    }
+	if (cmnd->out_file == 1 && cmnd->in_file == 0)
+	{
+		dup2(cmnd->pipefd[1], 1);
+		dup2(cmnd->pipefd[0], 0);
+	}
+	else
+	{
+		if (cmnd->out_file == 1 && cmnd->in_file != 0)
+		{
+			dup2(cmnd->in_file, 0);
+			dup2(cmnd->pipefd[1], 1);
+		}
+		else if (cmnd->out_file != 1 && cmnd->in_file == 0)
+		{
+			dup2(cmnd->out_file, 1);
+			dup2(cmnd->pipefd[0], 0);
+		}
+		else
+		{
+			dup2(cmnd->in_file, 0);
+			dup2(cmnd->out_file, 1);
+		}
+	}
 }
 
 void	ft_execute_child_mid_process(t_data **data, t_commands *cmnd)
 {
-    signal(SIGINT, ft_sigints);
-    ft_set_up_io_mid_redirection(cmnd);
-    ft_ft_clozi_pipes(cmnd);
-    if (ft_builtings_echo_env_exportwithparameters(data, cmnd) == 0)
-        ft_execvee(cmnd->cmd, data);
-    else
-        exit(0);
+	signal(SIGINT, ft_sigints);
+	ft_set_up_io_mid_redirection(cmnd);
+	ft_ft_clozi_pipes(cmnd);
+	if (ft_builtings_echo_env_exportwithparameters(data, cmnd) == 0)
+		ft_execvee(cmnd->cmd, data);
+	else
+		exit(0);
 }
 
 void	ft_execute_middle_commandz(t_data **data, t_commands *cmnd)
 {
-    if (ft_check_cmd(data, cmnd, NULL))
-    {
-        if (ft_builtings_cd_exit_unset_exportwithparameters(data, cmnd))
-            return ;
-        cmnd->pid = fork();
-        if (cmnd->pid == 0)
-            ft_execute_child_mid_process(data, cmnd);
-        else
+	if (ft_check_cmd(data, cmnd, NULL))
+	{
+		if (ft_builtings_cd_exit_unset_exportwithparameters(data, cmnd))
+			return ;
+		cmnd->pid = fork();
+		if (cmnd->pid == 0)
+			ft_execute_child_mid_process(data, cmnd);
+		else
 		{
-    		signal(SIGINT, SIG_IGN);
-            ft_execute_parent_process(&cmnd);
+			signal(SIGINT, SIG_IGN);
+			ft_execute_parent_process(&cmnd);
 		}
 	}
 }
@@ -429,62 +426,67 @@ t_commands	*return_node_after_error(t_commands *cmnd)
 
 void	wait_for_processes(t_commands *cmnd)
 {
-    t_commands	*current;
+	t_commands	*current;
 
-    current = cmnd;
-    while (current)
-    {
-        waitpid(current->pid, &g_exit_status, 0);
-        current = current->next;
-    }
+	current = cmnd;
+	while (current)
+	{
+		waitpid(current->pid, &g_exit_status, 0);
+		current = current->next;
+	}
 	if (!WEXITSTATUS(g_exit_status) && WIFEXITED(g_exit_status))
 		g_exit_status = 0;
 	else
-		g_exit_status = WEXITSTATUS(g_exit_status);	
+		g_exit_status = WEXITSTATUS(g_exit_status);
 }
 
 void	ft_clozi_pipes(t_commands *cmnd)
 {
-    t_commands	*current;
+	t_commands	*current;
 
-    current = cmnd;
-    while (current)
-    {
-        close(current->pipefd[0]);
-        close(current->pipefd[1]);
-        current = current->next;
-    }
+	current = cmnd;
+	while (current)
+	{
+		close(current->pipefd[0]);
+		close(current->pipefd[1]);
+		current = current->next;
+	}
 }
 
 void	ft_execute_more_than_one_cmd_with_pipes(t_data **data, t_commands *cmnd)
 {
-    t_commands	*current;
-    int			i;
+	t_commands	*current;
+	int			i;
 
-    i = 0;
-    current = return_node_after_error(cmnd);
-    if (!current->next)
-        ft_execute_only_one_cmd_with_no_pipes(data, current);
-    while (current)
-    {
-        if (i == 0)
-            ft_execute_first_command(data, current);
-        else if (!current->next)
-            ft_execute_last_commaand(data, current);
-        else
-            ft_execute_middle_commandz(data, current);
-        i++;
-        current = current->next;
-    }
-    ft_clozi_pipes(cmnd);
-    wait_for_processes(cmnd);
+	i = 0;
+	current = return_node_after_error(cmnd);
+	if (!current->next)
+		ft_execute_only_one_cmd_with_no_pipes(data, current);
+	while (current)
+	{
+		if (i == 0)
+			ft_execute_first_command(data, current);
+		else if (!current->next)
+			ft_execute_last_commaand(data, current);
+		else
+			ft_execute_middle_commandz(data, current);
+		i++;
+		current = current->next;
+	}
+	ft_clozi_pipes(cmnd);
+	wait_for_processes(cmnd);
 }
 
+void	ft_set_exit_status(void)
+{
+	if (!WEXITSTATUS(g_exit_status) && WIFEXITED(g_exit_status))
+		g_exit_status = 0;
+	else
+		g_exit_status = WEXITSTATUS(g_exit_status);
+}
 
 void	ft_execute_only_one_cmd_with_no_pipes(t_data **data, t_commands *cmnd)
 {
-	int	forkita;
-
 	if (ft_check_cmd(data, cmnd, NULL))
 	{
 		if (ft_builtings_cd_exit_unset_exportwithparameters(data, cmnd))
@@ -505,10 +507,7 @@ void	ft_execute_only_one_cmd_with_no_pipes(t_data **data, t_commands *cmnd)
 			signal(SIGINT, SIG_IGN);
 			ft_execute_parent_process(&cmnd);
 			waitpid(-1, &g_exit_status, 0);
-			if (!WEXITSTATUS(g_exit_status) && WIFEXITED(g_exit_status))
-				g_exit_status = 0;
-			else
-				g_exit_status = WEXITSTATUS(g_exit_status);	
+			ft_set_exit_status();
 		}
 	}
 }
