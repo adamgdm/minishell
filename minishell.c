@@ -239,7 +239,7 @@ int	main(int ac, char **av, char **envp)
 			add_history(input);
 		if (!input)
 			ft_exit(&g_data, NULL);
-		result = _lexer(input);
+		result = _lexer(&input);
 		//_print_token(result);
 		if (!result)
 			continue ;
@@ -268,7 +268,8 @@ int	main(int ac, char **av, char **envp)
 		// _print_commands(commands);
 		_free_all_tokens(&result, 0);
 		ft_execute_the_cmd(&g_data, commands);
-		free(input);
+		if (input)
+			free(input);
 		free_commands(commands);
 	}
 	return (g_exit_status);

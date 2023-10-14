@@ -96,3 +96,8 @@ check ambiguous redirection for append >>
 ------------
 
 cat < barca | wc | cat | cat | ls >> barca | wc | cat
+
+=====
+i should close a fd after executing command
+
+unset $PATH + wc ok -> crash
