@@ -98,29 +98,30 @@ void	ft_initalizebasevalue(t_data **data)
 	ft_exportminimumeq(data);
 }
 
-void	ft_initialize(t_data **data, char **env)
+void	ft_initializevalues(t_data **data, char **env)
+{
+	(*data) = malloc(sizeof(t_data));
+	if (!(*data))
+	{
+		perror("malloc");
+		exit(1);
+	}
+	(*data)->env = ft_array_to_elist(env);
+	(*data)->envnoeq = ft_array_to_elist(env);
+	delete_last_node(&((*data)->env));
+	delete_last_node(&((*data)->envnoeq));
+	add_last_node(&((*data)->env), "_=env");
+}
+
+void	ft_initialize(t_data **data, char **env, char *str)
 {
 	t_data	*y;
-	char	*str;
 	int		SHLVL;
 
 	if (!(*env))
 		ft_initalizebasevalue(data);
 	else
-	{
-		y = malloc(sizeof(t_data));
-		if (!y)
-		{
-			perror("malloc");
-			exit(1);
-		}
-		y->env = ft_array_to_elist(env);
-		y->envnoeq = ft_array_to_elist(env);
-		delete_last_node(&(y->env));
-		delete_last_node(&(y->envnoeq));
-		add_last_node(&(y->env), "_=env");
-		(*data) = y;
-	}
+		ft_initializevalues(data, env);
 	y->path = ft_returnpwd(&y);
 	str = ft_fetchvalue("SHLVL", (*data)->envnoeq);
 	if (!str)
@@ -176,7 +177,7 @@ void	ft_sigint(int sig)
 		(void)sig;
 		printf("\n");
 		rl_on_new_line();
-		rl_replace_line("", 0);
+		// rl_replace_line("", 0);
 		rl_redisplay();
 		g_exit_status = (127 + sig) % 256;
 	}

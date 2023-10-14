@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afaqir <afaqir@student.42.fr>              +#+  +:+       +#+        */
+/*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 01:05:23 by afaqir            #+#    #+#             */
-/*   Updated: 2023/10/13 06:11:51 by afaqir           ###   ########.fr       */
+/*   Updated: 2023/10/14 08:18:03 by agoujdam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ void	_update_before_expanded(t_token **head)
 void	_expander(t_token **result, t_data *data)
 {
 	t_token	*head;
-	char	*tmp;
 
 	head = *result;
 	while (head)

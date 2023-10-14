@@ -1,4 +1,4 @@
-#CFLAGS = -fsanitize=address -g3
+CFLAGS = -Wall -Wextra -Werror -g
 NAME = minishell
 SRC =  minishell_utils.c parsing/lexer_files/lexer.c minishell.c \
 		minishell_utils2.c parsing/lexer_files/utils_lexer.c parsing/lexer_files/tokens.c \

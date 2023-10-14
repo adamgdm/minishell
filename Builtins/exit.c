@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afaqir <afaqir@student.42.fr>              +#+  +:+       +#+        */
+/*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 19:37:46 by agoujdam          #+#    #+#             */
-/*   Updated: 2023/10/14 07:50:59 by afaqir           ###   ########.fr       */
+/*   Updated: 2023/10/14 08:55:02 by agoujdam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,7 @@ void	ft_error_exit(t_commands *cmnds)
 		if (ft_isnumber(cmnds->cmd[1]) == 0)
 		{
 			printf("minishell: exit: %s: numeric argument required\n",
-				cmnds->cmd[1]);
+					cmnds->cmd[1]);
 			g_exit_status = 255;
 		}
 		else if (cmnds->cmd[2] != NULL)
@@ -155,9 +155,7 @@ void	ft_error_exit(t_commands *cmnds)
 			g_exit_status = 1;
 		}
 		else
-		{
 			g_exit_status = ft_atoll(cmnds->cmd[1]);
-		}
 	}
 }
 

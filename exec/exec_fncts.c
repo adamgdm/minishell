@@ -6,7 +6,7 @@
 /*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 20:21:28 by agoujdam          #+#    #+#             */
-/*   Updated: 2023/10/14 02:14:47 by agoujdam         ###   ########.fr       */
+/*   Updated: 2023/10/14 08:23:24 by agoujdam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,6 @@ int	ft_execvee(char **cmd, t_data **data)
 {
 	t_execcommand	*excmd;
 	t_commands		*cmnd;
-	int				i;
 
 	cmnd = ft_createcommand(cmd);
 	excmd = ft_returndataforexecve(data, cmnd);
