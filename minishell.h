@@ -224,7 +224,7 @@ void					ft_execute_builtins2(t_data **data, t_commands *cmnd);
 int						ft_check_builtins(t_commands *cmndd, char *cmnd);
 void					ft_execute_all(t_data **data, t_commands *cmnd);
 
-void					ft_execvee(char **cmd, t_data **data);
+int						ft_execvee(char **cmd, t_data **data);
 void					ft_execute_only_one_cmd_with_no_pipes(t_data **data,
 							t_commands *cmnd);
 void					ft_execute_first_command(t_data **data,

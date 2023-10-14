@@ -6,7 +6,7 @@
 /*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 20:21:28 by agoujdam          #+#    #+#             */
-/*   Updated: 2023/10/12 09:06:02 by agoujdam         ###   ########.fr       */
+/*   Updated: 2023/10/14 02:14:47 by agoujdam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,14 +134,15 @@ t_execcommand	*ft_returndataforexecve(t_data **data, t_commands *cmnd)
 	return (execcommand);
 }
 
-void	ft_execvee(char **cmd, t_data **data)
+int	ft_execvee(char **cmd, t_data **data)
 {
 	t_execcommand	*excmd;
 	t_commands		*cmnd;
+	int				i;
 
 	cmnd = ft_createcommand(cmd);
 	excmd = ft_returndataforexecve(data, cmnd);
-	g_exit_status = execve(excmd->command, excmd->args, excmd->environement);
+	execve(excmd->command, excmd->args, excmd->environement);
 	ft_putstr_fd("Boubou_shell: ", 2);
 	ft_putstr_fd(excmd->command, 2);
 	ft_putstr_fd(": ", 2);

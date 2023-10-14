@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afaqir <afaqir@student.42.fr>              +#+  +:+       +#+        */
+/*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 01:05:51 by afaqir            #+#    #+#             */
-/*   Updated: 2023/10/12 01:17:58 by afaqir           ###   ########.fr       */
+/*   Updated: 2023/10/14 01:57:56 by agoujdam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,10 @@ t_token	*_lexer(char *input)
 		while (input[vars.i] && (input[vars.i] == ' ' || input[vars.i] == '\t'))
 			vars.i++;
 		if (!input[vars.i])
+		{
+			free(input);
 			break ;
+		}
 		if (!_it_contains(input[vars.i]))
 		{
 			vars.j = vars.i;

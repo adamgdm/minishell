@@ -6,7 +6,7 @@
 /*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 20:40:51 by agoujdam          #+#    #+#             */
-/*   Updated: 2023/10/12 09:05:37 by agoujdam         ###   ########.fr       */
+/*   Updated: 2023/10/14 02:23:02 by agoujdam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -319,9 +319,7 @@ int	ft_checkerrors(char *command, char *identifier)
 	while (identifier[i])
 	{
 		if (!ft_isalnum(identifier[i]) && identifier[i] != '_')
-		{
 			return (ft_printerror(command));
-		}
 		i++;
 	}
 	return (0);

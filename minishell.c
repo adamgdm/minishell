@@ -165,7 +165,7 @@ void	ft_sigints(int sig)
 		g_exit_status = (127 + sig) % 256;
 		ft_putstr_fd("\n", 1);
 		ft_putstr_fd("\e[01;32mBoubou_shell> \e[0;37m", 1);
-		exit(0);
+		exit(g_exit_status);
 	}
 }
 

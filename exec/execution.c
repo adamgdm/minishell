@@ -6,7 +6,7 @@
 /*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 09:00:52 by agoujdam          #+#    #+#             */
-/*   Updated: 2023/10/13 08:44:58 by agoujdam         ###   ########.fr       */
+/*   Updated: 2023/10/14 02:58:15 by agoujdam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,6 +160,31 @@ int	ft_check_cmd(t_data **data, t_commands *comond, char *cmd)
 	return (0);
 }
 
+void ft_pwd_pre(char *str, t_data **data, int fd)
+{
+	if (!str)
+		ft_pwd(data, fd);
+	else
+	{
+		ft_putstr_fd("pwd: too many arguments\n", 2);
+		g_exit_status = 1;
+	}
+}
+
+void	ft_env_pre(char *str, t_data **data, int fd)
+{
+	struct stat sb;
+
+	if (!str)
+		ft_env(data, fd);
+	else
+	{
+		ft_putstr_fd("env: ", 2);
+		ft_putstr_fd("Too many arguments\n", 2);
+		g_exit_status = 127;
+	}
+}
+
 int	ft_builtings_echo_env_exportwithparameters(t_data **data, t_commands *cmnd)
 {
 	if (ft_doesmatch(cmnd->cmd[0], "echo"))
@@ -169,7 +194,7 @@ int	ft_builtings_echo_env_exportwithparameters(t_data **data, t_commands *cmnd)
 	}
 	else if (ft_doesmatch(cmnd->cmd[0], "env"))
 	{
-		ft_env(data, 1);
+		ft_env_pre(cmnd->cmd[1],data, 1);
 		return (1);
 	}
 	else if ((ft_doesmatch(cmnd->cmd[0], "export") && !cmnd->cmd[1]))
@@ -179,7 +204,7 @@ int	ft_builtings_echo_env_exportwithparameters(t_data **data, t_commands *cmnd)
 	}
 	else if ((ft_doesmatch(cmnd->cmd[0], "pwd")))
 	{
-		ft_pwd(data, 1);
+		ft_pwd_pre(cmnd->cmd[1],data, 1);
 		return (1);
 	}
 	return (0);
@@ -409,9 +434,13 @@ void	wait_for_processes(t_commands *cmnd)
     current = cmnd;
     while (current)
     {
-        waitpid(-1, NULL, 0);
+        waitpid(current->pid, &g_exit_status, 0);
         current = current->next;
     }
+	if (!WEXITSTATUS(g_exit_status) && WIFEXITED(g_exit_status))
+		g_exit_status = 0;
+	else
+		g_exit_status = WEXITSTATUS(g_exit_status);	
 }
 
 void	ft_clozi_pipes(t_commands *cmnd)
@@ -467,15 +496,19 @@ void	ft_execute_only_one_cmd_with_no_pipes(t_data **data, t_commands *cmnd)
 			dup2(cmnd->in_file, 0);
 			dup2(cmnd->out_file, 1);
 			if (ft_builtings_echo_env_exportwithparameters(data, cmnd) == 0)
-				ft_execvee(cmnd->cmd, data);
+				g_exit_status = ft_execvee(cmnd->cmd, data);
 			else
-				exit(0);
+				exit(g_exit_status);
 		}
 		else
 		{
 			signal(SIGINT, SIG_IGN);
 			ft_execute_parent_process(&cmnd);
-			waitpid(-1, NULL, 0);
+			waitpid(-1, &g_exit_status, 0);
+			if (!WEXITSTATUS(g_exit_status) && WIFEXITED(g_exit_status))
+				g_exit_status = 0;
+			else
+				g_exit_status = WEXITSTATUS(g_exit_status);	
 		}
 	}
 }

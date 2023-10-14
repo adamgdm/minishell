@@ -6,7 +6,7 @@
 /*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 19:32:08 by agoujdam          #+#    #+#             */
-/*   Updated: 2023/10/14 01:05:57 by agoujdam         ###   ########.fr       */
+/*   Updated: 2023/10/14 04:20:36 by agoujdam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ char	*ft_returncwd(void)
 	{
 		perror("Pathconf");
 		g_exit_status = 1;
-		return (NULL);
 	}
 	buffer = malloc(sizeof(char) * i);
 	buffer[0] = '\0';
@@ -30,11 +29,13 @@ char	*ft_returncwd(void)
 	{
 		perror("Malloc");
 		g_exit_status = 1;
-		return (NULL);
 	}
 	getcwd(buffer, i);
 	if (!buffer)
-		return (NULL);
+	{
+		perror("getcwd");
+		g_exit_status = 1;
+	}
 	return (buffer);
 }
 
@@ -78,7 +79,7 @@ void	ft_unsetandexport(t_data **data, char *rts, char *pwd, char *str)
 
 	if (!pwd)
 		pwd = ft_returnpwd(data);
-	if (pwd && ft_ruleexist(data, "OLDPWD"))
+	if (ft_ruleexist(data, "OLDPWD"))
 	{
 		rts = ft_fetchvalue("PWD", (*data)->env);
 		comond = ft_createcommand(ft_split("unset OLDPWD", ' '));
@@ -88,7 +89,7 @@ void	ft_unsetandexport(t_data **data, char *rts, char *pwd, char *str)
 		cmd = ft_split(str, ' ');
 		ft_unsetandex(data, cmd, str, rts);
 	}
-	if (pwd && ft_ruleexist(data, "PWD"))
+	if (ft_ruleexist(data, "PWD"))
 	{
 		comond = ft_createcommand(ft_split("unset PWD", ' '));
 		ft_unset(data, comond);
@@ -97,7 +98,7 @@ void	ft_unsetandexport(t_data **data, char *rts, char *pwd, char *str)
 		cmd = ft_split(str, ' ');
 		ft_unsetandex(data, cmd, str, NULL);
 	}
-	ft_free_cd_stuff(pwd, NULL, NULL);
+	free(pwd);
 }
 
 char	*ft_return_home_or_pwd(t_data **data, char *path, char *lol)
@@ -150,22 +151,30 @@ int	ft_handle_cd_errors(t_data **data, t_commands *cmnd, char *path, char *lol)
 	return (0);
 }
 
-void	ft_print_the_long_goddamn_sentence(t_data **data)
+void	ft_print_the_long_goddamn_sentence()
 {
 	ft_putstr_fd("cd: error retrieving current directory: ", 2);
 	ft_putstr_fd("getcwd: cannot access parent directories: ", 2);
 	ft_putstr_fd("No such file or directory\n", 2);
+	g_exit_status = 1;
 }
 
 void	ft_free_and_replace(t_data **data, char *str, int casse)
 {
-	if ((*data)->path)
-		free((*data)->path);
-	(*data)->path = str;
 	if (casse == 1)
+	{
+		if ((*data)->path)
+			free((*data)->path);
+		(*data)->path = ft_strdup(str);
 		ft_unsetandexport(data, NULL, ft_strdup(str), NULL);
+	}
 	else if (casse == 2)
+	{	
+		if ((*data)->path)
+			free((*data)->path);
+		(*data)->path = (str);
 		ft_unsetandexport(data, NULL, NULL, NULL);
+	}
 }
 
 void	ft_handle_lblanat(t_data **data, char *pwd, char *path, int status)
@@ -175,17 +184,25 @@ void	ft_handle_lblanat(t_data **data, char *pwd, char *path, int status)
 	char	*pwdd;
 
 	pwdd = ft_returncwd();
-	if ((!pwdd || !pwdd[0]) && path && !status)
+	str = ft_strjoin(pwd, "/");
+	lola = ft_strjoin(str, path);
+	if ((!ft_does_directory_exist(data, ft_strdup(lola)))
+		&& (!ft_strcmp(path, "..") || !ft_strcmp(path, "."))
+		&& path && !status)
 	{
-		str = ft_strjoin(pwd, "/");
-		lola = ft_strjoin(str, path);
-		if (pwd && !ft_does_directory_exist(data, ft_strdup(lola)))
+		if (pwd)
+		{
+			ft_print_the_long_goddamn_sentence();
 			ft_free_and_replace(data, lola, 1);
-		ft_free_cd_stuff(str, pwd, NULL);
+			if (pwd)
+				free(pwd);
+		}
 	}
 	else
 		ft_free_and_replace(data, pwd, 2);
-	ft_free_cd_stuff(NULL, pwdd, NULL);
+	if (str)
+		free(str);
+	ft_free_cd_stuff(lola, pwdd, NULL);
 	g_exit_status = 0;
 }
 
@@ -205,7 +222,6 @@ void	ft_cd(t_data **data, t_commands *comond, char *path)
 			g_exit_status = 1;
 			return ;
 		}
-		g_exit_status = 0;
 	}
 	ft_handle_lblanat(data, ft_returnpwd(data), path, i);
 }
