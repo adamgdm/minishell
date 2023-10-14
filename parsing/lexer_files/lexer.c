@@ -6,7 +6,7 @@
 /*   By: afaqir <afaqir@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 01:05:51 by afaqir            #+#    #+#             */
-/*   Updated: 2023/10/14 06:54:18 by afaqir           ###   ########.fr       */
+/*   Updated: 2023/10/14 22:03:18 by afaqir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,12 @@ void	_custom_free(char **input)
 	*input = NULL;
 }
 
+void	_check_char(char c)
+{
+	if (c == ' ' || c == '\t')
+		return (1);
+	return (0);
+}
 
 t_token	*_lexer(char **input)
 {
@@ -29,7 +35,7 @@ t_token	*_lexer(char **input)
 	vars.s = NULL;
 	while ((*input)[vars.i])
 	{
-		while ((*input)[vars.i] && ((*input)[vars.i] == ' ' || (*input)[vars.i] == '\t'))
+		while ((*input)[vars.i] && _check_char((*input)[vars.i]))
 			vars.i++;
 		if (!(*input)[vars.i])
 		{

@@ -6,7 +6,7 @@
 /*   By: afaqir <afaqir@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 01:06:33 by afaqir            #+#    #+#             */
-/*   Updated: 2023/10/13 20:59:16 by afaqir           ###   ########.fr       */
+/*   Updated: 2023/10/14 22:00:44 by afaqir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,9 @@ void	_free_all_tokens(t_token **head, int check)
 		if (check == 1)
 		{
 			if (tmp->content)
-				{
-					free(tmp->content);}
+			{
+				free(tmp->content);
+			}
 			tmp->content = NULL;
 		}
 		free(tmp->before_expanded);
