@@ -6,7 +6,7 @@
 /*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 09:18:52 by agoujdam          #+#    #+#             */
-/*   Updated: 2023/10/14 08:21:26 by agoujdam         ###   ########.fr       */
+/*   Updated: 2023/10/14 21:40:13 by agoujdam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,8 +108,7 @@ void	ft_free_pipes(int **pipes, t_commands *cmnd, int i)
 }
 
 int	**ft_create_pipes(t_commands *cmnd)
-{
-	int	**pipes;
+{	int	**pipes;
 	int	i;
 
 	i = 0;

@@ -98,29 +98,30 @@ void	ft_initalizebasevalue(t_data **data)
 	ft_exportminimumeq(data);
 }
 
-void	ft_initialize(t_data **data, char **env)
+void	ft_initializevalues(t_data **data, char **env)
+{
+	(*data) = malloc(sizeof(t_data));
+	if (!(*data))
+	{
+		perror("malloc");
+		exit(1);
+	}
+	(*data)->env = ft_array_to_elist(env);
+	(*data)->envnoeq = ft_array_to_elist(env);
+	delete_last_node(&((*data)->env));
+	delete_last_node(&((*data)->envnoeq));
+	add_last_node(&((*data)->env), "_=env");
+}
+
+void	ft_initialize(t_data **data, char **env, char *str)
 {
 	t_data	*y;
-	char	*str;
 	int		SHLVL;
 
 	if (!(*env))
 		ft_initalizebasevalue(data);
 	else
-	{
-		y = malloc(sizeof(t_data));
-		if (!y)
-		{
-			perror("malloc");
-			exit(1);
-		}
-		y->env = ft_array_to_elist(env);
-		y->envnoeq = ft_array_to_elist(env);
-		delete_last_node(&(y->env));
-		delete_last_node(&(y->envnoeq));
-		add_last_node(&(y->env), "_=env");
-		(*data) = y;
-	}
+		ft_initializevalues(data, env);
 	y->path = ft_returnpwd(&y);
 	str = ft_fetchvalue("SHLVL", (*data)->envnoeq);
 	if (!str)
@@ -226,12 +227,9 @@ int	main(int ac, char **av, char **envp)
 	g_data = NULL;
 	if (ac != 1)
 		return (ft_handle_more_than_one_arg(&g_data, av[1]));
-	ft_initialize(&g_data, envp);
-	// printf("exit_status: %d\n", g_exit_status);
-	// ft_printennv(g_data->env, 1);
+	ft_initialize(&g_data, envp, NULL);
 	signal(SIGINT, ft_sigint);
 	signal(SIGQUIT, SIG_IGN);
-	// printf("exit_status: %d\n", g_exit_status);
 	while (1)
 	{
 		input = readline("\e[01;32mBoubou_shell> \e[0;37m");
@@ -240,7 +238,6 @@ int	main(int ac, char **av, char **envp)
 		if (!input)
 			ft_exit(&g_data, NULL);
 		result = _lexer(&input);
-		//_print_token(result);
 		if (!result)
 			continue ;
 		a = _syntax_check(&result);
@@ -257,7 +254,6 @@ int	main(int ac, char **av, char **envp)
 		}
 		_expander(&result, g_data);
 		_update_tokens(&result);
-		// _print_token(result);
 		commands = _parser(&result, g_data);
 		if (!commands)
 		{
@@ -265,7 +261,6 @@ int	main(int ac, char **av, char **envp)
 			free(input);
 			continue ;
 		}
-		// _print_commands(commands);
 		_free_all_tokens(&result, 0);
 		ft_execute_the_cmd(&g_data, commands);
 		if (input)
