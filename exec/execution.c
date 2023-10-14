@@ -6,7 +6,7 @@
 /*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 09:00:52 by agoujdam          #+#    #+#             */
-/*   Updated: 2023/10/13 02:33:17 by agoujdam         ###   ########.fr       */
+/*   Updated: 2023/10/13 08:44:58 by agoujdam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ int	ft_check_cmd(t_data **data, t_commands *comond, char *cmd)
 {
 	char	*str;
 
-	if (!comond->cmd)
+	if (!comond->cmd || !comond->cmd[0])
 		return (0);
 	cmd = comond->cmd[0];
 	if (comond->error_exist)
@@ -183,6 +183,19 @@ int	ft_builtings_echo_env_exportwithparameters(t_data **data, t_commands *cmnd)
 		return (1);
 	}
 	return (0);
+}
+
+void	ft_execute_parent_process(t_commands **cmnd)
+{
+	t_commands	*current;
+
+	current = (*cmnd);
+	if (current->pid == -1)
+	{
+		perror("fork");
+		g_exit_status = 1;
+	}
+    close(current->pipefd[1]);
 }
 
 void	ft_efn(t_data **data, t_commands **comnd, t_commands *current)
@@ -235,7 +248,7 @@ void	ft_execute_first_command(t_data **data, t_commands *cmnd)
 		else
 		{
 			signal(SIGINT, SIG_IGN);
-			close(cmnd->pipefd[1]);
+			ft_execute_parent_process(&cmnd);
 		}
 	}
 }
@@ -289,11 +302,6 @@ void	ft_set_up_io_redirection(t_commands *cmnd)
     dup2(cmnd->out_file, 1);
 }
 
-void	ft_execute_parent_process(t_commands *cmnd)
-{
-    signal(SIGINT, SIG_IGN);
-    close(cmnd->pipefd[1]);
-}
 
 void	ft_execute_child_process(t_data **data, t_commands *cmnd)
 {
@@ -316,9 +324,11 @@ void	ft_execute_last_commaand(t_data **data, t_commands *cmnd)
         if (cmnd->pid == 0)
             ft_execute_child_process(data, cmnd);
         else
-            ft_execute_parent_process(cmnd);
-    }
-    signal(SIGINT, ft_sigint);
+		{
+    		signal(SIGINT, SIG_IGN);
+            ft_execute_parent_process(&cmnd);
+		}
+	}
 }
 
 void	ft_set_up_io_mid_redirection(t_commands *cmnd)
@@ -356,7 +366,7 @@ void	ft_execute_child_mid_process(t_data **data, t_commands *cmnd)
     if (ft_builtings_echo_env_exportwithparameters(data, cmnd) == 0)
         ft_execvee(cmnd->cmd, data);
     else
-        exit(1);
+        exit(0);
 }
 
 void	ft_execute_middle_commandz(t_data **data, t_commands *cmnd)
@@ -369,8 +379,11 @@ void	ft_execute_middle_commandz(t_data **data, t_commands *cmnd)
         if (cmnd->pid == 0)
             ft_execute_child_mid_process(data, cmnd);
         else
-            ft_execute_parent_process(cmnd);
-    }
+		{
+    		signal(SIGINT, SIG_IGN);
+            ft_execute_parent_process(&cmnd);
+		}
+	}
 }
 
 t_commands	*return_node_after_error(t_commands *cmnd)
@@ -456,15 +469,15 @@ void	ft_execute_only_one_cmd_with_no_pipes(t_data **data, t_commands *cmnd)
 			if (ft_builtings_echo_env_exportwithparameters(data, cmnd) == 0)
 				ft_execvee(cmnd->cmd, data);
 			else
-				exit(g_exit_status);
+				exit(0);
 		}
 		else
 		{
 			signal(SIGINT, SIG_IGN);
-			waitpid(cmnd->pid, NULL, 0);
+			ft_execute_parent_process(&cmnd);
+			waitpid(-1, NULL, 0);
 		}
 	}
-	signal(SIGINT, ft_sigint);
 }
 
 void	ft_execute_the_cmd(t_data **data, t_commands *cmnd)
@@ -472,7 +485,6 @@ void	ft_execute_the_cmd(t_data **data, t_commands *cmnd)
 	if (!cmnd->next)
 		ft_execute_only_one_cmd_with_no_pipes(data, cmnd);
 	else
-	{
 		ft_execute_more_than_one_cmd_with_pipes(data, cmnd);
-	}
+	signal(SIGINT, ft_sigint);
 }

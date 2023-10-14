@@ -6,7 +6,7 @@
 /*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 19:33:33 by agoujdam          #+#    #+#             */
-/*   Updated: 2023/10/10 01:08:26 by agoujdam         ###   ########.fr       */
+/*   Updated: 2023/10/14 01:06:31 by agoujdam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,4 +74,5 @@ void	ft_echo(char **cmd, int fd)
 	ft_echo_norm(cmd, i, fd);
 	if (nl)
 		ft_putchar_fd('\n', fd);
+	g_exit_status = 0;
 }

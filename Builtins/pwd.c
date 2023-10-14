@@ -6,7 +6,7 @@
 /*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 19:59:59 by agoujdam          #+#    #+#             */
-/*   Updated: 2023/10/12 11:10:11 by agoujdam         ###   ########.fr       */
+/*   Updated: 2023/10/13 08:43:56 by agoujdam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char	*ft_returnpwd(t_data **data)
 	{
 		perror("Pathconf: ");
 		g_exit_status = 1;
-		exit(1);
+		return (NULL);
 	}
 	buffer = malloc(sizeof(char) * i);
 	if (!buffer)
@@ -40,7 +40,7 @@ char	*ft_returnpwd(t_data **data)
 		perror("Malloc: ");
 		free(buffer);
 		g_exit_status = 1;
-		exit(1);
+		return (NULL);
 	}
 	if (!getcwd(buffer, i) || !buffer[0])
 		buffer = ft_returnfetch(data, buffer);
@@ -57,7 +57,7 @@ void	ft_pwd(t_data **data, int fd)
 	{
 		perror("Pathconf: ");
 		g_exit_status = 1;
-		exit(1);
+		return ;
 	}
 	buffer = malloc(sizeof(char) * i);
 	if (!buffer)
@@ -65,7 +65,7 @@ void	ft_pwd(t_data **data, int fd)
 		perror("Malloc: ");
 		free(buffer);
 		g_exit_status = 1;
-		exit(1);
+		return ;
 	}
 	if (!getcwd(buffer, i) || !buffer[0])
 		buffer = ft_returnfetch(data, buffer);

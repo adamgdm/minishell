@@ -6,7 +6,7 @@
 /*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 19:32:08 by agoujdam          #+#    #+#             */
-/*   Updated: 2023/10/12 10:24:32 by agoujdam         ###   ########.fr       */
+/*   Updated: 2023/10/14 01:05:57 by agoujdam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ char	*ft_returncwd(void)
 	{
 		perror("Pathconf");
 		g_exit_status = 1;
-		exit(1);
+		return (NULL);
 	}
 	buffer = malloc(sizeof(char) * i);
 	buffer[0] = '\0';
@@ -30,7 +30,7 @@ char	*ft_returncwd(void)
 	{
 		perror("Malloc");
 		g_exit_status = 1;
-		exit(1);
+		return (NULL);
 	}
 	getcwd(buffer, i);
 	if (!buffer)
@@ -78,7 +78,7 @@ void	ft_unsetandexport(t_data **data, char *rts, char *pwd, char *str)
 
 	if (!pwd)
 		pwd = ft_returnpwd(data);
-	if (ft_ruleexist(data, "OLDPWD"))
+	if (pwd && ft_ruleexist(data, "OLDPWD"))
 	{
 		rts = ft_fetchvalue("PWD", (*data)->env);
 		comond = ft_createcommand(ft_split("unset OLDPWD", ' '));
@@ -88,7 +88,7 @@ void	ft_unsetandexport(t_data **data, char *rts, char *pwd, char *str)
 		cmd = ft_split(str, ' ');
 		ft_unsetandex(data, cmd, str, rts);
 	}
-	if (ft_ruleexist(data, "PWD"))
+	if (pwd && ft_ruleexist(data, "PWD"))
 	{
 		comond = ft_createcommand(ft_split("unset PWD", ' '));
 		ft_unset(data, comond);
@@ -97,7 +97,7 @@ void	ft_unsetandexport(t_data **data, char *rts, char *pwd, char *str)
 		cmd = ft_split(str, ' ');
 		ft_unsetandex(data, cmd, str, NULL);
 	}
-	free(pwd);
+	ft_free_cd_stuff(pwd, NULL, NULL);
 }
 
 char	*ft_return_home_or_pwd(t_data **data, char *path, char *lol)
@@ -180,9 +180,7 @@ void	ft_handle_lblanat(t_data **data, char *pwd, char *path, int status)
 		str = ft_strjoin(pwd, "/");
 		lola = ft_strjoin(str, path);
 		if (pwd && !ft_does_directory_exist(data, ft_strdup(lola)))
-		{
 			ft_free_and_replace(data, lola, 1);
-		}
 		ft_free_cd_stuff(str, pwd, NULL);
 	}
 	else
@@ -207,6 +205,7 @@ void	ft_cd(t_data **data, t_commands *comond, char *path)
 			g_exit_status = 1;
 			return ;
 		}
+		g_exit_status = 0;
 	}
 	ft_handle_lblanat(data, ft_returnpwd(data), path, i);
 }

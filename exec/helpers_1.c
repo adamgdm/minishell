@@ -6,7 +6,7 @@
 /*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 09:03:52 by agoujdam          #+#    #+#             */
-/*   Updated: 2023/10/12 10:28:35 by agoujdam         ###   ########.fr       */
+/*   Updated: 2023/10/13 08:45:21 by agoujdam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	ft_append_env_node(t_env **head, char *str)
 	if (!newnode)
 	{
 		perror("malloc");
-		exit(1);
+		return ;
 	}
 	if (*head == NULL)
 	{

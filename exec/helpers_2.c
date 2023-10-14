@@ -6,7 +6,7 @@
 /*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 09:15:55 by agoujdam          #+#    #+#             */
-/*   Updated: 2023/10/12 09:25:10 by agoujdam         ###   ########.fr       */
+/*   Updated: 2023/10/13 08:45:43 by agoujdam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	add_last_node(t_env **head, const char *str)
 	if (new_node == NULL)
 	{
 		perror("Memory allocation failed");
-		exit(EXIT_FAILURE);
+		return ;
 	}
 	new_node->str = ft_strdup(str);
 	new_node->next = NULL;
@@ -101,7 +101,7 @@ void	add_before_last_node(t_env **head, char *str)
 	if (new_node == NULL)
 	{
 		perror("Memory allocation failed");
-		exit(EXIT_FAILURE);
+		return ;
 	}
 	new_node->str = strdup(str);
 	new_node->next = current->next;
