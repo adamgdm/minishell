@@ -6,7 +6,7 @@
 /*   By: afaqir <afaqir@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 01:54:24 by afaqir            #+#    #+#             */
-/*   Updated: 2023/03/15 23:56:28 by afaqir           ###   ########.fr       */
+/*   Updated: 2023/10/14 22:48:41 by afaqir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,6 @@ int	ft_strlen(char *str)
 		i++;
 	return (i);
 }
-
-
 
 int	ft_strchr(char *s, int c)
 {

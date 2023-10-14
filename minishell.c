@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: afaqir <afaqir@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/10/14 22:50:26 by afaqir            #+#    #+#             */
+/*   Updated: 2023/10/14 22:50:27 by afaqir           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int		g_exit_status = 55;
@@ -226,45 +238,9 @@ int	main(int ac, char **av, char **envp)
 	g_data = NULL;
 	if (ac != 1)
 		return (ft_handle_more_than_one_arg(&g_data, av[1]));
-	ft_initialize(&g_data, envp, NULL);
+	ft_initialize(&g_data, envp);
 	signal(SIGINT, ft_sigint);
 	signal(SIGQUIT, SIG_IGN);
-	while (1)
-	{
-		input = readline("\e[01;32mBoubou_shell> \e[0;37m");
-		if (input && *input)
-			add_history(input);
-		if (!input)
-			ft_exit(&g_data, NULL);
-		result = _lexer(&input);
-		if (!result)
-			continue ;
-		a = _syntax_check(&result);
-		if (a)
-		{
-			_free_all_tokens(&result, 1);
-			free(input);
-			if (a == -1)
-			{
-				free_t_data(&g_data);
-				return (g_exit_status);
-			}
-			continue ;
-		}
-		_expander(&result, g_data);
-		_update_tokens(&result);
-		commands = _parser(&result, g_data);
-		if (!commands)
-		{
-			_free_all_tokens(&result, 1);
-			free(input);
-			continue ;
-		}
-		_free_all_tokens(&result, 0);
-		ft_execute_the_cmd(&g_data, commands);
-		if (input)
-			free(input);
-		free_commands(commands);
-	}
+	return (_launch_shell(g_data));
 	return (g_exit_status);
 }

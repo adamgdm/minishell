@@ -1,6 +1,7 @@
 CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address -g3 
 NAME = minishell
-SRC = parsing/lexer_files/lexer.c minishell.c parsing/lexer_files/utils_lexer.c parsing/lexer_files/tokens.c \
+SRC =  minishell_utils.c parsing/lexer_files/lexer.c minishell.c \
+		minishell_utils2.c parsing/lexer_files/utils_lexer.c parsing/lexer_files/tokens.c \
 		parsing/lexer_files/expander.c parsing/lexer_files/update_tokens.c parsing/syntax_files/syntax_checker.c \
 		parsing/parser_files/parser.c parsing/parser_files/commands.c \
 		parsing/parser_files/utils_parser.c  parsing/parser_files/here_doc.c \
