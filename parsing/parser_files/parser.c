@@ -6,7 +6,7 @@
 /*   By: afaqir <afaqir@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 01:06:11 by afaqir            #+#    #+#             */
-/*   Updated: 2023/10/13 06:37:57 by afaqir           ###   ########.fr       */
+/*   Updated: 2023/10/14 22:00:16 by afaqir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ t_commands	*_parser(t_token **result, t_data *data)
 	_initialize_vars(&vars);
 	while (current)
 	{
-		if(_parser_norm6(&head, current, &vars, data))
+		if (_parser_norm6(&head, current, &vars, data))
 			return (NULL);
 		current = current->next;
 	}
