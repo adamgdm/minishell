@@ -327,7 +327,7 @@ int						ft_doesmatch(char *str, char *qst);
 
 int						ft_ruleexist(t_data **data, char *iden);
 
-void					ft_initialize(t_data **data, char **env);
+void					ft_initialize(t_data **data, char **env, char *str);
 
 void					ft_unsetiden(t_env **env, t_env **envnocmd, char *iden);
 

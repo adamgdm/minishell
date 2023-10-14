@@ -48,7 +48,7 @@ void	ft_exportminimum(t_data **data)
 	free(str);
 	free(pwd);
 	pwd = ft_itoa(1);
-	str = ft_strjoin("SHLVL=", pwd);
+	str = ft_strjoin("shlvl=", pwd);
 	ft_append_env_node(&(*data)->env, str);
 	free(str);
 	free(pwd);
@@ -67,7 +67,7 @@ void	ft_exportminimumeq(t_data **data)
 	free(pwd);
 	free(str);
 	pwd = ft_itoa(1);
-	str = ft_strjoin("SHLVL=", pwd);
+	str = ft_strjoin("shlvl=", pwd);
 	ft_append_env_node(&(*data)->envnoeq, str);
 	free(str);
 	free(pwd);
@@ -115,29 +115,28 @@ void	ft_initializevalues(t_data **data, char **env)
 
 void	ft_initialize(t_data **data, char **env, char *str)
 {
-	t_data	*y;
-	int		SHLVL;
+	int	shlvl;
 
-	if (!(*env))
+	if (!env || !(*env))
 		ft_initalizebasevalue(data);
 	else
 		ft_initializevalues(data, env);
-	y->path = ft_returnpwd(&y);
-	str = ft_fetchvalue("SHLVL", (*data)->envnoeq);
+	(*data)->path = ft_returnpwd(data);
+	str = ft_fetchvalue("shlvl", (*data)->envnoeq);
 	if (!str)
-		SHLVL = 1;
+		shlvl = 1;
 	else
 	{
-		SHLVL = ft_atoi(str);
-		SHLVL++;
+		shlvl = ft_atoi(str);
+		shlvl++;
 	}
 	free(str);
-	if (SHLVL == 999)
+	if (shlvl == 1000)
 		str = ft_strdup("");
 	else
-		str = ft_itoa(SHLVL);
-	ft_unsetiden(&((*data)->env), &((*data)->envnoeq), "SHLVL");
-	ft_exporttherule(data, "SHLVL", str, NULL);
+		str = ft_itoa(shlvl);
+	ft_unsetiden(&((*data)->env), &((*data)->envnoeq), "shlvl");
+	ft_exporttherule(data, "shlvl", str, NULL);
 	free(str);
 }
 
