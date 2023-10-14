@@ -6,7 +6,7 @@
 /*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 20:40:51 by agoujdam          #+#    #+#             */
-/*   Updated: 2023/10/14 02:23:02 by agoujdam         ###   ########.fr       */
+/*   Updated: 2023/10/14 08:55:04 by agoujdam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,8 +180,6 @@ char	*ft_exporttherulenorm(t_data **data, char *iden, char *value, char *str)
 void	ft_exporttherule(t_data **data, char *iden, char *value, char *str)
 {
 	char	*tmp;
-	t_env	*env;
-	t_env	*envnoeq;
 
 	tmp = NULL;
 	if (ft_ruleexist(data, iden) && !value)
@@ -310,8 +308,7 @@ int	ft_printerror(char *str)
 
 int	ft_checkerrors(char *command, char *identifier)
 {
-	char	*str;
-	int		i;
+	int	i;
 
 	i = 0;
 	if (identifier[0] != '_' && !ft_isalpha(identifier[0]))

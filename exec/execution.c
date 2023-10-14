@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afaqir <afaqir@student.42.fr>              +#+  +:+       +#+        */
+/*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 09:00:52 by agoujdam          #+#    #+#             */
-/*   Updated: 2023/10/14 07:06:18 by afaqir           ###   ########.fr       */
+/*   Updated: 2023/10/14 08:23:01 by agoujdam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,8 +172,6 @@ void	ft_pwd_pre(char *str, t_data **data, int fd)
 
 void	ft_env_pre(char *str, t_data **data, int fd)
 {
-	struct stat	sb;
-
 	if (!str)
 		ft_env(data, fd);
 	else
@@ -222,7 +220,7 @@ void	ft_execute_parent_process(t_commands **cmnd)
 	close(current->pipefd[1]);
 }
 
-void	ft_efn(t_data **data, t_commands **comnd, t_commands *current)
+void	ft_efn(t_commands **comnd, t_commands *current)
 {
 	t_commands	*cmnd;
 
@@ -253,9 +251,6 @@ void	ft_efn(t_data **data, t_commands **comnd, t_commands *current)
 
 void	ft_execute_first_command(t_data **data, t_commands *cmnd)
 {
-	int			forkita;
-	t_commands	*current;
-
 	if (ft_check_cmd(data, cmnd, NULL))
 	{
 		if (ft_builtings_cd_exit_unset_exportwithparameters(data, cmnd))
@@ -263,7 +258,7 @@ void	ft_execute_first_command(t_data **data, t_commands *cmnd)
 		cmnd->pid = fork();
 		if (cmnd->pid == 0)
 		{
-			ft_efn(data, &cmnd, NULL);
+			ft_efn(&cmnd, NULL);
 			if (ft_builtings_echo_env_exportwithparameters(data, cmnd) == 0)
 				ft_execvee(cmnd->cmd, data);
 			else

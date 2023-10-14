@@ -6,7 +6,7 @@
 /*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 20:01:38 by agoujdam          #+#    #+#             */
-/*   Updated: 2023/10/10 20:03:10 by agoujdam         ###   ########.fr       */
+/*   Updated: 2023/10/14 08:55:08 by agoujdam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,10 +108,8 @@ void	ft_rulefinderanddelete(t_data **data, char *rule)
 
 void	ft_unset(t_data **data, t_commands *cmnd)
 {
-	t_env	*x;
-	t_env	*y;
-	int		i;
-	int		count;
+	int	i;
+	int	count;
 
 	count = ft_count(cmnd->cmd);
 	i = 1;

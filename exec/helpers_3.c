@@ -6,7 +6,7 @@
 /*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 09:18:52 by agoujdam          #+#    #+#             */
-/*   Updated: 2023/10/12 09:22:58 by agoujdam         ###   ########.fr       */
+/*   Updated: 2023/10/14 08:21:26 by agoujdam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	ft_which_line(char **envp, char *str)
 			if (envp[i][j] == str[k])
 			{
 				k++;
-				if (k == ft_strlen(str) && j == k - 1)
+				if (k == (int)ft_strlen(str) && j == k - 1)
 					return (i);
 			}
 			else
@@ -68,6 +68,7 @@ char	**ft_find_path(char **envp, t_env *head)
 	char	*line;
 	char	**str;
 
+	(void)envp;
 	line = ft_fetchvalue("PATH", head);
 	str = ft_split(line, ':');
 	return (str);
@@ -79,6 +80,7 @@ char	*ft_makethelist(char *cmd, char **path, t_env *head)
 	char	*hehe;
 	int		i;
 
+	(void)head;
 	i = 0;
 	while (path[i])
 	{
@@ -95,6 +97,7 @@ char	*ft_makethelist(char *cmd, char **path, t_env *head)
 
 void	ft_free_pipes(int **pipes, t_commands *cmnd, int i)
 {
+	(void)cmnd;
 	while (i >= 0)
 	{
 		if (pipes[i])

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afaqir <afaqir@student.42.fr>              +#+  +:+       +#+        */
+/*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 19:32:08 by agoujdam          #+#    #+#             */
-/*   Updated: 2023/10/14 07:21:14 by afaqir           ###   ########.fr       */
+/*   Updated: 2023/10/14 08:54:52 by agoujdam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ int	ft_does_directory_exist(t_data **data, char *path)
 {
 	struct stat	stats;
 
+	(void)data;
 	if (!path)
 		return (0);
 	if (stat(path, &stats) == 0 && S_ISDIR(stats.st_mode))
@@ -151,7 +152,7 @@ int	ft_handle_cd_errors(t_data **data, t_commands *cmnd, char *path, char *lol)
 	return (0);
 }
 
-void	ft_print_the_long_goddamn_sentence()
+void	ft_print_the_long_goddamn_sentence(void)
 {
 	ft_putstr_fd("cd: error retrieving current directory: ", 2);
 	ft_putstr_fd("getcwd: cannot access parent directories: ", 2);
@@ -169,7 +170,7 @@ void	ft_free_and_replace(t_data **data, char *str, int casse)
 		ft_unsetandexport(data, NULL, ft_strdup(str), NULL);
 	}
 	else if (casse == 2)
-	{	
+	{
 		if ((*data)->path)
 			free((*data)->path);
 		(*data)->path = (str);
@@ -192,9 +193,8 @@ void	ft_handle_lblanat(t_data **data, char *pwd, char *path, int status)
 	pwdd = ft_returncwd();
 	str = ft_strjoin(pwd, "/");
 	lola = ft_strjoin(str, path);
-	if ((!ft_does_directory_exist(data, ft_strdup(lola)))
-		&& (!ft_strcmp(path, "..") || !ft_strcmp(path, "."))
-		&& path && !status)
+	if ((!ft_does_directory_exist(data, ft_strdup(lola))) && (!ft_strcmp(path,
+				"..") || !ft_strcmp(path, ".")) && path && !status)
 	{
 		if (pwd)
 		{
@@ -214,8 +214,7 @@ void	ft_handle_lblanat(t_data **data, char *pwd, char *path, int status)
 
 void	ft_cd(t_data **data, t_commands *comond, char *path)
 {
-	char	*pwd;
-	int		i;
+	int i;
 
 	if (ft_handle_cd_errors(data, comond, path, NULL))
 		return ;
