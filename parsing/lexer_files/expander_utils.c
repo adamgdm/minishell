@@ -6,7 +6,7 @@
 /*   By: afaqir <afaqir@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 01:05:17 by afaqir            #+#    #+#             */
-/*   Updated: 2023/10/13 06:12:55 by afaqir           ###   ########.fr       */
+/*   Updated: 2023/10/14 07:37:17 by afaqir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ void	_norminette(char **save, t_token *head, t_data *data, t_vars *vars)
 	(vars->i)++;
 	k = vars->i;
 	tmp = NULL;
-	while (head->content[vars->i] && !ft_strchr("+*-?<>{}[]^()#%@\"'$&|;,/\t ",
+	while (head->content[vars->i] && !ft_strchr("+*-=?<>{}[]^()#%@\"'$&|;,/\t ",
 			head->content[vars->i]) && !ft_isdigit(head->content[vars->i]))
 		vars->i++;
 	if (k == vars->i && head->content[vars->i] == '?')

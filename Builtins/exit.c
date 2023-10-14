@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afaqir <afaqir@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 19:37:46 by agoujdam          #+#    #+#             */
-/*   Updated: 2023/10/14 04:04:29 by agoujdam         ###   ########.fr       */
+/*   Updated: 2023/10/14 07:50:59 by afaqir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,7 +163,7 @@ void	ft_error_exit(t_commands *cmnds)
 
 void	ft_exit(t_data **data, t_commands *cmnds)
 {
-	system("leaks minishell");
+	//system("leaks minishell");
 	printf("exit\n");
 	if (cmnds)
 	{
