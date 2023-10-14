@@ -6,7 +6,7 @@
 /*   By: afaqir <afaqir@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 01:05:51 by afaqir            #+#    #+#             */
-/*   Updated: 2023/10/14 22:03:18 by afaqir           ###   ########.fr       */
+/*   Updated: 2023/10/14 22:15:48 by afaqir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	_custom_free(char **input)
 	*input = NULL;
 }
 
-void	_check_char(char c)
+int	_check_char(char c)
 {
 	if (c == ' ' || c == '\t')
 		return (1);

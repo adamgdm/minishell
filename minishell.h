@@ -187,6 +187,11 @@ int		_do_norm2(t_token *current);
 void		_do_norm3(t_token *current, t_vars3 *vars, t_data *data);
 void	free_commands(t_commands *head);
 void	free_commands2(t_commands *head);
+int	_launch_shell(t_data *g_data);
+void	_minishell_norm(t_data **g_data, t_commands *commands, char *input, t_token **result);
+t_commands	*_minishell_norm2(t_token **result, t_data *g_data);
+int	_minishell_norm3(t_data **g_data);
+t_token	*_minishell_norm4(char **input, t_data **g_data);
 
 //	-----------------------    PARSING    ------------------------
 

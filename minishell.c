@@ -227,50 +227,8 @@ int	main(int ac, char **av, char **envp)
 	if (ac != 1)
 		return (ft_handle_more_than_one_arg(&g_data, av[1]));
 	ft_initialize(&g_data, envp);
-	// printf("exit_status: %d\n", g_exit_status);
-	// ft_printennv(g_data->env, 1);
 	signal(SIGINT, ft_sigint);
 	signal(SIGQUIT, SIG_IGN);
-	// printf("exit_status: %d\n", g_exit_status);
-	while (1)
-	{
-		input = readline("\e[01;32mBoubou_shell> \e[0;37m");
-		if (input && *input)
-			add_history(input);
-		if (!input)
-			ft_exit(&g_data, NULL);
-		result = _lexer(&input);
-		//_print_token(result);
-		if (!result)
-			continue ;
-		a = _syntax_check(&result);
-		if (a)
-		{
-			_free_all_tokens(&result, 1);
-			free(input);
-			if (a == -1)
-			{
-				free_t_data(&g_data);
-				return (g_exit_status);
-			}
-			continue ;
-		}
-		_expander(&result, g_data);
-		_update_tokens(&result);
-		// _print_token(result);
-		commands = _parser(&result, g_data);
-		if (!commands)
-		{
-			_free_all_tokens(&result, 1);
-			free(input);
-			continue ;
-		}
-		// _print_commands(commands);
-		_free_all_tokens(&result, 0);
-		ft_execute_the_cmd(&g_data, commands);
-		if (input)
-			free(input);
-		free_commands(commands);
-	}
+	return (_launch_shell(g_data));
 	return (g_exit_status);
 }
