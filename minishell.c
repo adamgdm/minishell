@@ -174,8 +174,10 @@ void	ft_sigint(int sig)
 	if (sig == SIGINT)
 	{
 		(void)sig;
-		ft_putstr_fd("\n", 1);
-		ft_putstr_fd("\e[01;32mBoubou_shell> \e[0;37m", 1);
+		printf("\n");
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
 		g_exit_status = (127 + sig) % 256;
 	}
 }
@@ -240,10 +242,7 @@ int	main(int ac, char **av, char **envp)
 		result = _lexer(input);
 		//_print_token(result);
 		if (!result)
-		{
-			free(input);
 			continue ;
-		}
 		a = _syntax_check(&result);
 		if (a)
 		{

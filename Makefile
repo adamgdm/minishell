@@ -1,4 +1,4 @@
-#CFLAGS = -fsanitize=address -g3
+#CFLAGS = -Wall -Wextra -Werror
 NAME = minishell
 SRC = parsing/lexer_files/lexer.c minishell.c parsing/lexer_files/utils_lexer.c parsing/lexer_files/tokens.c \
 		parsing/lexer_files/expander.c parsing/lexer_files/update_tokens.c parsing/syntax_files/syntax_checker.c \
@@ -25,7 +25,7 @@ $(LIBFT):
 	make -C libft
 
 $(NAME): $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ)  -o $(NAME) -lreadline libft/libft.a
+	$(CC) $(OBJ)  -o $(NAME) -lreadline libft/libft.a -I $(HOME)/.brew/Cellar/readline/8.2.1/include -L $(HOME)/.brew/Cellar/readline/8.2.1/lib $(CFLAGS)
 
 re: fclean all
 
