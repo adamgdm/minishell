@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afaqir <afaqir@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 19:32:08 by agoujdam          #+#    #+#             */
-/*   Updated: 2023/10/14 04:20:36 by agoujdam         ###   ########.fr       */
+/*   Updated: 2023/10/14 07:21:14 by afaqir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,6 +177,12 @@ void	ft_free_and_replace(t_data **data, char *str, int casse)
 	}
 }
 
+void	ft_set_exit_status_cd(int status)
+{
+	if (status == -1337)
+		g_exit_status = 1;
+}
+
 void	ft_handle_lblanat(t_data **data, char *pwd, char *path, int status)
 {
 	char	*str;
@@ -195,7 +201,7 @@ void	ft_handle_lblanat(t_data **data, char *pwd, char *path, int status)
 			ft_print_the_long_goddamn_sentence();
 			ft_free_and_replace(data, lola, 1);
 			if (pwd)
-				free(pwd);
+				status = ft_free_return(pwd, -1337);
 		}
 	}
 	else
@@ -203,7 +209,7 @@ void	ft_handle_lblanat(t_data **data, char *pwd, char *path, int status)
 	if (str)
 		free(str);
 	ft_free_cd_stuff(lola, pwdd, NULL);
-	g_exit_status = 0;
+	ft_set_exit_status_cd(status);
 }
 
 void	ft_cd(t_data **data, t_commands *comond, char *path)

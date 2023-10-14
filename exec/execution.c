@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afaqir <afaqir@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 09:00:52 by agoujdam          #+#    #+#             */
-/*   Updated: 2023/10/14 06:03:28 by agoujdam         ###   ########.fr       */
+/*   Updated: 2023/10/14 07:06:18 by afaqir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -506,7 +506,7 @@ void	ft_execute_only_one_cmd_with_no_pipes(t_data **data, t_commands *cmnd)
 		{
 			signal(SIGINT, SIG_IGN);
 			ft_execute_parent_process(&cmnd);
-			waitpid(-1, &g_exit_status, 0);
+			waitpid(cmnd->pid, &g_exit_status, 0);
 			ft_set_exit_status();
 		}
 	}
