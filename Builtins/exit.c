@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afaqir <afaqir@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 19:37:46 by agoujdam          #+#    #+#             */
-/*   Updated: 2023/10/12 09:51:09 by agoujdam         ###   ########.fr       */
+/*   Updated: 2023/10/13 22:03:03 by afaqir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ void	free_commands(t_commands *head)
 				free(temp->cmd[i]);
 				i++;
 			}
+			free(temp->cmd[i]);
 			free(temp->cmd);
 		}
 		free(temp->pipefd);

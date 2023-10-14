@@ -6,7 +6,7 @@
 /*   By: afaqir <afaqir@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 01:05:28 by afaqir            #+#    #+#             */
-/*   Updated: 2023/10/12 01:18:14 by afaqir           ###   ########.fr       */
+/*   Updated: 2023/10/13 06:01:18 by afaqir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	_write_to_pipe(char *content, int check, t_data *data, int *fd)
 			break ;
 		}
 		if (check == 1)
-			s = _expand_word(s, data);
+			s = _expand_word2(s, data);
 		write(fd[1], s, ft_strlen(s));
 		write(fd[1], "\n", 1);
 		free(s);

@@ -88,7 +88,6 @@ void	ft_printennv(t_env *head, int fd)
 
 void	ft_initalizebasevalue(t_data **data)
 {
-
 	(*data) = malloc(sizeof(t_data));
 	if (!(*data))
 	{
@@ -187,6 +186,32 @@ int	ft_handle_more_than_one_arg(t_data **data, char *str)
 	return (g_exit_status);
 }
 
+void	free_commands2(t_commands *head)
+{
+	t_commands	*current;
+	t_commands	*temp;
+	int			i;
+
+	i = 0;
+	current = head;
+	while (current != NULL)
+	{
+		i = 0;
+		temp = current;
+		current = current->next;
+		while (temp->cmd && temp->cmd[i] != NULL)
+		{
+			printf("freeing %s\n", temp->cmd[i]);
+			i++;
+		}
+		free(temp->cmd[i]);
+		free(temp->cmd);
+		printf("freeing %d %d\n", temp->pipefd[0], temp->pipefd[1]);
+		free(temp->pipefd);
+		free(temp);
+	}
+}
+
 int	main(int ac, char **av, char **envp)
 {
 	t_token		*result;
@@ -213,8 +238,12 @@ int	main(int ac, char **av, char **envp)
 		if (!input)
 			ft_exit(&g_data, NULL);
 		result = _lexer(input);
+		//_print_token(result);
 		if (!result)
+		{
+			free(input);
 			continue ;
+		}
 		a = _syntax_check(&result);
 		if (a)
 		{
@@ -231,6 +260,12 @@ int	main(int ac, char **av, char **envp)
 		_update_tokens(&result);
 		// _print_token(result);
 		commands = _parser(&result, g_data);
+		if (!commands)
+		{
+			_free_all_tokens(&result, 1);
+			free(input);
+			continue ;
+		}
 		// _print_commands(commands);
 		_free_all_tokens(&result, 0);
 		ft_execute_the_cmd(&g_data, commands);

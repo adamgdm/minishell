@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afaqir <afaqir@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 01:06:11 by afaqir            #+#    #+#             */
-/*   Updated: 2023/10/12 11:30:20 by agoujdam         ###   ########.fr       */
+/*   Updated: 2023/10/13 06:37:57 by afaqir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,8 @@ t_commands	*_parser(t_token **result, t_data *data)
 	_initialize_vars(&vars);
 	while (current)
 	{
-		_parser_norm6(&head, current, &vars, data);
+		if(_parser_norm6(&head, current, &vars, data))
+			return (NULL);
 		current = current->next;
 	}
 	vars.result_pipe[0] = vars.previous_pipe;

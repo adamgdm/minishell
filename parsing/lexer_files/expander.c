@@ -6,7 +6,7 @@
 /*   By: afaqir <afaqir@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 01:05:23 by afaqir            #+#    #+#             */
-/*   Updated: 2023/10/12 01:17:40 by afaqir           ###   ########.fr       */
+/*   Updated: 2023/10/13 06:11:51 by afaqir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	_contains_dollar(char *str)
 	return (0);
 }
 
-char	*_expand_word(char *content, t_data *data)
+char	*_expand_word(t_token *head, t_data *data)
 {
 	t_vars	vars;
 
@@ -34,18 +34,18 @@ char	*_expand_word(char *content, t_data *data)
 	vars.j = 0;
 	vars.k = 0;
 	vars.save = ft_strdup("");
-	while (content[vars.i])
+	while (head->content[vars.i])
 	{
-		if (content[vars.i] == '$')
-			_norminette(&vars.save, content, data, &vars);
-		else if (content[vars.i] && content[vars.i] != '$')
+		if (head->content[vars.i] == '$')
+			_norminette(&vars.save, head, data, &vars);
+		else if (head->content[vars.i] && head->content[vars.i] != '$')
 		{
-			vars.save = _append(vars.save, content[vars.i]);
+			vars.save = _append(vars.save, head->content[vars.i]);
 			vars.i++;
 			vars.j = vars.i;
 		}
 	}
-	free(content);
+	free(head->content);
 	return (vars.save);
 }
 
@@ -68,20 +68,13 @@ void	_expander(t_token **result, t_data *data)
 	{
 		if (head->type == HERE_DOC)
 		{
-			head = head->next->next;
-			while (head && head->space_check == 0)
-				head = head->next;
-			if (head && head->type != HERE_DOC)
-				head = head->next;
+			_expander_norm(&head);
 			continue ;
 		}
 		if (_contains_dollar(head->content) && (head->state == GENERAL
 				|| head->state == IN_DQUOTE))
 		{
-			_update_before_expanded(&head);
-			tmp = _expand_word(head->content, data);
-			head->content = ft_strtrim(tmp, " \t");
-			free(tmp);
+			_expander_norm2(&head, data);
 		}
 		head = head->next;
 	}
