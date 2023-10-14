@@ -6,7 +6,7 @@
 /*   By: afaqir <afaqir@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 01:06:00 by afaqir            #+#    #+#             */
-/*   Updated: 2023/10/13 07:46:41 by afaqir           ###   ########.fr       */
+/*   Updated: 2023/10/13 22:03:33 by afaqir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,21 @@ void	_parser_norm4(t_token *current, int *in_file, t_data *data)
 	free(fd);
 }
 
+void	_close_all_pipes(t_commands *head)
+{
+	t_commands	*current;
+
+	current = head;
+	while (current)
+	{
+		if (current->pipefd[0] != -1)
+			close(current->pipefd[0]);
+		if (current->pipefd[1] != -1)
+			close(current->pipefd[1]);
+		current = current->next;
+	}
+}
+
 int	_parser_norm5(t_commands **head, int **result_pipe, t_vars3 *vars,
 		int *previous_pipe)
 {
@@ -33,6 +48,7 @@ int	_parser_norm5(t_commands **head, int **result_pipe, t_vars3 *vars,
 	(*result_pipe)[0] = *previous_pipe;
 	if (pipe(p) == -1)
 	{
+		_close_all_pipes(*head);
 		perror("pipe");
 		g_exit_status = 1;
 		return (1);
@@ -86,6 +102,7 @@ int	_parser_norm6(t_commands **head, t_token *current, t_vars3 *vars,
 		{
 			free(current->content);
 			current->content = NULL;
+			_print_commands(*head);
 			free_commands2(*head);
 			return (1);
 		}
