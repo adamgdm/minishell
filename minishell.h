@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afaqir <afaqir@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/15 01:14:12 by agoujdam          #+#    #+#             */
-/*   Updated: 2023/10/15 02:05:28 by agoujdam         ###   ########.fr       */
+/*   Updated: 2023/10/15 06:46:45 by afaqir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,7 @@ void					ft_initializevalues(t_data **data, char **env);
 
 //	-----------------------    PARSING    ------------------------
 
-void	ft_sigints_her(int sig);
+void					ft_sigints_her(int sig);
 t_token					*_lexer(char **input);
 t_token					*_create_token(char *value, enum e_token type,
 							enum e_state state, int check_space);
@@ -223,7 +223,7 @@ int						_syntax_norm7(t_token *current, int i);
 void					_update_tokens_utils(t_token *current);
 int						_check_type(enum e_token type);
 int						_do_norm2(t_token *current);
-int					_do_norm3(t_token *current, t_vars3 *vars,
+int						_do_norm3(t_token *current, t_vars3 *vars,
 							t_data *data);
 void					free_commands(t_commands *head);
 void					free_commands2(t_commands *head);
