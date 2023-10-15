@@ -37,7 +37,9 @@ int	_syntax_norm7(t_token *current, int i)
 		&& current->content[i] != '(' && current->content[i] != ' ')
 		i++;
 	tmp = ft_substr(current->content, j, i - j);
-	printf("Boubou_shell: syntax error near unexpected token `%s'\n", tmp);
+	ft_putstr_fd("Boubou_shell: syntax error near unexpected token `", 2);
+	ft_putstr_fd(tmp, 2);
+	ft_putstr_fd("'\n", 2);
 	free(tmp);
 	g_exit_status = 258;
 	return (1);

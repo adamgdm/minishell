@@ -22,8 +22,9 @@ int	_syntax_norm(t_token *current)
 	}
 	if (_check_type(current->next->type) || current->next->type == PIPE)
 	{
-		printf("Boubou_shell: syntax error near unexpected token `%s'\n",
-			current->next->content);
+		ft_putstr_fd("Boubou_shell: syntax error near unexpected token `" , 2);
+		ft_putstr_fd(current->next->content, 2);
+		ft_putstr_fd("'\n", 2);
 		g_exit_status = 258;
 		return (1);
 	}
@@ -59,10 +60,8 @@ int	_syntax_norm4(t_token *current)
 int	_syntax_norm3(t_token *current)
 {
 	int		i;
-	int		j;
 
 	i = 0;
-	j = 0;
 	while (current->content[i])
 	{
 		if (current->content[0] == '(')
