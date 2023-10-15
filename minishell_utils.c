@@ -30,7 +30,10 @@ int	_launch_shell(t_data *g_data)
 		input = readline("\e[01;32mBoubou_shell> \e[0;37m");
 		result = _minishell_norm4(&input, &g_data);
 		if (!result)
+		{
+			free(input);
 			continue ;
+		}
 		a = _syntax_check(&result);
 		if (a)
 		{
