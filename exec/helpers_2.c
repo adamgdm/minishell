@@ -6,7 +6,7 @@
 /*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 09:15:55 by agoujdam          #+#    #+#             */
-/*   Updated: 2023/10/13 08:45:43 by agoujdam         ###   ########.fr       */
+/*   Updated: 2023/10/15 00:23:05 by agoujdam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void	add_bln_norminette(t_env **head, char *str)
 		perror("Memory allocation failed");
 		exit(EXIT_FAILURE);
 	}
-	new_node->str = strdup(str);
+	new_node->str = ft_strdup(str);
 	new_node->next = *head;
 	*head = new_node;
 }
@@ -103,7 +103,7 @@ void	add_before_last_node(t_env **head, char *str)
 		perror("Memory allocation failed");
 		return ;
 	}
-	new_node->str = strdup(str);
+	new_node->str = ft_strdup(str);
 	new_node->next = current->next;
 	current->next = new_node;
 }
@@ -132,18 +132,4 @@ void	ft_deletethenode(t_env **head, char *target)
 		prev = current;
 		current = current->next;
 	}
-}
-
-int	ft_strcmp(const char *s1, const char *s2)
-{
-	while (*s1 != '\0' && *s2 != '\0' && *s1 == *s2)
-	{
-		s1++;
-		s2++;
-	}
-	if (*s1 < *s2)
-		return (-1);
-	else if (*s1 > *s2)
-		return (1);
-	return (0);
 }

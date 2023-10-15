@@ -6,155 +6,67 @@
 /*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 09:18:52 by agoujdam          #+#    #+#             */
-/*   Updated: 2023/10/14 21:40:13 by agoujdam         ###   ########.fr       */
+/*   Updated: 2023/10/15 00:23:43 by agoujdam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	ft_which_line(char **envp, char *str)
-{
-	int	i;
-	int	j;
-	int	k;
-
-	i = 0;
-	j = 0;
-	k = 0;
-	while (envp[i])
-	{
-		while (envp[i][j])
-		{
-			if (envp[i][j] == str[k])
-			{
-				k++;
-				if (k == (int)ft_strlen(str) && j == k - 1)
-					return (i);
-			}
-			else
-				k = 0;
-			j++;
-		}
-		j = 0;
-		i++;
-	}
-	return (0);
-}
-
-char	*ft_line_w_out_path(char *str, int len)
-{
-	int		i;
-	int		j;
-	char	*line;
-
-	i = 0;
-	j = 0;
-	line = (char *)malloc(sizeof(char) * len);
-	if (!line)
-		return (NULL);
-	while (str[i] != ':')
-		i++;
-	while (j <= len)
-	{
-		line[j] = str[i];
-		j++;
-		i++;
-	}
-	return (line);
-}
-
-char	**ft_find_path(char **envp, t_env *head)
-{
-	char	*line;
-	char	**str;
-
-	(void)envp;
-	line = ft_fetchvalue("PATH", head);
-	str = ft_split(line, ':');
-	return (str);
-}
-
-char	*ft_makethelist(char *cmd, char **path, t_env *head)
-{
-	char	*command;
-	char	*hehe;
-	int		i;
-
-	(void)head;
-	i = 0;
-	while (path[i])
-	{
-		hehe = ft_strjoin(path[i], "/");
-		command = ft_strjoin(hehe, cmd);
-		free(hehe);
-		if (access(command, 0) == 0)
-			return (command);
-		free(command);
-		i++;
-	}
-	return (NULL);
-}
-
-void	ft_free_pipes(int **pipes, t_commands *cmnd, int i)
-{
-	(void)cmnd;
-	while (i >= 0)
-	{
-		if (pipes[i])
-			free(pipes[i]);
-		i--;
-	}
-	free(pipes);
-}
-
-int	**ft_create_pipes(t_commands *cmnd)
-{	int	**pipes;
-	int	i;
-
-	i = 0;
-	pipes = malloc(sizeof(int *) * (ft_count_how_many_pipes(cmnd) + 1));
-	if (!pipes)
-		return (NULL);
-	while (cmnd)
-	{
-		if (cmnd->next)
-		{
-			pipes[i] = malloc(sizeof(int) * 2);
-			if (!pipes[i])
-				return (ft_free_pipes(pipes, cmnd, i), NULL);
-			if (pipe(pipes[i]) == -1)
-				return (ft_free_pipes(pipes, cmnd, i), NULL);
-		}
-		else
-			pipes[i] = NULL;
-		i++;
-		cmnd = cmnd->next;
-	}
-	return (pipes);
-}
-
-int	ft_count_how_many_pipes(t_commands *cmnd)
-{
-	int	i;
-
-	i = 0;
-	while (cmnd)
-	{
-		if (cmnd)
-			i++;
-		cmnd = cmnd->next;
-	}
-	return (i);
-}
-
-int	ft_check_last_character(char *str, char c)
+int	ft_count(char **str)
 {
 	int	i;
 
 	i = 0;
 	while (str[i])
 		i++;
-	if (str[i - 1] == c)
+	return (i);
+}
+
+int	ft_strcmp(const char *s1, const char *s2)
+{
+	while (*s1 != '\0' && *s2 != '\0' && *s1 == *s2)
+	{
+		s1++;
+		s2++;
+	}
+	if (*s1 < *s2)
+		return (-1);
+	else if (*s1 > *s2)
 		return (1);
 	return (0);
+}
+
+char	*ft_fetchvalue(char *str, t_env *head)
+{
+	t_env	*cur;
+	char	*strr;
+	int		i;
+
+	cur = head;
+	i = 0;
+	while (cur)
+	{
+		if (ft_rulefinder(cur->str, ft_strjoin(str, "=")))
+			break ;
+		cur = cur->next;
+		i++;
+	}
+	if (!cur)
+		return (NULL);
+	strr = ft_getvalue(cur->str);
+	return (strr);
+}
+
+char	*ft_strcpy(char *dest, const char *src)
+{
+	int	i;
+
+	i = 0;
+	while (src[i] != '\0')
+	{
+		dest[i] = src[i];
+		i++;
+	}
+	dest[i] = '\0';
+	return (dest);
 }

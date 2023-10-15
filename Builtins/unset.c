@@ -6,21 +6,11 @@
 /*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 20:01:38 by agoujdam          #+#    #+#             */
-/*   Updated: 2023/10/14 08:55:08 by agoujdam         ###   ########.fr       */
+/*   Updated: 2023/10/15 00:07:14 by agoujdam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-int	ft_count(char **str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-		i++;
-	return (i);
-}
 
 void	ft_freenode(t_env *node)
 {

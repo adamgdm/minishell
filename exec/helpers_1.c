@@ -6,7 +6,7 @@
 /*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 09:03:52 by agoujdam          #+#    #+#             */
-/*   Updated: 2023/10/13 08:45:21 by agoujdam         ###   ########.fr       */
+/*   Updated: 2023/10/15 00:23:40 by agoujdam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,39 +112,4 @@ char	*ft_getvalue(char *input)
 	}
 	ft_strcpy(substring, pwantour + 1);
 	return (substring);
-}
-
-char	*ft_fetchvalue(char *str, t_env *head)
-{
-	t_env	*cur;
-	char	*strr;
-	int		i;
-
-	cur = head;
-	i = 0;
-	while (cur)
-	{
-		if (ft_rulefinder(cur->str, ft_strjoin(str, "=")))
-			break ;
-		cur = cur->next;
-		i++;
-	}
-	if (!cur)
-		return (NULL);
-	strr = ft_getvalue(cur->str);
-	return (strr);
-}
-
-char	*ft_strcpy(char *dest, const char *src)
-{
-	int	i;
-
-	i = 0;
-	while (src[i] != '\0')
-	{
-		dest[i] = src[i];
-		i++;
-	}
-	dest[i] = '\0';
-	return (dest);
 }
