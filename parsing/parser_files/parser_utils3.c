@@ -28,7 +28,7 @@ int	_do_norm2(t_token *current)
 	return (0);
 }
 
-void	_do_norm3(t_token *current, t_vars3 *vars, t_data *data)
+int	_do_norm3(t_token *current, t_vars3 *vars, t_data *data)
 {
 	if (current->type == REDIRECT_IN)
 	{
@@ -39,6 +39,9 @@ void	_do_norm3(t_token *current, t_vars3 *vars, t_data *data)
 	else if (current->type == HERE_DOC)
 	{
 		_parser_norm4(current, &vars->in_file, data);
+		if (g_exit_status != 0)
+			return (1);
 		_parser_free_norm(current);
 	}
+	return (0);
 }
