@@ -6,7 +6,7 @@
 /*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/15 01:01:49 by agoujdam          #+#    #+#             */
-/*   Updated: 2023/10/15 01:50:15 by agoujdam         ###   ########.fr       */
+/*   Updated: 2023/10/15 05:01:24 by agoujdam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,13 +59,13 @@ int	ft_doesmatch(char *str, char *qst)
 
 void	ft_sigints(int sig)
 {
-	if (sig == SIGINT)
-	{
-		g_exit_status = (127 + sig) % 256;
-		ft_putstr_fd("\n", 1);
-		ft_putstr_fd("\e[01;32mBoubou_shell> \e[0;37m", 1);
-		exit(g_exit_status);
-	}
+	(void)sig;
+	g_exit_status = (127 + sig) % 256;
+	ft_putstr_fd("\n", 1);
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
+	exit(g_exit_status);
 }
 
 void	ft_sigint(int sig)

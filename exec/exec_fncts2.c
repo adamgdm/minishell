@@ -6,7 +6,7 @@
 /*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/15 00:26:04 by agoujdam          #+#    #+#             */
-/*   Updated: 2023/10/15 02:44:51 by agoujdam         ###   ########.fr       */
+/*   Updated: 2023/10/15 05:08:46 by agoujdam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,15 @@
 
 void	ft_set_exit_status(void)
 {
-	if (!WEXITSTATUS(g_exit_status) && WIFEXITED(g_exit_status))
-		g_exit_status = 0;
-	else
+	if (WIFSIGNALED(g_exit_status))
+	{
+		g_exit_status = g_exit_status + 128 % 256;
+		if (g_exit_status == 131)
+			ft_putstr_fd("\nQuit: 3\n", 1);
+		else if (g_exit_status == 130)
+			ft_putstr_fd("\n", 1);
+	}
+	else if (WEXITSTATUS(g_exit_status))
 		g_exit_status = WEXITSTATUS(g_exit_status);
 }
 

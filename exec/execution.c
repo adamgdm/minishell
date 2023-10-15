@@ -6,7 +6,7 @@
 /*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 09:00:52 by agoujdam          #+#    #+#             */
-/*   Updated: 2023/10/15 02:46:09 by agoujdam         ###   ########.fr       */
+/*   Updated: 2023/10/15 04:53:47 by agoujdam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,7 @@ void	wait_for_processes(t_commands *cmnd)
 		waitpid(current->pid, &g_exit_status, 0);
 		current = current->next;
 	}
-	if (!WEXITSTATUS(g_exit_status) && WIFEXITED(g_exit_status))
-		g_exit_status = 0;
-	else
-		g_exit_status = WEXITSTATUS(g_exit_status);
+	ft_set_exit_status();
 }
 
 void	ft_clozi_pipes(t_commands *cmnd)

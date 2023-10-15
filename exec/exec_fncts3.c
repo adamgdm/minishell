@@ -6,7 +6,7 @@
 /*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/15 00:27:42 by agoujdam          #+#    #+#             */
-/*   Updated: 2023/10/15 02:29:39 by agoujdam         ###   ########.fr       */
+/*   Updated: 2023/10/15 04:56:56 by agoujdam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	ft_set_up_io_redirection(t_commands *cmnd)
 void	ft_execute_child_process(t_data **data, t_commands *cmnd)
 {
 	signal(SIGINT, ft_sigints);
-	signal(SIGQUIT, SIG_IGN);
+	signal(SIGQUIT, ft_sigints);
 	ft_set_up_io_redirection(cmnd);
 	ft_ft_clozi_pipes(cmnd);
 	if (ft_builtinechoexpwithpara(data, cmnd) == 0)

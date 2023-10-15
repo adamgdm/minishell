@@ -6,7 +6,7 @@
 /*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/15 00:29:10 by agoujdam          #+#    #+#             */
-/*   Updated: 2023/10/15 02:05:51 by agoujdam         ###   ########.fr       */
+/*   Updated: 2023/10/15 05:12:36 by agoujdam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	ft_check_if_directory(t_data **data, char *cmd, char *str)
 			if (ft_rulefinder(cmd, ft_strdup("./")) && access(cmd, F_OK) == 0)
 				ft_print_er(cmd, "Permission denied", 126);
 			else if (((access(cmd, F_OK) == 0 || access(cmd, X_OK) == 0)
-				|| (access(str, F_OK) == 0 || access(str, X_OK) == 0))
+					|| (access(str, F_OK) == 0 || access(str, X_OK) == 0))
 				&& ft_check_last_character(cmd, '/'))
 				ft_print_er(cmd, "Not a directory", 126);
 			else

@@ -6,7 +6,7 @@
 /*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 19:32:03 by agoujdam          #+#    #+#             */
-/*   Updated: 2023/10/15 02:04:44 by agoujdam         ###   ########.fr       */
+/*   Updated: 2023/10/15 05:12:00 by agoujdam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	ft_checkerrors(char *command, char *identifier)
 
 int	ft_check_last_character(char *str, char c)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (str[i])
