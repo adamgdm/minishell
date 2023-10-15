@@ -44,6 +44,7 @@ void	_write_to_pipe(char *content, int check, t_data *data, int *fd)
 		if (!_strcmp(s, content))
 		{
 			free(s);
+			g_exit_status = 0;
 			break ;
 		}
 		if (check == 1)
@@ -52,6 +53,13 @@ void	_write_to_pipe(char *content, int check, t_data *data, int *fd)
 		write(fd[1], "\n", 1);
 		free(s);
 	}
+}
+
+void	ft_sigints_her(int sig)
+{
+	ft_putstr_fd("\n", 1);
+	ft_putstr_fd("\e[01;32mBoubou_shell> \e[0;37m", 1);
+	exit(sig + 128);
 }
 
 int	*_here_doc(char *content, int check, t_data *data)
@@ -64,8 +72,8 @@ int	*_here_doc(char *content, int check, t_data *data)
 	pid = fork();
 	if (pid == 0)
 	{
-		signal(SIGINT, ft_sigints);
-		signal(SIGQUIT, ft_sigints);
+		signal(SIGINT, ft_sigints_her);
+		signal(SIGQUIT, ft_sigints_her);
 		_write_to_pipe(content, check, data, fd);
 		exit(0);
 	}
@@ -74,7 +82,8 @@ int	*_here_doc(char *content, int check, t_data *data)
 		signal(SIGQUIT, SIG_IGN);
 		signal(SIGINT, SIG_IGN);
 		close(fd[1]);
-		wait(NULL);
+		waitpid(pid, &g_exit_status, 0);
+		ft_set_exit_status();
 		return (fd);
 	}
 }
