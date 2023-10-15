@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afaqir <afaqir@student.42.fr>              +#+  +:+       +#+        */
+/*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 01:05:28 by afaqir            #+#    #+#             */
-/*   Updated: 2023/10/13 06:01:18 by afaqir           ###   ########.fr       */
+/*   Updated: 2023/10/15 02:51:31 by agoujdam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,14 +62,16 @@ int	*_here_doc(char *content, int check, t_data *data)
 	fd = malloc(sizeof(int) * 2);
 	pipe(fd);
 	pid = fork();
-	signal(SIGINT, ft_sigints);
 	if (pid == 0)
 	{
+		signal(SIGINT, ft_sigints);
+		signal(SIGQUIT, ft_sigints);
 		_write_to_pipe(content, check, data, fd);
 		exit(0);
 	}
 	else
 	{
+		signal(SIGQUIT, SIG_IGN);
 		signal(SIGINT, SIG_IGN);
 		close(fd[1]);
 		wait(NULL);

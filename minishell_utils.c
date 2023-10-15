@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afaqir <afaqir@student.42.fr>              +#+  +:+       +#+        */
+/*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/14 22:40:14 by afaqir            #+#    #+#             */
-/*   Updated: 2023/10/14 22:40:15 by afaqir           ###   ########.fr       */
+/*   Updated: 2023/10/15 02:42:33 by agoujdam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	_launch_shell(t_data *g_data)
 		}
 		commands = _minishell_norm2(&result, g_data);
 		if (!commands)
-			_minishell_norm5(&result, input, 0);
+			_minishell_norm5(&result, input, 1);
 		else
 			_minishell_norm(&g_data, commands, input, &result);
 	}

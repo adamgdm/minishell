@@ -6,7 +6,7 @@
 /*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/15 00:28:31 by agoujdam          #+#    #+#             */
-/*   Updated: 2023/10/15 01:19:19 by agoujdam         ###   ########.fr       */
+/*   Updated: 2023/10/15 02:50:45 by agoujdam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ void	ft_execute_parent_process(t_commands **cmnd)
 {
 	t_commands	*current;
 
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	current = (*cmnd);
 	if (current->pid == -1)
 	{
@@ -88,6 +90,7 @@ void	ft_execute_first_command(t_data **data, t_commands *cmnd)
 		cmnd->pid = fork();
 		if (cmnd->pid == 0)
 		{
+			signal(SIGQUIT, ft_sigints);
 			ft_efn(&cmnd, NULL);
 			if (ft_builtinechoexpwithpara(data, cmnd) == 0)
 				ft_execvee(cmnd->cmd, data);
@@ -96,6 +99,7 @@ void	ft_execute_first_command(t_data **data, t_commands *cmnd)
 		}
 		else
 		{
+			signal(SIGQUIT, SIG_IGN);
 			signal(SIGINT, SIG_IGN);
 			ft_execute_parent_process(&cmnd);
 		}

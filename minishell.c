@@ -6,7 +6,7 @@
 /*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/14 22:50:26 by afaqir            #+#    #+#             */
-/*   Updated: 2023/10/15 01:03:40 by agoujdam         ###   ########.fr       */
+/*   Updated: 2023/10/15 02:31:25 by agoujdam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,13 +63,9 @@ void	free_commands2(t_commands *head)
 		temp = current;
 		current = current->next;
 		while (temp->cmd && temp->cmd[i] != NULL)
-		{
-			printf("freeing %s\n", temp->cmd[i]);
 			i++;
-		}
 		free(temp->cmd[i]);
 		free(temp->cmd);
-		printf("freeing %d %d\n", temp->pipefd[0], temp->pipefd[1]);
 		free(temp->pipefd);
 		free(temp);
 	}

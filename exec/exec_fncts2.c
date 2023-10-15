@@ -6,7 +6,7 @@
 /*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/15 00:26:04 by agoujdam          #+#    #+#             */
-/*   Updated: 2023/10/15 01:19:19 by agoujdam         ###   ########.fr       */
+/*   Updated: 2023/10/15 02:44:51 by agoujdam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ void	ft_set_up_io_mid_redirection(t_commands *cmnd)
 void	ft_execute_child_mid_process(t_data **data, t_commands *cmnd)
 {
 	signal(SIGINT, ft_sigints);
+	signal(SIGQUIT, ft_sigints);
 	ft_set_up_io_mid_redirection(cmnd);
 	ft_ft_clozi_pipes(cmnd);
 	if (ft_builtinechoexpwithpara(data, cmnd) == 0)
@@ -69,7 +70,6 @@ void	ft_execute_middle_commandz(t_data **data, t_commands *cmnd)
 			ft_execute_child_mid_process(data, cmnd);
 		else
 		{
-			signal(SIGINT, SIG_IGN);
 			ft_execute_parent_process(&cmnd);
 		}
 	}

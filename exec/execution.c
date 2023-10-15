@@ -6,7 +6,7 @@
 /*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 09:00:52 by agoujdam          #+#    #+#             */
-/*   Updated: 2023/10/15 01:19:19 by agoujdam         ###   ########.fr       */
+/*   Updated: 2023/10/15 02:46:09 by agoujdam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ void	ft_execute_only_one_cmd_with_no_pipes(t_data **data, t_commands *cmnd)
 		cmnd->pid = fork();
 		if (cmnd->pid == 0)
 		{
+			signal(SIGQUIT, ft_sigints);
 			signal(SIGINT, ft_sigints);
 			dup2(cmnd->in_file, 0);
 			dup2(cmnd->out_file, 1);
@@ -85,6 +86,7 @@ void	ft_execute_only_one_cmd_with_no_pipes(t_data **data, t_commands *cmnd)
 		else
 		{
 			signal(SIGINT, SIG_IGN);
+			signal(SIGQUIT, SIG_IGN);
 			ft_execute_parent_process(&cmnd);
 			waitpid(cmnd->pid, &g_exit_status, 0);
 			ft_set_exit_status();
