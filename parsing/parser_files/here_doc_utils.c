@@ -43,7 +43,7 @@ void	_norminette_doc(char **save, char *content, t_data *data, t_vars *vars)
 	(vars->i)++;
 	k = vars->i;
 	tmp = NULL;
-	while (content[vars->i] && !ft_strchr("+*-?<>{}[]^()#%@\"'$&|;,/\t ",
+	while (content[vars->i] && !ft_strchr("+*-?=<>{}[]^()#%@\"'$&|;,/\t ",
 			content[vars->i]) && !ft_isdigit(content[vars->i]))
 		vars->i++;
 	if (k == vars->i && content[vars->i] == '?')

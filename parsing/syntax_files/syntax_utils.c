@@ -16,13 +16,13 @@ int	_syntax_norm(t_token *current)
 {
 	if (!current->next)
 	{
-		printf("minishell: syntax error near unexpected token `newline'\n");
+		ft_putstr_fd("Boubou_shell: syntax error near unexpected token `newline'\n", 2);
 		g_exit_status = 258;
 		return (1);
 	}
 	if (_check_type(current->next->type) || current->next->type == PIPE)
 	{
-		printf("minishell: syntax error near unexpected token `%s'\n",
+		printf("Boubou_shell: syntax error near unexpected token `%s'\n",
 			current->next->content);
 		g_exit_status = 258;
 		return (1);
@@ -34,7 +34,7 @@ int	_syntax_norm2(t_token *current)
 {
 	if (!current->next || current->next->type == PIPE)
 	{
-		printf("minishell: syntax error near unexpected token `|'\n");
+		ft_putstr_fd("Boubou_shell: syntax error near unexpected token `|'\n", 2);
 		g_exit_status = 258;
 		return (1);
 	}
@@ -69,13 +69,13 @@ int	_syntax_norm3(t_token *current)
 			return (_syntax_norm7(current, i));
 		if (current->content[0] == ')')
 		{
-			printf("minishell: syntax error near unexpected token `)'\n");
+			ft_putstr_fd("Boubou_shell: syntax error near unexpected token `)'\n", 2);
 			g_exit_status = 258;
 			return (1);
 		}
 		if (current->content[i] == '(')
 		{
-			printf("minishell: syntax error near unexpected token `('\n");
+			ft_putstr_fd("Boubou_shell: syntax error near unexpected token `('\n", 2);
 			g_exit_status = 258;
 			return (1);
 		}

@@ -14,14 +14,14 @@
 
 int	_syntax_norm5(void)
 {
-	printf("minishell: syntax error near unexpected token `)'\n");
+	ft_putstr_fd("Boubou_shell: syntax error near unexpected token `)'\n", 2);
 	g_exit_status = 258;
 	return (1);
 }
 
 int	_syntax_norm6(void)
 {
-	printf("minishell: syntax error near unexpected token `|'\n");
+	ft_putstr_fd("Boubou_shell: syntax error near unexpected token `|'\n", 2);
 	g_exit_status = 258;
 	return (1);
 }
@@ -37,7 +37,7 @@ int	_syntax_norm7(t_token *current, int i)
 		&& current->content[i] != '(' && current->content[i] != ' ')
 		i++;
 	tmp = ft_substr(current->content, j, i - j);
-	printf("minishell: syntax error near unexpected token `%s'\n", tmp);
+	printf("Boubou_shell: syntax error near unexpected token `%s'\n", tmp);
 	free(tmp);
 	g_exit_status = 258;
 	return (1);

@@ -24,11 +24,11 @@ void	_parser_norm(t_token *current, int *out_file, int *error,
 		if (ft_strlen(current->next->before_expanded) != 0
 			&& ft_strlen(current->next->content) == 0)
 		{
-			printf("minishell: %s: ambiguous redirect\n",
+			printf("Boubou_shell: %s: ambiguous redirect\n",
 				current->next->before_expanded);
 		}
 		else
-			printf("minishell: %s: %s\n", current->next->content,
+			printf("Boubou_shell: %s: %s\n", current->next->content,
 				strerror(errno));
 		*error = 1;
 		*already_printed = 1;
@@ -57,11 +57,11 @@ void	_parser_norm2(t_token *current, int *out_file, int *error,
 		if (ft_strlen(current->next->before_expanded) != 0
 			&& ft_strlen(current->next->content) == 0)
 		{
-			printf("minishell: %s: ambiguous redirect\n",
+			printf("Boubou_shell: %s: ambiguous redirect\n",
 				current->next->before_expanded);
 		}
 		else
-			printf("minishell: %s: %s\n", current->next->content,
+			printf("Boubou_shell: %s: %s\n", current->next->content,
 				strerror(errno));
 		*error = 1;
 		*already_printed = 1;
@@ -81,14 +81,14 @@ void	_parser_norm3(t_token *current, int *in_file, int *error,
 		{
 			if (ft_strlen(current->next->content) == 0
 				|| _is_there_space_or_tab(current->next->content) == 1)
-				printf("minishell: %s: ambiguous redirect\n",
+				printf("Boubou_shell: %s: ambiguous redirect\n",
 					current->next->before_expanded);
 			else
-				printf("minishell: %s: No such file or directory\n",
+				printf("Boubou_shell: %s: No such file or directory\n",
 					current->next->content);
 		}
 		else
-			printf("minishell: %s: %s\n", current->next->content,
+			printf("Boubou_shell: %s: %s\n", current->next->content,
 				strerror(errno));
 		*error = 1;
 		*already_printed = 1;

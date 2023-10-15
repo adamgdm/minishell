@@ -27,7 +27,7 @@ int	_here_doc_counter(t_token **result)
 	}
 	if (counter > 16)
 	{
-		printf("minishell: maximum here-document count exceeded\n");
+		ft_putstr_fd("Boubou_shell: maximum here-document count exceeded\n", 2);
 		g_exit_status = 2;
 		return (-1);
 	}

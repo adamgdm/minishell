@@ -14,7 +14,7 @@
 
 int	_lexer_norm(t_token **head, char *input)
 {
-	printf("Error: unclosed double quote\n");
+	ft_putstr_fd("Error: unclosed double quote\n", 2);
 	g_exit_status = 258;
 	_free_all_tokens(head, 1);
 	free(input);
@@ -38,7 +38,7 @@ void	_lexer_norm2(char *input, t_token **head, int *i, int *j)
 
 int	_lexer_norm3(t_token **head, char *input)
 {
-	printf("Error: unclosed single quote\n");
+	ft_putstr_fd("Error: unclosed single quote\n", 2);
 	g_exit_status = 258;
 	_free_all_tokens(head, 1);
 	free(input);
