@@ -6,7 +6,7 @@
 /*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 19:32:03 by agoujdam          #+#    #+#             */
-/*   Updated: 2023/10/15 01:13:00 by agoujdam         ###   ########.fr       */
+/*   Updated: 2023/10/15 02:04:44 by agoujdam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,5 +32,17 @@ int	ft_checkerrors(char *command, char *identifier)
 			return (ft_printerror(command));
 		i++;
 	}
+	return (0);
+}
+
+int	ft_check_last_character(char *str, char c)
+{
+	int i;
+
+	i = 0;
+	while (str[i])
+		i++;
+	if (str[i - 1] == c)
+		return (1);
 	return (0);
 }

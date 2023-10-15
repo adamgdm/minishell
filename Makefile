@@ -1,4 +1,4 @@
-CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address -g3  -I  $(HOME)/.brew/Cellar/readline/8.2.1/include
+CFLAGS = -Wall -Wextra -Werror -g -I  $(HOME)/.brew/Cellar/readline/8.2.1/include
 NAME = minishell
 SRC =  minishell_utils.c parsing/lexer_files/lexer.c minishell.c \
 		minishell_utils2.c parsing/lexer_files/utils_lexer.c parsing/lexer_files/tokens.c \

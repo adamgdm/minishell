@@ -6,7 +6,7 @@
 /*   By: agoujdam <agoujdam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/15 01:14:12 by agoujdam          #+#    #+#             */
-/*   Updated: 2023/10/15 01:47:35 by agoujdam         ###   ########.fr       */
+/*   Updated: 2023/10/15 02:05:28 by agoujdam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -384,6 +384,7 @@ void					ft_deletenodebycontent(t_env **head, char *target);
 void					ft_rulefinderanddelete_eq(t_data **data, char *rule);
 void					ft_rulefinderanddelete(t_data **data, char *rule);
 void					ft_unset(t_data **data, t_commands *cmnd);
+int						ft_check_last_character(char *str, char c);
 
 //	-----------------------    EXECUTION    ------------------------
 
